@@ -1,0 +1,39 @@
+[articles]
+    read_more = "Read more"
+    words = "words"
+    readingtime = "minute read"
+    share = "分享"
+    comments = "评论"
+
+# Linked older/newer posts at the bottom of each one
+[articles.linked_posts]
+    older = "上一篇"
+    newer = "下一篇"
+
+[search]
+    placeholder = "搜索"
+
+[pagination]
+    previous = "Prev"
+    next = "Next"
+
+[profile]
+    follow_button = "Follow"
+    tags = "Tags"
+    posts = "Posts"
+
+[page_not_found]
+    title = "404 - page not found"
+    subtitle = "The content you're looking for doesn't seem to exist."
+
+[widgets.categories]
+    title = "Categories"
+
+[widgets.recent_articles]
+    title = "Recents"
+
+[widgets.tag_cloud]
+    title = "Tag cloud"
+
+[widgets.tags]
+    title = "Tags"
