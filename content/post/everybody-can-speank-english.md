@@ -4,8 +4,8 @@ date = "2017-04-04T15:31:56+08:00"
 title = "人人都能说英语"
 banner = "/images/20170404banner.jpg"
 description = "人人都能说英语，everybody can speak English as long as he wants, 学习英语的必要性，英语是一门人人可以习得的技能，刻意地练习，就像开车一样。"
-categories = ["others"]
-
+categories = ["english"]
+url = "everybody-can-speak-english"
 +++
 
 ## 1.为什么要学习英语？

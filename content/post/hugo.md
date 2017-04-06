@@ -111,18 +111,18 @@ url = "build-blog-with-hugo"
 
 	cd themes
 
-由于需要使用到Git下载主题，以及版本管理和代码推送。需要事先下载安装好[Git](https://git-for-windows.github.io/)，关于如何安装和使用Git，可以参考我之前的一篇文章：[Git学习笔记](http://www.wangxingfeng.com/post/git%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/)。
+由于需要使用到Git下载主题，以及版本管理和代码推送。需要事先下载安装好[Git](https://git-for-windows.github.io/)，关于如何安装和使用Git，可以参考我之前的一篇文章：[Git学习笔记](http://www.wangxingfeng.com/git-intro/)。
 
 把选定的主题下载到`themes`目录下。
 
-	git clone https://github.com/dim0627/hugo_theme_robust.git
+	git clone https://github.com/dim0627/hugo-icarus-theme.git
 
 
 ## Step 5. 启动服务，本地预览
 先从`themes`目录下退回到`blog`目录, 然后启动服务。
 
 	cd ..
-    hugo server --theme=hugo_theme_robust --buildDrafts
+    hugo server --theme=hugo-icarus-theme --buildDrafts
 
 在浏览器中打开 `[http://localhost:1313/](https://themes.gohugo.io/) `
 

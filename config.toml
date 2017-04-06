@@ -58,8 +58,8 @@ theme = "hugo-icarus-theme"
     link   = "categories/tools/"
 [[params.menu]]
     before = false
-    label  = "其他"
-    link   = "categories/others/"
+    label  = "英语学习"
+    link   = "categories/english/"
 # Enter a link for the follow button on the left
 [params.profile]
     follow_button = "https://github.com/frankwang0909"
