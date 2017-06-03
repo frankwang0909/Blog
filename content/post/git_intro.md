@@ -2,6 +2,7 @@
 title = "Git学习笔记"
 categories = ["tools"]
 tags = ["Git"]
+keywords = "Git学习笔记，Git新手学习指南，Git工作流，在win7系统中如何使用Git管理代码"
 description = "Git学习笔记，Git新手学习指南，Git工作流，在win7系统中如何使用Git管理代码"
 date = "2016-04-03T22:43:39+08:00"
 url = "git-intro"

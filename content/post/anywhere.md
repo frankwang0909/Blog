@@ -1,5 +1,6 @@
 +++
 title = "快速启动Node服务器，调试本地静态文件代码"
+keywords = ["Node服务器", "anywhere", "npm", "移动设备调试"]
 description = "快速启动Node服务器，如何在移动设备上测试静态文件，前端工程师必会技能，随时随地将你的当前目录变成一个静态文件服务器的根目录,Running static file server anywhere. "
 categories = ["node"]
 tags = ["服务器"]

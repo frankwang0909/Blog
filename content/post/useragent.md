@@ -3,6 +3,7 @@ images = []
 banner = ""
 menu = ""
 description = "通过navigator.userAgent识别移动设备，跳转移动端站点，userAgent的妙用，userAgent的用途：识别手机、平板设备；userAgent返回字符串的具体含义"
+keywords = "userAgent， 移动设备，userAgent的妙用，userAgent的用途"
 categories = ["frontend"]
 tags = ["userAgent"]
 date = "2017-04-04T21:02:50+08:00"

@@ -5,6 +5,7 @@ date = "2016-12-18T21:56:37+08:00"
 title = "JavaScript的正则表达式"
 banner = "/images/2016-12-18banner.jpg"
 description = "JavaScript的正则表达式学习笔记"
+keywords = "JavaScript, 正则表达式"
 url = "js-reg"
 +++
 
@@ -20,7 +21,7 @@ url = "js-reg"
 
 ## 3.在线图形工具：
 
-`[https://regexper.com/](https://regexper.com/)` 是一款非常实用的正则表达式图形化工具。你也可以[下载](https://regexper.com/)到本地，运行速度更快
+[https://regexper.com/](https://regexper.com/) 是一款非常实用的正则表达式图形化工具。你也可以[下载](https://regexper.com/)到本地，运行速度更快
 
 
 ## 4.IDE中可以支持正则表达式：

@@ -1,11 +1,12 @@
 +++
-tags = ["英语"]
+categories = ["english"]
 date = "2017-04-04T15:31:56+08:00"
 title = "人人都能说英语"
 banner = "/images/20170404banner.jpg"
+keywords = "人人都能说英语, 刻意练习"
 description = "人人都能说英语，everybody can speak English as long as he wants, 学习英语的必要性，英语是一门人人可以习得的技能，刻意地练习，就像开车一样。"
-categories = ["english"]
 url = "everybody-can-speak-english"
+
 +++
 
 ## 1.为什么要学习英语？
@@ -62,3 +63,4 @@ url = "everybody-can-speak-english"
 在国内，没有老外朋友，工作上也用不上英语，怎么用起来呢？
 
 看看美剧、听听英文歌、阅读英文小说、看BBC的纪录片、 听VOA的新闻、看TED上的视频、交个外国朋友或网友。只要你想，你总能找到使用英语的场景。
+

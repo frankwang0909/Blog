@@ -1,5 +1,6 @@
 +++
 banner = "/images/2017-04-03banner.jpg"
+keywords = "Hugo, 建站, 静态博客, GitHub"
 description = "用Hugo快速搭建个人静态博客，并托管到GitHub"
 categories = ["tools"]
 tags = ["Hugo", "GitHub"]

@@ -4,13 +4,14 @@ title = "童鞋，放开那本词汇书"
 banner = "images/20170406dictionary.jpg"
 menu = ""
 description = "背单词书是反人类的事，放弃快速提升词汇量的妄念词汇是攒的，把你不熟悉的单词用手机查出来，标注出来，弄懂文章中的每一句话, throw away  your vocabulary books"
+keywords = "攒单词， 背单词书"
 categories = ["english"]
 tags = ["攒词汇"]
 url = "throw-away-vocabulary-books"
 +++
 
 
-## 词汇是都是攒出来的
+## 词汇都是攒出来的
 
 其实，语言学习的本质是相通的。我们不妨先来回顾一下学习汉语（普通话）的过程。有多少人在学习语文的过程中，遇到过要求背诵《新华字典》、《辞海》的语文老师或者家长？我想绝大部分人应该是没有这种经历的。
 

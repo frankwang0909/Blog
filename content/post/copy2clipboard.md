@@ -2,7 +2,8 @@
 images = []
 banner = "/images/20170405banner.jpg"
 menu = ""
-description = "不用Flash实现剪贴板功能，纯JavaScript实现复制内容到剪切板的功能，Clipboard.js轻量集的JavaScript库"
+keywords = ["clipboard.js" , "复制到剪贴板"]
+description = "不用Flash实现剪贴板功能，纯JavaScript实现复制内容到剪贴板的功能，Clipboard.js轻量集的JavaScript库"
 categories = ["frontend"]
 tags = ["Clipboard"]
 date = "2017-04-05T20:29:51+08:00"

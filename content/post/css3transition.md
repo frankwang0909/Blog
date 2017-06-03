@@ -1,6 +1,7 @@
 +++
 title = " CSS3 动画效果"
-description = "CSS3 动画效果, CSS3 transition"
+keywords = ["CSS3 动画效果", "CSS3 transition", "过渡效果"]
+description = "CSS3 动画效果, CSS3 transition, transition可以代替JavaScript代码来实现动画效果"
 categories = ["frontend"]
 tags = ["CSS3"]
 menu = ""

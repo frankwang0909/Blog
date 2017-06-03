@@ -6,7 +6,7 @@ disqusShortname = ""
 # Enable Google Analytics by entering your tracking code
 googleAnalytics = ""
 # Define the number of posts per page
-paginate = 6
+paginate = 10
 footnotereturnlinkcontents = "↩"
 theme = "hugo-icarus-theme"
 
@@ -20,9 +20,10 @@ theme = "hugo-icarus-theme"
     author = "Frank Wang"
     bio = "Blogger - Programmer"
     location = "China, Shenzhen"
-    site_description = "人人都能说英语，Hugo快速建站，前端学习笔记， 英语学习"
+    site_keywords = "人人都能说英语，Hugo快速建站，前端学习笔记， CSS，Node, HTML, JavaScript, ES6, Python"
+    site_description = "Frank Wang’s Personal Blog, 前端工程师成长记录"
     copyright  = "[Frank Wang](//www.wangxingfeng.com). Powered by [Hugo](//gohugo.io). Theme by [PPOffice](http://github.com/ppoffice)."
-    avatar = "css/images/avatar.png"
+    avatar = "css/images/avatar.jpg"
     logo = "css/images/logo.png"
     disable_mathjax = false # set to true to disable MathJax
 
@@ -47,19 +48,29 @@ theme = "hugo-icarus-theme"
 [[params.menu]]
     before = false
     label  = "前端"
-    link   = "categories/frontend/"
+    link   = "categories/frontend"
 [[params.menu]]
     before = false
     label  = "Node"
-    link   = "categories/node/"
+    link   = "categories/node"
+[[params.menu]]
+    before = false
+    label  = "Python"
+    link   = "categories/python"
+[[params.menu]]
+    before = false
+    label  = "Database"
+    link   = "categories/database"
 [[params.menu]]
     before = false
     label  = "工具"
-    link   = "categories/tools/"
+    link   = "categories/tools"
 [[params.menu]]
     before = false
-    label  = "英语学习"
-    link   = "categories/english/"
+    label  = "英语"
+    link   = "categories/english"
+
+
 # Enter a link for the follow button on the left
 [params.profile]
     follow_button = "https://github.com/frankwang0909"
@@ -103,4 +114,4 @@ theme = "hugo-icarus-theme"
     recent_articles = true
     categories = true
     tags = false
-    tag_cloud = true
+    tag_cloud = false

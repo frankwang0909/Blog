@@ -2,6 +2,7 @@
 title = "Sublime Text 学习笔记"
 banner = "/images/20160513banner.jpg"
 description = "Sublime Text 学习笔记，Sublime Text 新手指南，前端工程师的编辑神器"
+keywords = "Sublime Text, 学习笔记, 新手指南，前端工程师的编辑神器"
 categories = ["tools"]
 tags = ["Sublime Text"]
 date = "2016-05-13T00:14:00+08:00"
