@@ -1,13 +1,12 @@
 +++
-menu = "Database"
-description = "MySQL数据库的基本数据类型包括数值类型、字符类型和时间日期类型。MySQL数据库表的基本操作。MySQL数据库记录的基本操作"
+url = "mysql-basic-2.html"
 categories = ["Database"]
 tags = ["MySQL"]
 date = "2017-06-08T07:32:57+08:00"
 title = "MySQL数据库的基本数据类型、表的操作和记录的操作"
-url = "mysql-basic-2.html"
-
+description = "MySQL数据库的基本数据类型包括数值类型、字符类型和时间日期类型。MySQL数据库表的基本操作。MySQL数据库记录的基本操作"
 +++
+
 ## 一、MySQL的基本数据类型：
 
 ### 1. 数值类型：
