@@ -21,7 +21,7 @@ url = "mysql-basic.html"
 ## 二、MySQL常用命令：
 
 1.显示当前数据库版本
-```SQL
+
 	SELECT VERSION();
 
 2.显示当前时间:

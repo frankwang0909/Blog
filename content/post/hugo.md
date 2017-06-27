@@ -125,7 +125,7 @@ url = "build-blog-with-hugo"
 	cd ..
     hugo server --theme=hugo-icarus-theme --buildDrafts
 
-在浏览器中打开 `[http://localhost:1313/](https://themes.gohugo.io/) `
+在浏览器中打开 http://localhost:1313/
 
 
 ## Step 6. 修改配置文件`config.toml`
@@ -160,8 +160,7 @@ url = "build-blog-with-hugo"
 	git commit -m "Initial commit"
 
 ### 2. 创建`Git` 远程仓库：
-登录你的`GitHub`. 创建一个新的仓库，仓库名为`Github用户.github.io`
-比如我的是`frankwang0909.github.io `.
+登录你的`GitHub`. 创建一个新的仓库，仓库名为`Github用户.github.io`, 比如我的是`frankwang0909.github.io `.
 
 ### 3. 添加`Git` 远程仓库，并提交代码。
 
