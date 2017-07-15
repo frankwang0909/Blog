@@ -40,7 +40,7 @@ url = "fix-inline-bug"
         width:20%;
     }
     .fs0{
-        font-size: 0;
+        font-size: 0!important;
     }
 </style>
 

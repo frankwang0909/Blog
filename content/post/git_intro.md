@@ -64,9 +64,21 @@ url = "git-intro"
 
 7.  更新本地库：推送前先  `git pull` 更新本地库，以免远程库已经改变导致推送失败报错。
 
+8.  常见错误及处理：
+
+常见报错1:
+
+	fatal: remote origin already exists. 
+
+解决方法：先删除远程 git 仓库，再添加
+	
+	git remote rm origin
+
+	git remote add origin git@github.com:项目的远程git仓库
 
 ## 方式二： 使用`GiHub`提供的`GitHub for Windows`
 
 在window平台下使用Git的最简单的方式是使用GitHub网站提供的[GitHub for Windows](https://desktop.github.com/)。优点是直接图形化的操作界面，完全不用记命令。
 
 
+#
