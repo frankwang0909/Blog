@@ -1,6 +1,6 @@
 +++
 title = "Python操作MySQL学习笔记"
-keywords = "Python, MySQL, MySQLdb, 数据库连接对象connection, 数据库交互对象cursor, 学习笔记"
+keywords = ["Python", "MySQL", "MySQLdb", "数据库连接对象connection", "数据库交互对象cursor", "学习笔记"]
 description = "Python操作MySQL，访问数据库的统一规范接口Python DB API"
 categories = ["Python", "Database"]
 tags = ["Python", "MySQL"]
