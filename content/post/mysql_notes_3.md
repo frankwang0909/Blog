@@ -4,9 +4,9 @@ categories = ["Database"]
 tags = ["MySQL"]
 date = "2017-06-27T22:57:29+08:00"
 title = "MySQL学习笔记：修改数据表的常用命令"
-keywords = "MySQL学习笔记, 修改数据表"
+keywords = ["MySQL学习笔记", "修改数据表"]
 description = "MySQL学习笔记：修改数据表的常用命令，包括新增或删除数据列的命令，新增约束，删除约束，修改数据列的定义，修改数据列的名称，数据表更名"
-url = "mysql_notes_3.html"
+url = "/mysql_notes_3.html"
 
 +++
 

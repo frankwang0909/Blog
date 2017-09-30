@@ -1,12 +1,12 @@
 +++
 date = "2017-06-03T22:38:52+08:00"
 title = "MySQL入门：语句规范及常用命令"
-keywords = "MySQL, 语句规范, 常用命令"
+keywords = ["MySQL", "语句规范", "常用命令"]
 description = "MySQL入门：MySQL语句规范及MySQL的常用命令。MySQL语句规范：关键字、函数名全部大写；数据库名、表名、字段名一律小写；SQL语句必须以分号结尾。MySQL的常用命令：创建数据库， 查看数据库，删除数据库等。"
 menu = "Database"
 categories = ["Database"]
 tags = ["MySQL"]
-url = "mysql-basic.html"
+url = "/mysql-basic.html"
 +++
 
 

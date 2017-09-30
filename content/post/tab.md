@@ -2,10 +2,10 @@
 categories = ["frontend"]
 tags = ["tab切换"]
 description = "实现Tab切换的几种方式"
-keywords = "Tab切换"
+keywords = ["Tab切换"]
 date = "2016-05-08T23:36:44+08:00"
 title = "实现Tab切换的几种方式"
-url = "tab"
+url = "/tab.html"
 +++
 
 Tab 切换是网页中常见的组件。适当地使用，可以节省页面空间，在同一个大小的页面中展现更多的内容。Tab 切换的效果千差万别，只需要学会基本的思路，便可变换出各种各样的效果。下面我分别使用了原生js和jQuery来实现四种不同的Tab切换效果。

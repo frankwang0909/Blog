@@ -2,11 +2,11 @@
 title = "Sublime Text 学习笔记"
 banner = "/images/20160513banner.jpg"
 description = "Sublime Text 学习笔记，Sublime Text 新手指南，前端工程师的编辑神器"
-keywords = "Sublime Text, 学习笔记, 新手指南，前端工程师的编辑神器"
+keywords = ["Sublime Text", "前端工程师的编辑神器"]
 categories = ["tools"]
 tags = ["Sublime Text"]
 date = "2016-05-13T00:14:00+08:00"
-url = "sublimetext-notes"
+url = "/sublimetext-notes.html"
 +++
 
 自从把主力代码编辑器改为[Sublime Text](https://www.sublimetext.com/)之后，写代码的效率明显高了许多。最近，我开始尝试着给身边的朋友推荐这款编辑器。

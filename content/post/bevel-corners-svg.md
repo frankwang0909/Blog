@@ -2,9 +2,9 @@
 categories = ["frontend"]
 tags = ["CSS"]
 title = "用border-image+SVG实现切角效果"
-keywords = "切角效果，SVG，border-image"
+keywords = ["切角效果", "SVG", "border-image"]
 description = "切角效果在网页设计中非常流行，大多数网页开发者倾向于使用背景图片来实现，其实我们可以用border-image+SVG实现切角效果"
-url = "bevel-corners-svg.html"
+url = "/bevel-corners-svg.html"
 date = "2017-05-06T16:19:48+08:00"
 
 +++

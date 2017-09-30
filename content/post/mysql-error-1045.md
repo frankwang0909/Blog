@@ -1,11 +1,11 @@
 +++
 title = "Win7系统MySQL报错ERROR1045及其处理方法"
-menu = "Database"
+keywords = ["MySQL报错"]
 description = "Win7系统安装MySQL报错ERROR1045及其处理方法"
 categories = ["Database"]
 tags = ["MySQL"]
 date = "2017-06-03T21:52:09+08:00"
-url = "mysql-error-1045.html"
+url = "/mysql-error-1045.html"
 +++
 
 最近自学数据库，在`Win7`系统下使用`MySQL`遇到了一些报错，做个记录，方便以后查阅。

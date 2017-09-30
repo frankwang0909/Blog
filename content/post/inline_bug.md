@@ -1,14 +1,14 @@
 +++
-keywords = "inline元素间距bug"
+keywords = ["inline元素间距bug"]
 description = "htlm代码换行导致的inline元素间距bug"
 categories = ["frontend"]
 tags = ["bug"]
 date = "2017-01-11T21:48:19+08:00"
 title = "代码换行导致的inline元素间距bug"
-url = "fix-inline-bug"
+url = "/fix-inline-bug.html"
 +++
 
-## inline 元素：
+## 1. inline 元素：
 
 如果inline元素(span, strong, b, em, i等)代码换行，它们之间会产生我们不希望的间隔。通过设置`margin:0`或者`padding:0` , 这个都间隔仍然存在，说明这个间隔并不是margin或者padding。
 
@@ -34,7 +34,6 @@ url = "fix-inline-bug"
         color:#fff;
         line-height:30px;
     }
-
     .inline-block span{
         display: inline-block;
         width:20%;
@@ -54,7 +53,7 @@ url = "fix-inline-bug"
 
 是否为了不消除这个间隔，就必须把inline元素的html代码写在一行内呢？答案是否定的。
 开发的时候，为了方便阅读和调试，我们习惯于把代码写成这样：
-
+```html
     <p>
         <span>inline元素 1</span>
         <span>inline元素 2</span>
@@ -62,6 +61,7 @@ url = "fix-inline-bug"
         <span>inline元素 4</span>
         <span>inline元素 5</span>
     </p>
+```
 
 解决方法：设置父元素`font-size:0`，再给子元素单独设置`font-size`，修复bug。
 <div class="inline ">
@@ -72,10 +72,11 @@ url = "fix-inline-bug"
     </p>
 </div>
 
-## inline-block 元素：
-要在一行展示多个并列的元素，除了通过设置浮动`float:left;float:right`，我们还可以通过设置`display:inline-block` 把inline元素或block元素，转换成一个可以设置高度和宽度的inline-block元素。
+## 2. inline-block 元素：
+要在一行展示多个并列的元素，除了通过设置浮动`float:left;float:right`，我们还可以通过设置`display:inline-block` 把 inline 元素或 block 元素，转换成一个可以设置高度和宽度的 inline-block 元素。
 
-如果有5个`inline-block`元素，设置它们的宽度为`20%`。我们期望它们是在一行展示的。但是因为html代码换行产生了间距，导致无法在一行内显示。
+如果有5个`inline-block`元素，设置它们的宽度为`20%`。我们期望它们是在一行展示的。但是因为 html 代码换行产生了间距，导致无法在一行内显示。
+
 <div class="inline ">
     <p class="inline-block">
         <span>inline-block元素 1</span>
@@ -85,7 +86,9 @@ url = "fix-inline-bug"
         <span>inline-block元素 5</span>
     </p>
 </div>
+
 解决方法: 设置父元素`font-size:0`，再给子元素单独设置`font-size`。
+
 <div class="inline ">
     <p class="inline-block fs0">
         <span>inline-block元素 1</span>

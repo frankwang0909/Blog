@@ -5,7 +5,7 @@ date = "2017-07-15T17:13:18+08:00"
 title = "快速入门 Angular2 核心概念"
 keywords = ["Angular2", "组件", "模板", "元数据", "数据绑定", "指令", "服务", "依赖注入", "模块"]
 description = "快速入门 Angular2 核心概念，主要包括组件、模板、元数据、数据绑定、指令、服务、依赖注入、模块等8个核心概念"
-url = "angular2_basic.html"
+url = "/angular2_basic.html"
 +++
 
 # Angular2 的核心概念

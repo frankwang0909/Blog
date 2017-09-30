@@ -4,9 +4,8 @@ keywords = ["CSS3 动画效果", "CSS3 transition", "过渡效果"]
 description = "CSS3 动画效果, CSS3 transition, transition可以代替JavaScript代码来实现动画效果"
 categories = ["frontend"]
 tags = ["CSS3"]
-menu = ""
 date = "2016-07-11T21:03:27+08:00"
-
+url = "/css3_transition.html"
 +++
 
 ## 作用

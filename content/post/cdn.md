@@ -1,14 +1,11 @@
 +++
-images = []
-banner = ""
-menu = ""
 keywords = ["前端CDN公共库","CDN加速"]
 date = "2016-08-20T21:07:46+08:00"
 title = "推荐几个常用的CDN公共库"
 description = "推荐几个常用的CDN公共库,前端CDN公共库，CDN加速"
 categories = ["frontend"]
 tags = ["CDN"]
-url= "cdn"
+url= "/cdn.html"
 +++
 
 ## CDN

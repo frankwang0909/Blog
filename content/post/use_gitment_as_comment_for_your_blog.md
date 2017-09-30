@@ -6,7 +6,7 @@ date = "2017-06-24T17:04:42+08:00"
 title = "一个Geek的评论系统Gitment"
 keywords = "Gitment, 博客评论系统, GitHub Issues"
 description = "Gitment是一个使用GitHub Issues 搭建的评论系统。本文教你如何使用Gitment作为自己博客的评论系统"
-url = "use_gitment_as_comment_system_for_your_blog.html"
+url = "/use_gitment_as_comment_system_for_your_blog.html"
 
 +++
 

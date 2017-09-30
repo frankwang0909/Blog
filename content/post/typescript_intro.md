@@ -5,7 +5,7 @@ keywords = ["TypeScript", "JavaScript", "静态类型","类型注解", "类 Clas
 description = "TypeScript 是微软2012年推出的一种编程语言，属于 JavaScript 的超集，可以编译为 JavaScript 执行。它拓展了 JavaScript 的语法，给 JavaScript 添加可选的静态类型和基于类的面向对象编程。"
 categories = ["frontend"]
 tags = ["TypeScript"]
-url = "typescript_basic.html"
+url = "/typescript_basic.html"
 +++
 
 ## 1.简介：

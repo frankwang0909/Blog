@@ -2,17 +2,17 @@
 title = "Git学习笔记"
 categories = ["tools"]
 tags = ["Git"]
-keywords = "Git学习笔记，Git新手学习指南，Git工作流，在win7系统中如何使用Git管理代码"
+keywords = ["Git学习笔记", "Git新手学习指南", "Git工作流", "在win7系统中如何使用Git管理代码"]
 description = "Git学习笔记，Git新手学习指南，Git工作流，在win7系统中如何使用Git管理代码"
 date = "2016-04-03T22:43:39+08:00"
-url = "git-intro"
+url = "/git-intro.html"
 +++
 
 `Git`是一款分布式的代码管理工具，方便多人协作时的代码管理。在`win7`系统中使用Git管理代码有2种主要的方式。
 
-## 方式一： `msysgit`
+## 方式一： msysgit
 
-### Step 1: 下载并安装`msysgit`
+### Step 1: 下载并安装  msysgit
 
 [msysgit](https://git-for-windows.github.io) 是Windows版的Git。下载，然后按默认选项安装即可。安装完成后，在开始菜单里找到“ Git ”->“ Git Bash ”，点击会弹出一个命令行窗口，说明Git安装成功。
 
@@ -20,29 +20,32 @@ url = "git-intro"
 ### Step 2: 设置用户名
 
 在命令行输入以下命令
-
+```shell
 	$ git config --global user.name "Your Name"
 	$ git config --global user.email "email@example.com"
+```
 
 **注意**： `git confi`g命令的`--global`参数，用了这个参数，表示你这台电脑上所有的Git仓库都会使用这个配置，当然也可以对某个仓库指定不同的用户名和Email地址。
 
 ### Step 3: 创建版本库
 
 选择一个合适的地方，创建一个空目录：
-
+```shell
 	$ mkdir  gitskills  // 创建一个名gitskills的目录
 	$ cd   gitskills    // 切换gitskills目录
 	$ pwd           //pwd 命令用于显示当前目录
     $ git init      //初始化Git仓库，当前目录中会多了一个.git目录（默认是隐藏的）
+```
 
 **注意**：为避免莫名其妙地报错，请确保目录名（包括父目录）不包含 **中文**。
 
 ### Step 4: 把文件添加到版本库
 
 在刚刚创建的目录(比如gitskills)下新建文件，或者从其他地方拷贝文件到该目录下。
-
+```shell
 	$ git add readme.md  //新增一个readme.md文件
 	$ git commit -m "提交时的附加信息"  //把文件提交到仓库,并附上相关的说明文字（用引号括起来）
+```
 
 **注意**： 每次修改文件，都需要先`git add`到暂存区，然后才能`git commit`到仓库。可以`add`一个文件之后`commit`，也可以`add`多个文件，然后一起`commit`。
 
@@ -67,18 +70,18 @@ url = "git-intro"
 8.  常见错误及处理：
 
 常见报错1:
-
+```shell
 	fatal: remote origin already exists. 
+```
 
 解决方法：先删除远程 git 仓库，再添加
-	
+```shell
 	git remote rm origin
 
 	git remote add origin git@github.com:项目的远程git仓库
+```
 
-## 方式二： 使用`GiHub`提供的`GitHub for Windows`
+## 方式二： 使用 GiHub 提供的 GitHub for Windows
 
-在window平台下使用Git的最简单的方式是使用GitHub网站提供的[GitHub for Windows](https://desktop.github.com/)。优点是直接图形化的操作界面，完全不用记命令。
+在 window 平台下使用 Git 的最简单的方式是使用 GitHub 网站提供的[GitHub for Windows](https://desktop.github.com/)。优点是直接图形化的操作界面，完全不用记命令。
 
-
-#

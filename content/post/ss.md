@@ -3,9 +3,9 @@ date = "2017-07-09T11:37:11+08:00"
 categories = ["tools"]
 tags = ["Shadowsocks"]
 title = "撸了Google Cloud，自建了个梯子"
-keywords = "Google Cloud Platform, Shadowsocks, 科学上网"
+keywords = ["Google Cloud Platform", "Shadowsocks", "科学上网"]
 description = "为了更方便地科学上网，使用 Google Cloud Platform 免费试用服务，搭建一个 Shadowsocks 梯子"
-url = "ss.html"
+url = "/ss.html"
 
 +++
 
@@ -54,7 +54,7 @@ url = "ss.html"
 4)等待一会儿后安装完毕，这时输入命令`pip install shadowsocks` 安装SS;
 
 5)输入命令`emacs /etc/ss.json` 打开编辑器，并打开一个名为`ss.json`的配置文件保存在`/etc/`目录下。以下是SS官方的默认配置：
-
+```json
 	{
 	    "server":"你的服务器静态IP地址",
 	    "server_port":端口号, //端口号需要与步骤5设置的一致
@@ -63,6 +63,7 @@ url = "ss.html"
 	    "method":"rc4-md5", 
 	    "auth": true
 	}
+```
 
 6)配置完成后, 按`ctrl + x` 然后 `ctrl + s` 保存文件，再按 `ctrl + x `然后 `ctrl + c`退出编辑器。
 

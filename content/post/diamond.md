@@ -2,9 +2,9 @@
 date = "2017-05-01T22:00:03+08:00"
 categories = ["frontend"]
 tags = ["CSS"]
-keywords = "菱形图片, 裁切路径, clip-path, CSS变形"
+keywords = ["菱形图片", "裁切路径", "clip-path", "CSS变形"]
 description = "把图片裁切成菱形是一种常见的视觉设计手法。传统的实现方法是预先在图像处理软件中把图片裁切好，而现在，CSS的新特性已经可以支持用CSS代码来实现菱形图片。"
-url = "diamond-picture.html"
+url = "/diamond-picture.html"
 title = "如何用CSS代码实现网页设计中的菱形图片"
 +++
 
@@ -18,36 +18,39 @@ title = "如何用CSS代码实现网页设计中的菱形图片"
 ## 1. 基于tranform的实现方法
 
 原图
-<img src="/images/adamcatlace.jpg" style="display:block; max-width: 200px; margin:0 auto">
+<img src="/images/adamcatlace.jpg" style="display:block; max-width: 200px; margin:30px auto">
 用一个`<div>` 把图片包裹起来，对这个容器`<div>`应用`transform:rotate(45deg)`, 进行旋转45度，我们得到如下的效果：图片应该也会跟着旋转了
 
-	div{
-		width:200px;
-		transform: rotate(45deg);
-		overflow: hidden;
-	};
+```css
+div{
+	width:200px;
+	transform: rotate(45deg);
+	overflow: hidden;
+};
+```
 
-<div class="diamond-pic">
+<div class="diamond-pic" style="width:200px;transform: rotate(45deg);overflow: hidden;margin:60px auto;">
 	<img src="/images/adamcatlace.jpg" >
 </div>
 
 如果我们对里面的图片进行反向旋转45度，那么图片的旋转就会抵消掉。看看效果。
-
+```css
 	div>img{
 		max-width:100%;
 		transform: rotate(-45deg);
 	};
+```
 
-<div class="diamond-pic">
-	<img src="/images/adamcatlace.jpg" class="diamond-img">
+<div class="diamond-pic" style="width:200px;transform: rotate(45deg);overflow: hidden;margin:60px auto;">
+	<img src="/images/adamcatlace.jpg" class="diamond-img" style="max-width:100%;transform: rotate(-45deg);">
 </div>
 
 我们得到了一个裁成`八边形`的图片。
 
 问题出在哪里呢？我给外面的`div`加一个边框，这样就容易看出来了。
 
-<div class="diamond-pic" style="border:1px solid red">
-	<img src="/images/adamcatlace.jpg" class="diamond-img">
+<div class="diamond-pic" style="border:1px solid red; width:200px;transform: rotate(45deg);overflow: hidden;margin:60px auto;">
+	<img src="/images/adamcatlace.jpg" class="diamond-img" style="max-width:100%;transform: rotate(-45deg);">
 </div>
 
 问题出在了这里图片的宽度是与容器`div`的`边长`相等，其实我们应该让图片的宽度与`对角线`相等。
@@ -55,26 +58,29 @@ title = "如何用CSS代码实现网页设计中的菱形图片"
 运用勾股定理，可以计算出图片的宽度应该是√2倍，我们取1.42倍。
 
 如果通过`width属性`设置来放大图片,会得到如下的效果。
-
+```css
 	div>img{
+		width:142%;
 		max-width:142%;
 		transform: rotate(-45deg);
 	};
+```
 
-<div class="diamond-pic">
-	<img src="/images/adamcatlace.jpg" class="diamond-img" style="max-width:142%;">
+<div class="diamond-pic" style="width:200px;transform: rotate(45deg);overflow: hidden;margin:60px auto;">
+	<img src="/images/adamcatlace.jpg" class="diamond-img" style="width:142%;max-width:142%;transform: rotate(-45deg);">
 </div>
 
 因为是以图片的`左上角`为原点进行放大的。我们还需要在通过设置`margin:-45px;`才能得到菱形图片。
-
+```css
 	div>img{
 		max-width:142%;
 		transform: rotate(-45deg);
 		margin:-45px;
 	};
+```
 
-<div class="diamond-pic">
-	<img src="/images/adamcatlace.jpg" class="diamond-img" style="max-width:142%; margin:-45px">
+<div class="diamond-pic" style="width:200px;transform: rotate(45deg);overflow: hidden;margin:60px auto;">
+	<img src="/images/adamcatlace.jpg" class="diamond-img" style="max-width:142%;transform: rotate(-45deg); margin:-45px">
 </div>
 
 当然，我们可以通过`transform:scale(1.42)`来放大图片1.42倍。`scale()`是以图片的`中心点`进行缩放的，这样我们就不用额外地设置`margin`值了。

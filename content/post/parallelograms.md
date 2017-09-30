@@ -2,10 +2,10 @@
 tags = ["CSS"]
 date = "2017-04-30T16:44:06+08:00"
 title = "用CSS创建内容不倾斜的平行四边形"
-keywords = "CSS, transform, skew, 平行四边形, 伪元素"
+keywords = ["CSS transform", "skew", "平行四边形", "伪元素"]
 description = "用CSS绘制内容不倾斜的平行四边形的两种实现方式：嵌套元素方案和伪元素方案"
 categories = ["frontend"]
-url = "parallelograms.html"
+url = "/parallelograms.html"
 +++
 
 ## 1.平行四边形

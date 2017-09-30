@@ -5,7 +5,7 @@ date = "2017-08-02T21:23:27+08:00"
 title = "在 CentOS 上搭建 WordPress 博客"
 keywords = ["CentOS", "WordPress", "建站", "LNMP"]
 description = "CentOS 系统上搭建 WordPress 博客。首先需要准备 WordPress 博客系统依赖的基础运行环境。 "
-url = "centos_wordpress.html"
+url = "/centos_wordpress.html"
 
 +++
 
@@ -15,11 +15,11 @@ url = "centos_wordpress.html"
 
 备注：服务器是腾讯上的云主机， 操作系统是 `CentOS` 6.8 64 位的。 
 
-## 一、准备 `LNMP` 环境
+## 1. 准备 LNMP 环境
 
 `LNMP` 是 `Linux、Nginx、MySQL 和 PHP` 的缩写，是 `WordPress `博客系统依赖的基础运行环境。我们先来准备 LNMP 环境。
 
-### 1. 安装 `Nginx`
+### 1.1 安装 Nginx
 
 使用 `yum` 安装 `Nginx`：
 
@@ -60,7 +60,7 @@ url = "centos_wordpress.html"
 	chkconfig nginx on
 
 
-### 2.安装 `MySQL`
+### 1.2 安装 MySQL
 
 使用 `yum` 安装 `MySQL`：
 
@@ -81,7 +81,7 @@ url = "centos_wordpress.html"
 	chkconfig mysqld on
 
 
-### 3.安装 `PHP`
+### 1.3 安装 PHP
 
 使用 `yum` 安装 `PHP`：
 
@@ -104,9 +104,9 @@ url = "centos_wordpress.html"
 	chkconfig php-fpm on
 
 
-## 二、安装并配置 `WordPress`
+## 2. 安装并配置  WordPress
 
-### 2.1安装 `WordPres`s
+### 2.1 安装 WordPress
 
 配置好 `LNMP` 环境后，继续使用 `yum` 来安装 `WordPress`：
 
@@ -116,7 +116,7 @@ url = "centos_wordpress.html"
 
 
 
-### 2.2配置`数据库`
+### 2.2 配置 数据库
 
 配进入 `MySQL`：
 
@@ -237,7 +237,7 @@ url = "centos_wordpress.html"
 	require_once(ABSPATH . 'wp-settings.php');
 
 
-### 2.3配置 `Nginx`
+### 2.3 配置 Nginx
 
 `WordPress` 已经安装完毕，我们配置`Nginx` 把请求转发给 `PHP-FPM` 来处理。
 
@@ -270,11 +270,11 @@ url = "centos_wordpress.html"
 	nginx -s reload
 
 
-## 三、准备域名和解析
+## 3. 准备域名和解析
 
-3.1域名注册
+### 3.1域名注册
 
-3.2域名解析
+### 3.2域名解析
 
  WordPress 博客已经部署完成。可以通过浏览器访问博客查看效果。
 

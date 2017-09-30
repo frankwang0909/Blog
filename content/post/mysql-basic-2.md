@@ -1,5 +1,5 @@
 +++
-url = "mysql-basic-2.html"
+url = "/mysql-basic-2.html"
 categories = ["Database"]
 tags = ["MySQL"]
 date = "2017-06-08T07:32:57+08:00"

@@ -1,14 +1,11 @@
 +++
 title = "用CSS实现图片翻转的动画效果"
 tags = ["CSS"]
-images = []
-banner = ""
-menu = ""
 keywords = ["CSS3", "transform","图片翻转","页面翻转效果", "rotateY"]
 description = "CSS如何实现图片翻转效果，CSS如何实现页面翻转效果,CSS3, transform,"
 categories = ["frontend"]
 date = "2017-04-29T21:24:00+08:00"
-url ="css-flip.html"
+url ="/css-flip.html"
 +++
 
 ## 用CSS实现页面或图片翻转的动画效果

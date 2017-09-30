@@ -2,10 +2,10 @@
 date = "2016-06-05T22:05:46+08:00"
 title = "Markdown 学习笔记"
 description = "Markdown 学习笔记，用Markdown写博客"
-keywords = "Markdown, 博客"
+keywords = ["Markdown", "博客"]
 categories = ["tools"]
 tags = ["Markdown"]
-url ="markdonw-notes"
+url ="/markdonw-notes.html"
 +++
 
 ## 定义：

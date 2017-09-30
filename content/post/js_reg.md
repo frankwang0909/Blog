@@ -5,8 +5,8 @@ date = "2016-12-18T21:56:37+08:00"
 title = "JavaScript的正则表达式"
 banner = "/images/2016-12-18banner.jpg"
 description = "JavaScript的正则表达式学习笔记"
-keywords = "JavaScript, 正则表达式"
-url = "js-reg"
+keywords = ["JavaScript", "正则表达式"]
+url = "/js-reg.html"
 +++
 
 ## 1.基本概念
@@ -46,15 +46,16 @@ url = "js-reg"
 ## 5.JavaScript中实例化`RegExp`对象
 
 5.1.字面量: 
-
+```javascript
 	var reg = /\d/; 
 	var reg2 = /[a-zA-Z0-9]/g;
+```
 
 5.2.构造函数:  
-
+```javascript
 	var reg = new RegExp(\d); 
 	var reg = new RegExp('[a-zA-Z0-9]', 'g');
-
+```
 
 ## 6.修饰符：
 
@@ -90,23 +91,27 @@ url = "js-reg"
 ## 8.字符类：
 
 8.1.通常，正则表达式一个字符对应字符串一个字符，如`/a/`对应字母a。元字符`[]`构建一个字符类，如`[abc]`可以匹配字符a或b或c中的任意一个。在浏览器调试界面控制台输入：
-	
+```javascript
 	'a1b2c3d4a'.match(/[abc]/g);
+```
 
 会得到匹配的字符串：
-	
+```javascript
 	["a", "b", "c", "a"]
+```
 
 8.2字符类取反：
 
 在`[]`内使用元字符^创建反向类，即匹配不属于某个字符类的字符串。如`[^abc]`匹配不是字符a、b、c的内容。
 在浏览器调试界面控制台输入：
-	
+```javascript	
 	'a1b2c3d4a'.match(/[^abc]/g);
+```
 
 会得到匹配的字符串：
-	
+```javascript	
 	["1", "2", "3", "d", "4"]
+```
 
 
 8.3范围类：
@@ -114,22 +119,26 @@ url = "js-reg"
 1)`[a-z]`表示：a到z的任意一个字符；
 
 在浏览器调试界面控制台输入：
-	
+```javascript	
 	'a1b2c3d4a'.match(/[a-z]/g);
+```
 
 会得到匹配的字符串：
-	
+```javascript	
 	["a", "b", "c", "d", "a"]
+```
 
 2)`[a-zA-Z]`表示：a到z以及A到Z的任意一个字符。
 
 在浏览器调试界面控制台输入：
-	
+```javascript	
 	'a1B2Zc3d4'.match(/[a-zA-Z]/g);
+```
 
 会得到匹配的字符串：
-	
+```javascript	
 	["a", "B", "Z", "c", "d"]
+```
 
 8.4 预定义类（简写）
 
@@ -158,53 +167,54 @@ url = "js-reg"
 10.1.贪婪模式：正则表达式会尽可能多地去匹配字符。
 
 例如，下面的正则表达式，匹配3到6个数字的字符串，默认会尽可能多地去匹配。
-
+```javascript
 	'b12345678A5879e123'.match(/\d{3,6}/g)
-
-	>>>["123456", "5879", "123"]
+	// ["123456", "5879", "123"]
+```
 
 10.2.非贪婪模式：在量词后加一个问号, 尽可能少地去匹配字符串。
-
+```javascript
 	'b12345678A5879e123'.match(/\d{3,6}?/g)
-
-	>>>["123", "456", "587", "123"]
-
+	// ["123", "456", "587", "123"]
+```
 
 ## 11.分组：
 
 11.1.括号“()”把字符串变成分组，使量词作用于分组。
 
 示例代码：
-
+```javascript
 	'abcabcabccc'.match(/abc{3}/g); 
-	>>>["abccc"]
+	// ["abccc"]
 
 	'abcabcabccc'.match(/(abc){3}/g);
-	>>>["abcabcabc"]
+	// ["abcabcabc"]
+```
 
 11.2.逻辑或：竖线 “|” 作用于分组, 可以表示选择多个分支中的一个。
-
+```javascript
 	'whatwhaowho'.match(/wh(at|o)/g)；
-	>>>["what", "who"]
+	// ["what", "who"]
 
 	'whatwhaowhowhy'.match(/wh(at|o|y)/g)
-	>>>["what", "who", "why"]
+	// ["what", "who", "why"]
+```
 
 11.3.捕获分组，反向引用
 
 想要把如下日期格式化：`2016-01-20` => `01/20/2016`；可以这样写
-
+```javascript
 	'2016-01-20'.replace(/(\d{4})-(\d{2})-(\d{2})/g, "$2/$3/$1")
-	>>>"01/20/2016"
-
+	// "01/20/2016"
+```
 
 `$`加上一个数字，数字对应的是分组的序号，第一个分组的内容用`$1`来捕获，第二分组的内容用`$2`来捕获，以此类推。
 
 11.4.忽略分组：分组内加上`?:`表示忽略该分组，而捕获该组的内容。
-
+```javascript
 	'2016-01-20'.replace(/(?:\d{4})-(\d{2})-(\d{2})/g, "$1/$2")
-	>>>"01/20"
-
+	// "01/20"
+```
 
 ## 12.断言：
 
@@ -213,15 +223,16 @@ url = "js-reg"
 12.2.前瞻与后顾：正则表达式匹配到规则的时候，向前检查是否符合断言，称为"前瞻"。向后检查是否符合断言则称为"后顾"。JavaScript不支持后顾。
 
 12.3.正向/肯定前瞻：向前符合断言。exp(?=assert)
-
-		'5a68cz7'.match(/\d(?=[a-z])/g);
-		>>>["5", "8"]
+```javascript
+	'5a68cz7'.match(/\d(?=[a-z])/g);
+	//["5", "8"]
+```
 
 12.4.负向/否定前瞻：向前不符合断言。exp(?!assert)
-
+```javascript
 	'5a68cz7'.match(/\d(?=[a-z])/g);
-	>>>["6", "7"]
-
+	// ["6", "7"]
+```
 
 ### 13.RegExp对象属性
 
@@ -234,55 +245,57 @@ url = "js-reg"
 13.4.`source`：正则表达式文本内容；（只读属性）;
 
 13.5.`lastIndex`: 当前表达式匹配内容的最后一个字符的下一个位置。   
-
+```javascript
 	var reg1 = /\d{3,5}-\w{6}/, reg2 = /\d{3,5}-\w{6}/gim;
 	reg1.global
-	>>>false
+	// false
 	reg1.ignoreCase
-	>>>false
+	// false
 	reg1.multiline
-	>>>false
+	// false
 	reg2.global
-	>>>true
+	// true
 	reg2.multiline
-	>>>true
+	// true
 	reg2.ignoreCase
-	>>>true
+	// true
 	reg1.source
-	>>>"\d{3,5}-\w{6}"
+	// "\d{3,5}-\w{6}"
 	reg2.source
-	>>>"\d{3,5}-\w{6}"
+	// "\d{3,5}-\w{6}"
 	reg1.source == reg2.source
-	>>>true
+	// true
+```
 
-## 14.RegExp的方法：`test()`, `exec()`;
+## 14.RegExp的方法：test(), exec()
 
 14.1.`RegExp.test(string)`: 测试某个字符串是否能够匹配该正则表达式。参数为字符串；返回值为布尔值。
-
+```javascript
 	var reg1 = /\d/, reg2 = /\d/g;
 	reg1.test('a12ab');
-	>>>true
+	// true
 
 	reg2.test('a12ab');
-	>>>true
+	// true
 
 	reg2.test('a12ab');
-	>>>true
+	// true
 
 	reg2.test('a12ab'); //注意这里变成`false`了就是因为每执行一次，`lastIndex`属性变了一次导致的。所以用`test`方法的RegExp不要用全局匹配模式。
-	>>>false
+	// false
 
 	reg2.test('a12ab');
-	>>>true
+	// true
 
 	reg2.test('a12ab');
-	>>>true
+	// true
 
 	while(reg2.test('a12ab')){
 		console.log('reg2.lastIndex:' +reg2.lastIndex);
 	}
-	>>> reg2.lastIndex:2
-	>>> reg2.lastIndex:3
+	//  reg2.lastIndex:2
+	//  reg2.lastIndex:3
+```
 
 14.2.`RegExp.exec(string)`: 返回匹配信息的数组。
 
@@ -299,7 +312,7 @@ url = "js-reg"
 	>>>reg2.lastIndex:9	result.index:5	58g7,g
 
 
-## 15.`String`的一些正则操作(查找、替换、切分等)方法：`match()`、`search()`、`replace()`、`split()`;
+## 15. String 的一些正则操作(查找、替换、切分等)方法：match()、search()、replace()、split();
 
 15.1. `string.match(RegExp)`： 
 
@@ -308,17 +321,18 @@ url = "js-reg"
 2)全局模式下，返回所有匹配结果为元素的数组；
 
 3)匹配失败则返回`null`。
-
+```javascript
 	var reg1 = /\d{4}-\d{2}-\d{2}/;
 	var reg2 = /\d{4}-\d{2}-\d{2}/g;
 	var str = "2016-10-01 2017-10-01 20181001";
 	var matchArray1 = str.match(reg1);
 	var matchArray2 = str.match(reg2);
 	console.log(matchArray1);
-	>>>["2016-10-01", index: 0, input: "2016-10-01 2017-10-01 20181001"]
+	// ["2016-10-01", index: 0, input: "2016-10-01 2017-10-01 20181001"]
 
 	console.log(matchArray2);
-	>>>["2016-10-01", "2017-10-01"]
+	// ["2016-10-01", "2017-10-01"]
+```
 
 15.2.`string.search(RegExp)`:
 
@@ -327,51 +341,55 @@ url = "js-reg"
 15.3.`string.replace(RegExp, replacement)`：
 
 1)这个方法用来进行正则表达式替换，将`RegExp`能匹配的文本替换成第二个参数`replacement`。默认只进行一次匹配。如果设定为全局模式，则所有能匹配的文本都会替换。
-	
+```javascript	
 	"2016-10-01 2017-10-01 20181001".replace(/\d{4}-\d{2}-\d{2}/, "Date");
-	>>>"Date 2017-10-01 20181001"
+	// "Date 2017-10-01 20181001"
 
 	"2016-10-01 2017-10-01 20181001".replace(/\d{4}-\d{2}-\d{2}/g, "Date");
-	>>>"Date Date 20181001"
+	// "Date Date 20181001"
+```
 
 2)如果第二个参数字符串中引用分组，可以使用`$1`表示第一个分组，`$2`表示第二个分组，以此类推。
-	
+```javascript	
 	"2016-10-01 2017-10-01 20181001".replace(/(\d{4})-(\d{2})-(\d{2})/, "$2/$3/$1");
-	>>>"10/01/2016 2017-10-01 20181001"
+	// "10/01/2016 2017-10-01 20181001"
 
 	"2016-10-01 2017-10-01 20181001".replace(/(\d{4})-(\d{2})-(\d{2})/g, "$2/$3/$1");
-	>>>"10/01/2016 10/01/2017 20181001"
+	// "10/01/2016 10/01/2017 20181001"
 
 	"2016-10-01 2017-10-01 20181001".replace(/(\d{4})-?(\d{2})-?(\d{2})/g, "$2/$3/$1");
-	>>>"10/01/2016 10/01/2017 10/01/2018"
+	// "10/01/2016 10/01/2017 10/01/2018"
+```
 
 3)如果要在第二个参数中表示`$`字符，则必须使用`$$`转义。
-	
+```javascript	
 	"the price is 12.99".replace(/([\d+\.\d{0,2}|\d+])/, "$$$1");
-	>>>"the price is $12.99"
+	// "the price is $12.99"
 
 	"the price is 12".replace(/([\d+\.\d{0,2}|\d+])/, "$$$1");
 	"the price is $12"
 
 	"the price is 12.99".replace(/(\d+\.\d{0,2})/, "￥$1");
-	>>>"the price is ￥12.99"
+	// "the price is ￥12.99"
 
 	"the price is 12".replace(/([\d+\.\d{0,2}|\d+])/, "$");
 	"the price is $12"
-
+```
 4)第二个参数还可以是函数。
 
 下面的例子展示了如何将t开头的单词转换为大写。
-	
+```javascript	
 	"one two three".replace(/\bt[a-zA-Z]+\b/g, function(m){
 		return m.toUpperCase();
 	});
-	>>>"one TWO THREE"
+	// "one TWO THREE"
+```
 
 15.4. `string.split(RegExp)`:
 
 这个方法使用一个正则表达式切分字符串，正则表达式是否使用了全局模式对结果没有影响。
-	
+```javascript
 	"one two three".split(/s+/);
-	>>>["one two three"]
+	// ["one two three"]
+```
 

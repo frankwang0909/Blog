@@ -1,14 +1,11 @@
 +++
 categories = ["frontend"]
 tags = ["CSS"]
-images = []
-banner = ""
-menu = ""
 date = "2017-05-02T22:52:17+08:00"
 title = "CSS实现切角效果"
-keywords = "切角效果，CSS实现切角效果，弧形切角，"
+keywords = ["切角效果", "CSS实现切角效果", "弧形切角"]
 description = "切角效果在网页设计中非常流行，大多数网页开发者倾向于使用背景图片来实现，这里提供纯CSS的解决方案，仅用CSS代码就能实现切角效果。"
-url = "bevel-corners.html"
+url = "/bevel-corners.html"
 
 +++
 

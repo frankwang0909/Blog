@@ -2,10 +2,10 @@
 date = "2017-07-09T21:45:51+08:00"
 categories = ["frontend"]
 tags = ["JavaScript"]
-title = "JavaScript 的 number 需要注意的一些特性"
-keywords = "NaN, Infinity, parseInt(), parseFloat(), Number(), JavaScript"
-description = "JavaScript 的 number 有一些特性需要引起注意。比如： NaN 和 Infinity 这两个特殊的值。转换成数值的方法： parseInt(), parseFloat(), Number()。"
-url = "javascript_number.html"
+title = "JavaScript 的 Number 需要注意的一些特性"
+keywords = ["NaN", "Infinity", "parseInt()", "parseFloat()", "Number()", "JavaScript"]
+description = "JavaScript 的 Number 有一些特性需要引起注意。比如： NaN 和 Infinity 这两个特殊的值。转换成数值的方法： parseInt(), parseFloat(), Number()。"
+url = "/js-number.html"
 +++
 
 ## 一、NaN：

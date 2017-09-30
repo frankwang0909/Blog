@@ -5,7 +5,7 @@ categories = ["frontend"]
 tags = ["返回顶部"]
 date = "2016-04-22T22:56:30+08:00"
 title = "实现返回顶部效果的3种方式"
-url = "back-to-top"
+url = "/back-to-top.html"
 +++
 
 

@@ -8,7 +8,7 @@ categories = ["frontend"]
 tags = ["Clipboard"]
 date = "2017-04-05T20:29:51+08:00"
 title = "JavaScript实现复制内容到剪贴板的功能"
-url = "copy2clipboard"
+url = "/copy2clipboard.html"
 +++
 
 

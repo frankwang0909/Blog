@@ -1,13 +1,11 @@
 +++
 date = "2017-04-06T20:33:42+08:00"
 title = "童鞋，放开那本词汇书"
-banner = "images/20170406dictionary.jpg"
-menu = ""
 description = "背单词书是反人类的事，放弃快速提升词汇量的妄念词汇是攒的，把你不熟悉的单词用手机查出来，标注出来，弄懂文章中的每一句话, throw away  your vocabulary books"
 keywords = "攒单词， 背单词书"
 categories = ["english"]
 tags = ["攒词汇"]
-url = "throw-away-vocabulary-books"
+url = "/throw-away-vocabulary-books.html"
 +++
 
 

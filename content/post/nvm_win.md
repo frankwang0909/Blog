@@ -5,7 +5,7 @@ date = "2017-07-20T07:54:41+08:00"
 title = " window 系统的 Node 版本管理工具 nvm-windows"
 keywords = ["Node", "版本管理工具", "nvm", "windows"]
 description = " nvm-windows 是一款用 Go 语言写的 用于 window 操作系统的 Node 版本管理工具。"
-url = "nvm_for_window.html"
+url = "/nvm_for_window.html"
 +++
 
 

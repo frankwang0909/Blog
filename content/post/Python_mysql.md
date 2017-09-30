@@ -5,7 +5,7 @@ description = "Python操作MySQL，访问数据库的统一规范接口Python DB
 categories = ["Python", "Database"]
 tags = ["Python", "MySQL"]
 date = "2017-06-20T07:44:01+08:00"
-url = "python_mysqldb.html"
+url = "/python_mysqldb.html"
 +++
 
 

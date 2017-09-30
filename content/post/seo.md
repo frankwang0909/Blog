@@ -3,10 +3,10 @@ menu = ""
 date = "2016-08-01T21:49:40+08:00"
 title = "前端工程师应该具备的SEO基础知识"
 description = "前端工程师应该具备的SEO基础知识, SEO新手指南"
-keywords = "SEO基础知识, SEO新手指南"
+keywords = ["SEO基础知识", "SEO新手指南"]
 categories = ["frontend"]
 tags = ["seo"]
-url = "seo"
+url = "/seo.html"
 +++
 
 ## SEO 是什么？
