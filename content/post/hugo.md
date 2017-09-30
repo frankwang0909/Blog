@@ -161,7 +161,7 @@ url = "/build-blog-with-hugo.html"
 7.2  启动`hugo`, 生成发布文件到`public`目录下。
 
 ```shell
-	hugo --theme=hugo-icarus-theme
+	hugo --theme=even
 ```
 
 ## Step 8. 托管到 GitHub Pages

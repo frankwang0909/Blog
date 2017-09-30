@@ -7,6 +7,53 @@ categories = ["frontend"]
 date = "2017-04-29T21:24:00+08:00"
 url ="/css-flip.html"
 +++
+<style>
+
+.back, .front, .rotate-container{
+	width: 320px;
+    height: 380px;
+    margin: 0 auto;
+    text-align: center;
+    color: #00f;
+}
+.flipper {
+    transition-duration: 1s;
+    transform-style: preserve-3d;
+    position: relative;
+}
+.rotate-container.hover .flipper,.rotate-container:hover .flipper {
+    transform: rotateY(180deg)
+}
+.back, .front {
+    backface-visibility: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+.front {
+    z-index: 2;
+}
+.back {
+    transform: rotateY(180deg);
+}
+.rotateY{
+	transition-duration:1.5s;
+}
+.rotateY45:hover{
+	transform: rotateY(45deg);
+}
+.rotateY90:hover{
+	transform: rotateY(90deg);
+}
+.rotateY180:hover{
+	transform: rotateY(180deg);
+	
+}
+.bf-hidden{
+	transform-style: preserve-3d;
+	backface-visibility: hidden;
+}
+</style>
 
 ## 用CSS实现页面或图片翻转的动画效果
 Web开发中常常会有动画的交互效果，以前我们只能用JavaScript来实现，随着浏览器对CSS3新特性的支持度越来越好，很多的特效都可以通过CSS代码来实现。
@@ -38,75 +85,58 @@ Web开发中常常会有动画的交互效果，以前我们只能用JavaScript�
 ## 示例代码
 
 HTML代码
-
-	<div class="rotate-container"">
-		<div class="flipper">
-			<div class="front">
-				<!-- 前面内容 -->
-			</div>
-			<div class="back">
-				<!-- 背面内容 -->
-			</div>
+```html
+<div class="rotate-container">
+	<div class="flipper">
+		<div class="front">
+			<!-- 前面内容 -->
+		</div>
+		<div class="back">
+			<!-- 背面内容 -->
 		</div>
 	</div>
+</div>
+```
 
 CSS代码
+```css
+.rotate-container:hover .flipper{
+	transform: rotateY(180deg);
+}
 
-	.rotate-container:hover .flipper{
-		transform: rotateY(180deg);
-	}
+.rotate-container, .front, .back {
+	width: 320px;
+	height: 480px;
+}
 
-	.rotate-container, .front, .back {
-		width: 320px;
-		height: 480px;
-	}
+.flipper {
+	transition-duration: 1s;  
+	transform-style: preserve-3d;
+	position: relative;
+}
 
-	.flipper {
-		transition-duration: 1s;  
-		transform-style: preserve-3d;
-		position: relative;
-	}
+.front, .back {
+	backface-visibility: hidden;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
 
-	.front, .back {
-		backface-visibility: hidden;
-		position: absolute;
-		top: 0;
-		left: 0;
-	}
+.front {
+	z-index: 2;
+}
 
-	.front {
-		z-index: 2;
-	}
-
-	.back {
-		transform: rotateY(180deg);
-	}
-
+.back {
+	transform: rotateY(180deg);
+}
+```
 
 ## 关键的技术点解释：
 
 ### 1.transform：变形
 
 `transform: rotateY(180deg)` 表示沿着Y轴旋转180度。
-<style>
-	.rotateY{
-		transition-duration:1.5s;
-	}
-	.rotateY45:hover{
-		transform: rotateY(45deg);
-	}
-	.rotateY90:hover{
-		transform: rotateY(90deg);
-	}
-	.rotateY180:hover{
-		transform: rotateY(180deg);
-		
-	}
-	.bf-hidden{
-		transform-style: preserve-3d;
-		backface-visibility: hidden;
-	}
-</style>
+
 <p>Demo2：沿着Y轴旋转180度(旋转到背面可见)</p>
 <div class="rotateY rotateY180">
 	<img src="https://images-cn.ssl-images-amazon.com/images/I/51fD0ZgQoXL._SL400_.jpg" alt="">
