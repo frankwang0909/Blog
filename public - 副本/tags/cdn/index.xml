@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Cdn on Frank Wang&#39;s Coding World</title>
+    <link>http://www.wangxingfeng.com/tags/cdn/index.xml</link>
+    <description>Recent content in Cdn on Frank Wang&#39;s Coding World</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <atom:link href="http://www.wangxingfeng.com/tags/cdn/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>推荐几个常用的CDN公共库</title>
+      <link>http://www.wangxingfeng.com/cdn.html</link>
+      <pubDate>Sat, 20 Aug 2016 21:07:46 +0800</pubDate>
+      
+      <guid>http://www.wangxingfeng.com/cdn.html</guid>
+      <description>
+
+&lt;h2 id=&#34;cdn&#34;&gt;CDN&lt;/h2&gt;
+
+&lt;p&gt;CDN的全称是Content Delivery Network，即内容分发网络。是指一种通过互联网互相连接的电脑网络系统，利用最靠近每位用户的服务器，更快、更可靠地将音乐、图片、视频、应用程序及其他文件发送给用户，来提供高性能、可扩展性及低成本的网络内容传递给用户。&lt;/p&gt;
+
+&lt;h2 id=&#34;cdn公共库&#34;&gt;CDN公共库&lt;/h2&gt;
+
+&lt;p&gt;CDN公共库指将常用的js库存放在CDN节点，以方便广大开发者直接调用。与存放在服务器单机上相比，CDN公共库更加稳定、高速。一般的CDN公共库都会包含全球所有最流行的开源JavaScript库，可以直接引用。&lt;/p&gt;
+
+&lt;h3 id=&#34;优点&#34;&gt;优点：&lt;/h3&gt;
+
+&lt;p&gt;1.提高访问速度：&lt;/p&gt;
+
+&lt;p&gt;假设你网站的jQuery引用了新浪的CDN，那么当用户的浏览器提交请求时，浏览器自动下载网络上最近的可用的文件，下载速度会更快。&lt;/p&gt;
+
+&lt;p&gt;2.更好的缓存:&lt;/p&gt;
+
+&lt;p&gt;许多网站都使用了国内或者是国外的几个知名的CDN公共库。很可能用户浏览器的缓存区里早就已经下载了许多版本的jQuery，访问你的网站时，不需要重复下载jQuery。如果你用自己的服务器提供jQuery，那么你的用户至少要下载一次它。&lt;/p&gt;
+
+&lt;h2 id=&#34;推荐几个常用前端公共库cdn&#34;&gt;推荐几个常用前端公共库CDN&lt;/h2&gt;
+
+&lt;h3 id=&#34;国外的&#34;&gt;国外的&lt;/h3&gt;
+
+&lt;p&gt;1.jQuery: &lt;a href=&#34;https://code.jquery.com/&#34;&gt;https://code.jquery.com/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;2.Google: &lt;a href=&#34;https://developers.google.com/speed/libraries/&#34;&gt;https://developers.google.com/speed/libraries/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;3.CDNJS: &lt;a href=&#34;https://cdnjs.com/libraries&#34;&gt;https://cdnjs.com/libraries&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;国内的&#34;&gt;国内的&lt;/h3&gt;
+
+&lt;p&gt;1.cdnjs: &lt;a href=&#34;http://cdnjs.net/&#34;&gt;http://cdnjs.net/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;2.百度：&lt;a href=&#34;http://developer.baidu.com/wiki/index.php?title=docs/cplat/libs&#34;&gt;http://developer.baidu.com/wiki/index.php?title=docs/cplat/libs&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;3.360：&lt;a href=&#34;http://libs.useso.com/&#34;&gt;http://libs.useso.com/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;4.又拍云：&lt;a href=&#34;http://upcdn.b0.upaiyun.com/&#34;&gt;http://upcdn.b0.upaiyun.com/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;5.新浪：&lt;a href=&#34;http://lib.sinaapp.com/&#34;&gt;http://lib.sinaapp.com/&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;国内外常用的jquerycdn&#34;&gt;国内外常用的jQueryCDN：&lt;/h3&gt;
+
+&lt;p&gt;1.jQuery官网： &lt;a href=&#34;http://code.jquery.com/jquery-2.0.0.min.js&#34;&gt;http://code.jquery.com/jquery-2.0.0.min.js&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;2.CDNJS： &lt;a href=&#34;http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.0/jquery.min.js&#34;&gt;http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.0/jquery.min.js&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;3.Google Hosted Libraries： &lt;a href=&#34;http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js&#34;&gt;http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;4.jsDeliver： &lt;a href=&#34;http://cdn.jsdelivr.net/jquery/2.0.0/jquery-2.0.0.min.js&#34;&gt;http://cdn.jsdelivr.net/jquery/2.0.0/jquery-2.0.0.min.js&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;5.七牛: &lt;a href=&#34;http://cdn.staticfile.org/jquery/2.0.0/jquery.min.js&#34;&gt;http://cdn.staticfile.org/jquery/2.0.0/jquery.min.js&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;6.百度: &lt;a href=&#34;http://libs.baidu.com/jquery/2.0.0/jquery.min.js&#34;&gt;http://libs.baidu.com/jquery/2.0.0/jquery.min.js&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;7.新浪: &lt;a href=&#34;http://lib.sinaapp.com/js/jquery/2.0/jquery.min.js&#34;&gt;http://lib.sinaapp.com/js/jquery/2.0/jquery.min.js&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;8.又拍云: &lt;a href=&#34;http://upcdn.b0.upaiyun.com/libs/jquery/jquery-2.0.0.min.js&#34;&gt;http://upcdn.b0.upaiyun.com/libs/jquery/jquery-2.0.0.min.js&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;9.360: &lt;a href=&#34;http://libs.useso.com/js/jquery/2.0.0/jquery.min.js&#34;&gt;http://libs.useso.com/js/jquery/2.0.0/jquery.min.js&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;当然，毕竟第三方的服务也不一定完全靠谱，如果引用的是国外的站点的话，哪天被墙了也有可能。所以，我们可以加入以下代码，当
+CDN加载失败时，还可以加载自己本地的jQuery文件。&lt;a href=&#34;https://paulund.co.uk/fallback-on-local-jquery-if-cdn-fails&#34;&gt;以下代码来源链接&lt;/a&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;script&amp;gt;
+    window.jQuery || document.write(&#39;&amp;lt;script src=&amp;quot;js/libs/jquery-2.1.0.min.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;&#39;);
+&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

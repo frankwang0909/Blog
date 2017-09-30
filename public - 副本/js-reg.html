@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>JavaScript的正则表达式 - Frank Wang&#39;s Coding World</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="Frank Wang" /><meta name="description" content="JavaScript的正则表达式学习笔记" />
+<meta name="keywords" content="JavaScript, 正则表达式" />
+
+
+
+<meta name="baidu-site-verification" content="WSqfBuzd3t" />
+
+
+
+<meta name="generator" content="Hugo 0.19" />
+
+
+<link rel="canonical" href="http://www.wangxingfeng.com/js-reg.html" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="icon" href="/favicon.ico" />
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+<link href="/dist/even.min.css?v=2.6.1" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+<meta property="og:title" content="JavaScript的正则表达式" />
+<meta property="og:description" content="JavaScript的正则表达式学习笔记" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.wangxingfeng.com/js-reg.html" />
+
+
+
+<meta property="article:published_time" content="2016-12-18T21:56:37&#43;08:00"/>
+<meta property="article:modified_time" content="2016-12-18T21:56:37&#43;08:00"/>
+
+
+
+
+
+
+
+
+
+
+
+<meta itemprop="name" content="JavaScript的正则表达式">
+<meta itemprop="description" content="JavaScript的正则表达式学习笔记">
+
+
+<meta itemprop="dateModified" content="2016-12-18T21:56:37&#43;08:00" />
+<meta itemprop="wordCount" content="2935">
+
+
+
+<meta itemprop="keywords" content="database,english,frontend,node,python,tools,angular2,bug,cdn,clipboard,css,css3,git,github,gitment,hugo,javascript,markdown,mysql,node,nvm,python,regexp,seo,shadowsocks,sublime-text,tab切换,typescript,useragent,wordpress,下拉菜单,块级作用域,攒词汇,数组,服务器,返回顶部," />
+
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:text:title" content="JavaScript的正则表达式"/>
+<meta name="twitter:title" content="JavaScript的正则表达式"/>
+<meta name="twitter:description" content="JavaScript的正则表达式学习笔记"/>
+
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+<script>
+  var _hmt = _hmt || [];
+  (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?7d0fc5a9b2d70433d9b1dd477606dc3c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+  }
+  )();
+</script>
+<script>
+  (function() {
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+          bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+      } else {
+          bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+  }
+  )();
+</script>
+<script>
+  (function(i, s, o, g, r, a, m) {
+      i['GoogleAnalyticsObject'] = r;
+      i[r] = i[r] || function() {
+          (i[r].q = i[r].q || []).push(arguments)
+      }
+      ,
+      i[r].l = 1 * new Date();
+      a = s.createElement(o),
+      m = s.getElementsByTagName(o)[0];
+      a.async = 1;
+      a.src = g;
+      m.parentNode.insertBefore(a, m)
+  }
+  )(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+  ga('create', 'UA-101812896-1', 'auto');
+  ga('send', 'pageview');
+</script>
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Frank Wang’s Coding World</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Frank Wang’s Coding World</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">JavaScript的正则表达式</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2016-12-18 </span>
+        <div class="post-category">
+            <a href="/categories/frontend/">frontend</a>
+          </div>
+        <span class="more-meta"> 约 2935 字 </span>
+        <span class="more-meta"> 预计阅读 6 分钟 </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content">
+      <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#1-基本概念">1.基本概念</a></li>
+<li><a href="#2-通配符">2.通配符</a></li>
+<li><a href="#3-在线图形工具">3.在线图形工具：</a></li>
+<li><a href="#4-ide中可以支持正则表达式">4.IDE中可以支持正则表达式：</a></li>
+<li><a href="#5-javascript中实例化-regexp-对象">5.JavaScript中实例化<code>RegExp</code>对象</a></li>
+<li><a href="#6-修饰符">6.修饰符：</a></li>
+<li><a href="#7-原意文本字符-和元字符">7.原意文本字符 和元字符：</a></li>
+<li><a href="#8-字符类">8.字符类：</a></li>
+<li><a href="#10-贪婪模式与非贪婪模式">10.贪婪模式与非贪婪模式：</a></li>
+<li><a href="#11-分组">11.分组：</a></li>
+<li><a href="#12-断言">12.断言：</a>
+<ul>
+<li><a href="#13-regexp对象属性">13.RegExp对象属性</a></li>
+</ul></li>
+<li><a href="#14-regexp的方法-test-exec">14.RegExp的方法：test(), exec()</a></li>
+<li><a href="#15-string-的一些正则操作-查找-替换-切分等-方法-match-search-replace-split">15. String 的一些正则操作(查找、替换、切分等)方法：match()、search()、replace()、split();</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+    <iframe src="https://rcm-cn.amazon-adsystem.com/e/cm?o=28&p=12&l=ur1&category=books&banner=0CQKPCZXE9QEVSSXN002&f=ifr&linkID=adf25941500ff7304f5193004b357dff&t=frankwang09-23&tracking_id=frankwang09-23" width="300" height="250" scrolling="no" border="0" marginwidth="0" style="border:none;" frameborder="0"></iframe>
+    <iframe src="https://rcm-cn.amazon-adsystem.com/e/cm?o=28&p=12&l=ur1&category=books&banner=1N4AHFJRK48P743G2QR2&f=ifr&linkID=7551f551ae22dc5bee3805c6bfb79010&t=frankwang09-23&tracking_id=frankwang09-23" width="300" height="250" scrolling="no" border="0" marginwidth="0" style="border:none;" frameborder="0"></iframe>
+    
+    <div class="post-content">
+      
+
+<h2 id="1-基本概念">1.基本概念</h2>
+
+<p>正则表达式(<code>Regular Expression</code>)是一个字符串，定义了某个规则，按照这种规则来描述、匹配一系列符合条件的字符串。</p>
+
+<h2 id="2-通配符">2.通配符</h2>
+
+<p>当前目录下查找文件(linux 命令行)</p>
+
+<pre><code>find ./ -name *.txt
+</code></pre>
+
+<h2 id="3-在线图形工具">3.在线图形工具：</h2>
+
+<p><a href="https://regexper.com/">https://regexper.com/</a> 是一款非常实用的正则表达式图形化工具。你也可以<a href="https://regexper.com/">下载</a>到本地，运行速度更快</p>
+
+<h2 id="4-ide中可以支持正则表达式">4.IDE中可以支持正则表达式：</h2>
+
+<p>我用的是编辑器是<code>Sublime Text 3</code>。快捷键<code>Ctrl+F</code>查找字符串，<code>Ctrl+H</code>替换字符串，在底部唤出的面板左上角有开启正则表达式（快捷键<code>Alt+R</code>）</p>
+
+<pre><code>http://www.wangxingfeng.com
+http://m.wangxingfeng.com
+http://cosmic.wangxingfeng.com
+http://blog.wangxingfeng.com
+http://img.wangxingfeng.com/1234.jpg
+http://img.wangxingfeng.com/158.png
+https://img.wangxingfeng.com/128744.jpg
+http://img.wangxingfeng.com/1285.jpg
+http://img.wangxingfeng.com/7884.png
+</code></pre>
+
+<p><code>Sublime</code>中找出上面的<code>url</code>中<code>http</code>协议的<code>jpg</code>文件，去掉其协议头</p>
+
+<pre><code>Find What: http:\/\/(.+\.jpg)
+replace with: $1
+</code></pre>
+
+<h2 id="5-javascript中实例化-regexp-对象">5.JavaScript中实例化<code>RegExp</code>对象</h2>
+
+<p>5.1.字面量:</p>
+
+<pre><code class="language-javascript">    var reg = /\d/; 
+    var reg2 = /[a-zA-Z0-9]/g;
+</code></pre>
+
+<p>5.2.构造函数:</p>
+
+<pre><code class="language-javascript">    var reg = new RegExp(\d); 
+    var reg = new RegExp('[a-zA-Z0-9]', 'g');
+</code></pre>
+
+<h2 id="6-修饰符">6.修饰符：</h2>
+
+<p>6.1.<code>g</code>(global):表示全局匹配，不添加则默认匹配到第一个字符串。</p>
+
+<p>6.2.<code>i</code>(ignore case):表示忽略大小写,不添加则默认大小写敏感。</p>
+
+<p>6.3.<code>m</code>(multiple lines):表示多行匹配。</p>
+
+<h2 id="7-原意文本字符-和元字符">7.原意文本字符 和元字符：</h2>
+
+<p>7.1.原意文本字符：表示字符的原本含义，如<code>a</code>表示小写字母a，<code>1</code>表示数字1。</p>
+
+<p>7.2.元字符：在正则表达式中有特殊含义的非字母字符，如星号<code>*</code>，问号<code>？</code>等。</p>
+
+<p>7.3.常用元字符及其含义：</p>
+
+<pre><code>1）[]:构建字符类，范围类等；
+2）{}:量词，表示字符的个数；
+3）():构建分组；
+4）*：表示任意个字符；可理解为{0,}；
+5）？：表示最多有一个该字符{0,1}；
+6）+：表示至少有一个该字符{1,}；
+7）^: 取反；
+8）\n: 换行符；
+9）\r: 回车符；
+10）\0: 空字符；
+11）\t: 水平制表符；
+12）\v:  垂直制表符；
+13）\f: 换页符。
+</code></pre>
+
+<h2 id="8-字符类">8.字符类：</h2>
+
+<p>8.1.通常，正则表达式一个字符对应字符串一个字符，如<code>/a/</code>对应字母a。元字符<code>[]</code>构建一个字符类，如<code>[abc]</code>可以匹配字符a或b或c中的任意一个。在浏览器调试界面控制台输入：</p>
+
+<pre><code class="language-javascript">    'a1b2c3d4a'.match(/[abc]/g);
+</code></pre>
+
+<p>会得到匹配的字符串：</p>
+
+<pre><code class="language-javascript">    [&quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;a&quot;]
+</code></pre>
+
+<p>8.2字符类取反：</p>
+
+<p>在<code>[]</code>内使用元字符^创建反向类，即匹配不属于某个字符类的字符串。如<code>[^abc]</code>匹配不是字符a、b、c的内容。
+在浏览器调试界面控制台输入：</p>
+
+<pre><code class="language-javascript">    'a1b2c3d4a'.match(/[^abc]/g);
+</code></pre>
+
+<p>会得到匹配的字符串：</p>
+
+<pre><code class="language-javascript">    [&quot;1&quot;, &quot;2&quot;, &quot;3&quot;, &quot;d&quot;, &quot;4&quot;]
+</code></pre>
+
+<p>8.3范围类：</p>
+
+<p>1)<code>[a-z]</code>表示：a到z的任意一个字符；</p>
+
+<p>在浏览器调试界面控制台输入：</p>
+
+<pre><code class="language-javascript">    'a1b2c3d4a'.match(/[a-z]/g);
+</code></pre>
+
+<p>会得到匹配的字符串：</p>
+
+<pre><code class="language-javascript">    [&quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;d&quot;, &quot;a&quot;]
+</code></pre>
+
+<p>2)<code>[a-zA-Z]</code>表示：a到z以及A到Z的任意一个字符。</p>
+
+<p>在浏览器调试界面控制台输入：</p>
+
+<pre><code class="language-javascript">    'a1B2Zc3d4'.match(/[a-zA-Z]/g);
+</code></pre>
+
+<p>会得到匹配的字符串：</p>
+
+<pre><code class="language-javascript">    [&quot;a&quot;, &quot;B&quot;, &quot;Z&quot;, &quot;c&quot;, &quot;d&quot;]
+</code></pre>
+
+<p>8.4 预定义类（简写）</p>
+
+<pre><code>1) /./ =&gt; /[^\r\n]/  除了回车符和换行符之外的任何字符
+2) /\d/ =&gt; [0-9]  数字字符
+3) /\D/ =&gt; [^0-9] 非数字字符
+4) /\s/ =&gt; 空白字符
+5) /\S/ =&gt; 非空白字符
+6) /\w/ =&gt; [a-zA-Z0-9_]单词字符（字母，数字，下划线. 
+7) /\W/ =&gt; [^a-zA-Z0-9_]非单词字符
+8) \b: 单词边界
+9) \B：非单词边界；
+</code></pre>
+
+<p>9.量词：在字符后跟一个{}表示重复前面字符的次数。</p>
+
+<pre><code>1.) /\d{1,20}/: 1~20个数字；
+2.) /\d*/ =&gt; /\d{0,}/: 任意个数字;
+3.) /\d+/ =&gt; /\d{1,}/  :至少一个数字；
+4.) /\d?/ =&gt; /\d{0,1}/ :之多一个数字；
+5.) /\d{3}/ : 3个数字
+</code></pre>
+
+<h2 id="10-贪婪模式与非贪婪模式">10.贪婪模式与非贪婪模式：</h2>
+
+<p>10.1.贪婪模式：正则表达式会尽可能多地去匹配字符。</p>
+
+<p>例如，下面的正则表达式，匹配3到6个数字的字符串，默认会尽可能多地去匹配。</p>
+
+<pre><code class="language-javascript">    'b12345678A5879e123'.match(/\d{3,6}/g)
+    // [&quot;123456&quot;, &quot;5879&quot;, &quot;123&quot;]
+</code></pre>
+
+<p>10.2.非贪婪模式：在量词后加一个问号, 尽可能少地去匹配字符串。</p>
+
+<pre><code class="language-javascript">    'b12345678A5879e123'.match(/\d{3,6}?/g)
+    // [&quot;123&quot;, &quot;456&quot;, &quot;587&quot;, &quot;123&quot;]
+</code></pre>
+
+<h2 id="11-分组">11.分组：</h2>
+
+<p>11.1.括号“()”把字符串变成分组，使量词作用于分组。</p>
+
+<p>示例代码：</p>
+
+<pre><code class="language-javascript">    'abcabcabccc'.match(/abc{3}/g); 
+    // [&quot;abccc&quot;]
+
+    'abcabcabccc'.match(/(abc){3}/g);
+    // [&quot;abcabcabc&quot;]
+</code></pre>
+
+<p>11.2.逻辑或：竖线 “|” 作用于分组, 可以表示选择多个分支中的一个。</p>
+
+<pre><code class="language-javascript">    'whatwhaowho'.match(/wh(at|o)/g)；
+    // [&quot;what&quot;, &quot;who&quot;]
+
+    'whatwhaowhowhy'.match(/wh(at|o|y)/g)
+    // [&quot;what&quot;, &quot;who&quot;, &quot;why&quot;]
+</code></pre>
+
+<p>11.3.捕获分组，反向引用</p>
+
+<p>想要把如下日期格式化：<code>2016-01-20</code> =&gt; <code>01/20/2016</code>；可以这样写</p>
+
+<pre><code class="language-javascript">    '2016-01-20'.replace(/(\d{4})-(\d{2})-(\d{2})/g, &quot;$2/$3/$1&quot;)
+    // &quot;01/20/2016&quot;
+</code></pre>
+
+<p><code>$</code>加上一个数字，数字对应的是分组的序号，第一个分组的内容用<code>$1</code>来捕获，第二分组的内容用<code>$2</code>来捕获，以此类推。</p>
+
+<p>11.4.忽略分组：分组内加上<code>?:</code>表示忽略该分组，而捕获该组的内容。</p>
+
+<pre><code class="language-javascript">    '2016-01-20'.replace(/(?:\d{4})-(\d{2})-(\d{2})/g, &quot;$1/$2&quot;)
+    // &quot;01/20&quot;
+</code></pre>
+
+<h2 id="12-断言">12.断言：</h2>
+
+<p>12.1.正则表达式从文本头部向文本尾部开始解析，文本尾部方向称为“前”，反之，为“后”。</p>
+
+<p>12.2.前瞻与后顾：正则表达式匹配到规则的时候，向前检查是否符合断言，称为&rdquo;前瞻&rdquo;。向后检查是否符合断言则称为&rdquo;后顾&rdquo;。JavaScript不支持后顾。</p>
+
+<p>12.3.正向/肯定前瞻：向前符合断言。exp(?=assert)</p>
+
+<pre><code class="language-javascript">    '5a68cz7'.match(/\d(?=[a-z])/g);
+    //[&quot;5&quot;, &quot;8&quot;]
+</code></pre>
+
+<p>12.4.负向/否定前瞻：向前不符合断言。exp(?!assert)</p>
+
+<pre><code class="language-javascript">    '5a68cz7'.match(/\d(?=[a-z])/g);
+    // [&quot;6&quot;, &quot;7&quot;]
+</code></pre>
+
+<h3 id="13-regexp对象属性">13.RegExp对象属性</h3>
+
+<p>13.1.<code>global</code>: 是否全文搜索（只读属性）;</p>
+
+<p>13.2.<code>ignoreCase</code>：是否大小写敏感（只读属性）;</p>
+
+<p>13.3.<code>multline</code>: 是否多行（只读属性）;</p>
+
+<p>13.4.<code>source</code>：正则表达式文本内容；（只读属性）;</p>
+
+<p>13.5.<code>lastIndex</code>: 当前表达式匹配内容的最后一个字符的下一个位置。</p>
+
+<pre><code class="language-javascript">    var reg1 = /\d{3,5}-\w{6}/, reg2 = /\d{3,5}-\w{6}/gim;
+    reg1.global
+    // false
+    reg1.ignoreCase
+    // false
+    reg1.multiline
+    // false
+    reg2.global
+    // true
+    reg2.multiline
+    // true
+    reg2.ignoreCase
+    // true
+    reg1.source
+    // &quot;\d{3,5}-\w{6}&quot;
+    reg2.source
+    // &quot;\d{3,5}-\w{6}&quot;
+    reg1.source == reg2.source
+    // true
+</code></pre>
+
+<h2 id="14-regexp的方法-test-exec">14.RegExp的方法：test(), exec()</h2>
+
+<p>14.1.<code>RegExp.test(string)</code>: 测试某个字符串是否能够匹配该正则表达式。参数为字符串；返回值为布尔值。</p>
+
+<pre><code class="language-javascript">    var reg1 = /\d/, reg2 = /\d/g;
+    reg1.test('a12ab');
+    // true
+
+    reg2.test('a12ab');
+    // true
+
+    reg2.test('a12ab');
+    // true
+
+    reg2.test('a12ab'); //注意这里变成`false`了就是因为每执行一次，`lastIndex`属性变了一次导致的。所以用`test`方法的RegExp不要用全局匹配模式。
+    // false
+
+    reg2.test('a12ab');
+    // true
+
+    reg2.test('a12ab');
+    // true
+
+    while(reg2.test('a12ab')){
+        console.log('reg2.lastIndex:' +reg2.lastIndex);
+    }
+    //  reg2.lastIndex:2
+    //  reg2.lastIndex:3
+</code></pre>
+
+<p>14.2.<code>RegExp.exec(string)</code>: 返回匹配信息的数组。</p>
+
+<p>如果没有匹配的文本，则返回<code>null</code>，否则返回一个结果数组。非全局匹配模式，<code>lastIndex</code>为0，不会变。全局模式下，每次执行，<code>lastIndex</code>都会跟着改变。</p>
+
+<pre><code>var reg1 = /\d+(\w)\d/, reg2 = /\d+(\w)\d/g, str=&quot;1a2ce58g79ht&quot;;
+var result = reg1.exec(str);
+console.log(reg1.lastIndex + '\t' + result.index+ '\t' + result.toString());
+&gt;&gt;&gt; 0   0   1a2,a
+while(result=reg2.exec(str)){
+    console.log('reg2.lastIndex:'+ reg2.lastIndex + '\t' + 'result.index:'+ result.index+ '\t' + result.toString());    
+}
+&gt;&gt;&gt;reg2.lastIndex:3 result.index:0  1a2,a
+&gt;&gt;&gt;reg2.lastIndex:9 result.index:5  58g7,g
+</code></pre>
+
+<h2 id="15-string-的一些正则操作-查找-替换-切分等-方法-match-search-replace-split">15. String 的一些正则操作(查找、替换、切分等)方法：match()、search()、replace()、split();</h2>
+
+<p>15.1. <code>string.match(RegExp)</code>：</p>
+
+<p>1)非全局模式下，返回第一个匹配结果及其<code>index</code>以及原字符串的引用(见示例代码)；</p>
+
+<p>2)全局模式下，返回所有匹配结果为元素的数组；</p>
+
+<p>3)匹配失败则返回<code>null</code>。</p>
+
+<pre><code class="language-javascript">    var reg1 = /\d{4}-\d{2}-\d{2}/;
+    var reg2 = /\d{4}-\d{2}-\d{2}/g;
+    var str = &quot;2016-10-01 2017-10-01 20181001&quot;;
+    var matchArray1 = str.match(reg1);
+    var matchArray2 = str.match(reg2);
+    console.log(matchArray1);
+    // [&quot;2016-10-01&quot;, index: 0, input: &quot;2016-10-01 2017-10-01 20181001&quot;]
+
+    console.log(matchArray2);
+    // [&quot;2016-10-01&quot;, &quot;2017-10-01&quot;]
+</code></pre>
+
+<p>15.2.<code>string.search(RegExp)</code>:</p>
+
+<p>参数可以是<code>子字符串</code>也可以是<code>正则表达式</code>。这个方法用来寻找某个子字符串或者正则表达式在该字符串中第一次匹配成功的位置，如果不成功，则返回<code>-1</code>.</p>
+
+<p>15.3.<code>string.replace(RegExp, replacement)</code>：</p>
+
+<p>1)这个方法用来进行正则表达式替换，将<code>RegExp</code>能匹配的文本替换成第二个参数<code>replacement</code>。默认只进行一次匹配。如果设定为全局模式，则所有能匹配的文本都会替换。</p>
+
+<pre><code class="language-javascript">    &quot;2016-10-01 2017-10-01 20181001&quot;.replace(/\d{4}-\d{2}-\d{2}/, &quot;Date&quot;);
+    // &quot;Date 2017-10-01 20181001&quot;
+
+    &quot;2016-10-01 2017-10-01 20181001&quot;.replace(/\d{4}-\d{2}-\d{2}/g, &quot;Date&quot;);
+    // &quot;Date Date 20181001&quot;
+</code></pre>
+
+<p>2)如果第二个参数字符串中引用分组，可以使用<code>$1</code>表示第一个分组，<code>$2</code>表示第二个分组，以此类推。</p>
+
+<pre><code class="language-javascript">    &quot;2016-10-01 2017-10-01 20181001&quot;.replace(/(\d{4})-(\d{2})-(\d{2})/, &quot;$2/$3/$1&quot;);
+    // &quot;10/01/2016 2017-10-01 20181001&quot;
+
+    &quot;2016-10-01 2017-10-01 20181001&quot;.replace(/(\d{4})-(\d{2})-(\d{2})/g, &quot;$2/$3/$1&quot;);
+    // &quot;10/01/2016 10/01/2017 20181001&quot;
+
+    &quot;2016-10-01 2017-10-01 20181001&quot;.replace(/(\d{4})-?(\d{2})-?(\d{2})/g, &quot;$2/$3/$1&quot;);
+    // &quot;10/01/2016 10/01/2017 10/01/2018&quot;
+</code></pre>
+
+<p>3)如果要在第二个参数中表示<code>$</code>字符，则必须使用<code>$$</code>转义。</p>
+
+<pre><code class="language-javascript">    &quot;the price is 12.99&quot;.replace(/([\d+\.\d{0,2}|\d+])/, &quot;$$$1&quot;);
+    // &quot;the price is $12.99&quot;
+
+    &quot;the price is 12&quot;.replace(/([\d+\.\d{0,2}|\d+])/, &quot;$$$1&quot;);
+    &quot;the price is $12&quot;
+
+    &quot;the price is 12.99&quot;.replace(/(\d+\.\d{0,2})/, &quot;￥$1&quot;);
+    // &quot;the price is ￥12.99&quot;
+
+    &quot;the price is 12&quot;.replace(/([\d+\.\d{0,2}|\d+])/, &quot;$&quot;);
+    &quot;the price is $12&quot;
+</code></pre>
+
+<p>4)第二个参数还可以是函数。</p>
+
+<p>下面的例子展示了如何将t开头的单词转换为大写。</p>
+
+<pre><code class="language-javascript">    &quot;one two three&quot;.replace(/\bt[a-zA-Z]+\b/g, function(m){
+        return m.toUpperCase();
+    });
+    // &quot;one TWO THREE&quot;
+</code></pre>
+
+<p>15.4. <code>string.split(RegExp)</code>:</p>
+
+<p>这个方法使用一个正则表达式切分字符串，正则表达式是否使用了全局模式对结果没有影响。</p>
+
+<pre><code class="language-javascript">    &quot;one two three&quot;.split(/s+/);
+    // [&quot;one two three&quot;]
+</code></pre>
+
+    </div>
+    
+    
+    
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Frank Wang</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">2016-12-18</span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      <div class="post-tags">
+          
+          <a href="/tags/regexp/">RegExp</a>
+          
+        </div>
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/fix-inline-bug.html">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">代码换行导致的inline元素间距bug</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        
+          <a class="next" href="/cdn.html">
+            <span class="next-text nav-default">推荐几个常用的CDN公共库</span>
+            <span class="prev-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+      </div>  
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:frankwang0909@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://www.twitter.com/frankwang0909" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="https://www.github.com/frankwang0909" class="iconfont icon-github" title="github"></a>
+  <a href="http://www.wangxingfeng.com/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    &copy; 
+    
+      2016 - 
+    2017
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Frank Wang</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js"></script>
+<script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+<script type="text/javascript" src="/dist/even.min.js?v=2.6.1"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script async src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML'></script>
+
+
+
+
+</body>
+</html>

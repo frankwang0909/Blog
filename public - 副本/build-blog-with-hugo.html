@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>用Hugo快速搭建个人静态博客 - Frank Wang&#39;s Coding World</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="Frank Wang" /><meta name="description" content="用Hugo快速搭建个人静态博客，并托管到GitHub" />
+<meta name="keywords" content="Hugo, 建站, 静态博客, GitHub" />
+
+
+
+<meta name="baidu-site-verification" content="WSqfBuzd3t" />
+
+
+
+<meta name="generator" content="Hugo 0.19" />
+
+
+<link rel="canonical" href="http://www.wangxingfeng.com/build-blog-with-hugo.html" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="icon" href="/favicon.ico" />
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+<link href="/dist/even.min.css?v=2.6.1" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+<meta property="og:title" content="用Hugo快速搭建个人静态博客" />
+<meta property="og:description" content="用Hugo快速搭建个人静态博客，并托管到GitHub" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.wangxingfeng.com/build-blog-with-hugo.html" />
+
+
+
+<meta property="article:published_time" content="2017-04-03T20:49:23&#43;08:00"/>
+<meta property="article:modified_time" content="2017-04-03T20:49:23&#43;08:00"/>
+
+
+
+
+
+
+
+
+
+
+
+<meta itemprop="name" content="用Hugo快速搭建个人静态博客">
+<meta itemprop="description" content="用Hugo快速搭建个人静态博客，并托管到GitHub">
+
+
+<meta itemprop="dateModified" content="2017-04-03T20:49:23&#43;08:00" />
+<meta itemprop="wordCount" content="1375">
+
+
+
+<meta itemprop="keywords" content="database,english,frontend,node,python,tools,angular2,bug,cdn,clipboard,css,css3,git,github,gitment,hugo,javascript,markdown,mysql,node,nvm,python,regexp,seo,shadowsocks,sublime-text,tab切换,typescript,useragent,wordpress,下拉菜单,块级作用域,攒词汇,数组,服务器,返回顶部," />
+
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:text:title" content="用Hugo快速搭建个人静态博客"/>
+<meta name="twitter:title" content="用Hugo快速搭建个人静态博客"/>
+<meta name="twitter:description" content="用Hugo快速搭建个人静态博客，并托管到GitHub"/>
+
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+<script>
+  var _hmt = _hmt || [];
+  (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?7d0fc5a9b2d70433d9b1dd477606dc3c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+  }
+  )();
+</script>
+<script>
+  (function() {
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+          bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+      } else {
+          bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+  }
+  )();
+</script>
+<script>
+  (function(i, s, o, g, r, a, m) {
+      i['GoogleAnalyticsObject'] = r;
+      i[r] = i[r] || function() {
+          (i[r].q = i[r].q || []).push(arguments)
+      }
+      ,
+      i[r].l = 1 * new Date();
+      a = s.createElement(o),
+      m = s.getElementsByTagName(o)[0];
+      a.async = 1;
+      a.src = g;
+      m.parentNode.insertBefore(a, m)
+  }
+  )(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+  ga('create', 'UA-101812896-1', 'auto');
+  ga('send', 'pageview');
+</script>
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Frank Wang’s Coding World</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Frank Wang’s Coding World</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">用Hugo快速搭建个人静态博客</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2017-04-03 </span>
+        <div class="post-category">
+            <a href="/categories/tools/">tools</a>
+          </div>
+        <span class="more-meta"> 约 1375 字 </span>
+        <span class="more-meta"> 预计阅读 3 分钟 </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content">
+      <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#step-1-install-hugo-下载-安装-hugo">Step 1. Install Hugo 下载、安装 Hugo</a></li>
+<li><a href="#step-2-创建一个名为-blog-的-hugo-站点">Step 2. 创建一个名为  blog 的 Hugo 站点</a></li>
+<li><a href="#step-3-添加内容">Step 3. 添加内容</a></li>
+<li><a href="#step-4-添加主题">Step 4. 添加主题</a></li>
+<li><a href="#step-5-启动服务-本地预览">Step 5. 启动服务，本地预览</a></li>
+<li><a href="#step-6-修改配置文件-config-toml">Step 6. 修改配置文件 config.toml</a></li>
+<li><a href="#step-7-生成网站">Step 7.  生成网站</a></li>
+<li><a href="#step-8-托管到-github-pages">Step 8. 托管到 GitHub Pages</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+    <iframe src="https://rcm-cn.amazon-adsystem.com/e/cm?o=28&p=12&l=ur1&category=books&banner=0CQKPCZXE9QEVSSXN002&f=ifr&linkID=adf25941500ff7304f5193004b357dff&t=frankwang09-23&tracking_id=frankwang09-23" width="300" height="250" scrolling="no" border="0" marginwidth="0" style="border:none;" frameborder="0"></iframe>
+    <iframe src="https://rcm-cn.amazon-adsystem.com/e/cm?o=28&p=12&l=ur1&category=books&banner=1N4AHFJRK48P743G2QR2&f=ifr&linkID=7551f551ae22dc5bee3805c6bfb79010&t=frankwang09-23&tracking_id=frankwang09-23" width="300" height="250" scrolling="no" border="0" marginwidth="0" style="border:none;" frameborder="0"></iframe>
+    
+    <div class="post-content">
+      
+
+<p>最近心血来潮，想要重新折腾一番自己的博客。于是，发现了 Hugo 比之前使用的 Jekyll 更好用。本文是个人参照<a href="https://gohugo.io/overview/quickstart/">Hugo官网</a> 搭建个人博客的记录。</p>
+
+<h2 id="step-1-install-hugo-下载-安装-hugo">Step 1. Install Hugo 下载、安装 Hugo</h2>
+
+<p>下载地址：<a href="https://github.com/spf13/hugo/releases">https://github.com/spf13/hugo/releases</a>。
+根据自己的操作系统，下载对应的安装包。我的操作系统是<code>Win7 64bit</code>， 选择了<code>hugo_0.19_Windows-64bit.zip</code>。</p>
+
+<p>下载完成之后，解压的文件夹包含以下3个文件：</p>
+
+<pre><code>hugo_0.19_windows_amd64.exe
+LICENSE.md
+README.md
+</code></pre>
+
+<p>将 <code>hugo_0.19_windows_amd64.exe</code> 重命名为<code>hugo.exe</code>。在你的软件安装盘新增名为<code>hugo</code>的文件目录，在里面在新建一个<code>bin</code>子目录。然后将<code>hugo.exe</code>放到<code>hugo\bin</code>目录下。再将这个<code>bin</code>目录的路径添加到<code>系统环境变量</code>中。</p>
+
+<p>完成以上步骤后，打开命令行输入</p>
+
+<pre><code class="language-shell">    hugo help
+</code></pre>
+
+<p>如果得到如下信息，说明安装成功。</p>
+
+<pre><code class="language-shell">    hugo is the main command, used to build your Hugo site.
+
+    Hugo is a Fast and Flexible Static Site Generator
+    built with love by spf13 and friends in Go.
+
+    Complete documentation is available at http://gohugo.io/.
+</code></pre>
+
+<h2 id="step-2-创建一个名为-blog-的-hugo-站点">Step 2. 创建一个名为  blog 的 Hugo 站点</h2>
+
+<p>我希望在E盘下创建站点，所以我先切换目录</p>
+
+<pre><code class="language-shell">    cd e:
+    e:
+</code></pre>
+
+<p>然后输入命令：</p>
+
+<pre><code class="language-shell">    hugo new site blog 
+</code></pre>
+
+<p>得到如下提示创建成功的信息：</p>
+
+<pre><code>Congratulations! Your new Hugo site is created in E:\blog.
+Just a few more steps and you're ready to go:
+1. Download a theme into the same-named folder.
+Choose a theme from https://themes.gohugo.io/, or
+create your own with the &quot;hugo new theme &lt;THEMENAME&gt;&quot; command.
+2. Perhaps you want to add some content. You can add single files
+with &quot;hugo new &lt;SECTIONNAME&gt;\&lt;FILENAME&gt;.&lt;FORMAT&gt;&quot;.
+3. Start the built-in live server via &quot;hugo server&quot;.
+Visit https://gohugo.io/ for quickstart guide and full documentation.
+</code></pre>
+
+<p>进入该目录，可以看到自动生成了5个目录和一个配置文件config.toml</p>
+
+<pre><code>|-- archetypes
+|-- content   #存放内容的目录
+|-- data      
+|-- layouts   
+|-- static    #存放静态资源（图片,css,js）
+|-- themes    #存放主题
+|-- config.toml  #配置文件
+</code></pre>
+
+<h2 id="step-3-添加内容">Step 3. 添加内容</h2>
+
+<p>切换到该目录下，然后输入如下命令，会在<code>content</code>的目录下创建<code>post</code>目录，在<code>post</code>目录下创建名为<code>test.md</code>的文件。</p>
+
+<pre><code class="language-shell">    cd blog
+    hugo new post/test.md
+</code></pre>
+
+<p>提示文件创建成功：</p>
+
+<pre><code class="language-shell">    E:\blog\content\post\test.md created
+</code></pre>
+
+<p>用文本编辑器打开文件<code>test.md</code>文件
+可以看到如下内容：</p>
+
+<pre><code class="language-markdown">    +++
+    date = &quot;2017-01-02T17:45:06+08:00&quot;  #创建文件的时间
+    title = &quot;test&quot;                      #文件的标题
+    draft = true                        # 是否为草稿
+    +++
+</code></pre>
+
+<p>上述内容为自动创建的与文章有关的内容。自己也可以在两个<code>+++</code>之间添加如下内容：</p>
+
+<pre><code class="language-markdown">    image = &quot;hugo.png&quot;            #指定图片。
+    category = &quot;test&quot;             #文章的类别
+    tags = [&quot;Hugo&quot;, &quot;intro&quot;]      #文章的标签分类。
+    url = &quot;new_start&quot;             #该文章访问时的相对的url地址，默认为文件名。
+</code></pre>
+
+<p>更多的设置，可以参考<a href="https://gohugo.io/content/front-matter/">官方文档</a>。</p>
+
+<p>以后写博客文章就是这样创建<code>markdown</code>文件, 之后通过<code>Hugo</code>编译成静态的html文件。</p>
+
+<h2 id="step-4-添加主题">Step 4. 添加主题</h2>
+
+<p>官方提供了多种主题可供选择，具体在 <a href="https://themes.gohugo.io/">https://themes.gohugo.io/</a> 可以找到。</p>
+
+<p>找到想要的主题后，切换到<code>themes</code>目录（该目录可以存放多个不同的主题）。</p>
+
+<pre><code class="language-shell">    cd themes
+</code></pre>
+
+<p>由于需要使用到Git下载主题，以及版本管理和代码推送。需要事先下载安装好<a href="https://git-for-windows.github.io/">Git</a>，关于如何安装和使用Git，可以参考我之前的一篇文章：<a href="http://www.wangxingfeng.com/git-intro/">Git学习笔记</a>。</p>
+
+<p>把选定的主题下载到<code>themes</code>目录下。</p>
+
+<pre><code class="language-shell">    git clone https://github.com/dim0627/hugo-icarus-theme.git
+</code></pre>
+
+<h2 id="step-5-启动服务-本地预览">Step 5. 启动服务，本地预览</h2>
+
+<p>先从<code>themes</code>目录下退回到<code>blog</code>目录, 然后启动服务。</p>
+
+<pre><code class="language-shell">    cd ..
+    hugo server --theme=hugo-icarus-theme --buildDrafts
+</code></pre>
+
+<p>在浏览器中打开 <a href="http://localhost:1313/">http://localhost:1313/</a></p>
+
+<h2 id="step-6-修改配置文件-config-toml">Step 6. 修改配置文件 config.toml</h2>
+
+<pre><code class="language-markdown">    languageCode = &quot;zh-cn&quot;
+    title = &quot;Frank Wang's Coding World&quot;
+    baseurl = &quot;http://www.wangxingfeng.com/&quot;  
+
+    [Params]
+        Author =&quot;Frank Wang&quot;
+</code></pre>
+
+<h2 id="step-7-生成网站">Step 7.  生成网站</h2>
+
+<p>7.1 改变文章<code>draft</code>（草稿）状态：</p>
+
+<pre><code>hugo undraft content/post/*.md
+</code></pre>
+
+<p>7.2  启动<code>hugo</code>, 生成发布文件到<code>public</code>目录下。</p>
+
+<pre><code class="language-shell">    hugo --theme=even
+</code></pre>
+
+<h2 id="step-8-托管到-github-pages">Step 8. 托管到 GitHub Pages</h2>
+
+<p>8.1 使用 <code>Git</code> 来进行版本管理</p>
+
+<pre><code class="language-shell">    git init
+    echo &quot;/public/&quot; &gt;&gt; .gitignore
+    echo &quot;/themes/&quot; &gt;&gt; .gitignore
+    git add --all
+    git commit -m &quot;Initial commit&quot;
+</code></pre>
+
+<p>8.2 创建 <code>Git</code> 远程仓库：</p>
+
+<p>登录你的 <code>GitHub</code>. 创建一个新的仓库，仓库名为 <code>Github用户.github.io</code>, 比如我的是<code>frankwang0909.github.io</code>.</p>
+
+<p>8.3. 添加 <code>Git</code> 远程仓库，并提交代码。</p>
+
+<pre><code class="language-shell">    cd public
+    git init
+    git remote add origin git@github.com:frankwang0909/frankwang0909.github.io.git
+
+    git add --all
+    git commit -m &quot;blog added&quot;
+    git push -u origin master
+</code></pre>
+
+<p>8.4 以后有内容改动，提交代码.</p>
+
+<pre><code class="language-shell">    (cd ..; hugo --theme=hugo_theme_robust)
+    git add --all
+    git commit -m &quot;&lt;some change message&gt;&quot;
+    git push -u origin master
+</code></pre>
+
+    </div>
+    
+    
+    
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Frank Wang</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">2017-04-03</span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      <div class="post-tags">
+          
+          <a href="/tags/hugo/">Hugo</a>
+          
+          <a href="/tags/github/">GitHub</a>
+          
+        </div>
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/everybody-can-speak-english.html">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">人人都能说英语</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        
+          <a class="next" href="/fix-inline-bug.html">
+            <span class="next-text nav-default">代码换行导致的inline元素间距bug</span>
+            <span class="prev-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+      </div>  
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:frankwang0909@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://www.twitter.com/frankwang0909" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="https://www.github.com/frankwang0909" class="iconfont icon-github" title="github"></a>
+  <a href="http://www.wangxingfeng.com/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    &copy; 
+    
+      2016 - 
+    2017
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Frank Wang</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js"></script>
+<script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+<script type="text/javascript" src="/dist/even.min.js?v=2.6.1"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script async src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML'></script>
+
+
+
+
+</body>
+</html>

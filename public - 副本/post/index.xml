@@ -1,0 +1,2637 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Posts on Frank Wang&#39;s Coding World</title>
+    <link>http://www.wangxingfeng.com/post/index.xml</link>
+    <description>Recent content in Posts on Frank Wang&#39;s Coding World</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Wed, 02 Aug 2017 21:23:27 +0800</lastBuildDate>
+    <atom:link href="http://www.wangxingfeng.com/post/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>在 CentOS 上搭建 WordPress 博客</title>
+      <link>http://www.wangxingfeng.com/centos_wordpress.html</link>
+      <pubDate>Wed, 02 Aug 2017 21:23:27 +0800</pubDate>
+      
+      <guid>http://www.wangxingfeng.com/centos_wordpress.html</guid>
+      <description>
+
+&lt;p&gt;在资金预算或人力资源有限的情况下， &lt;code&gt;WordPress&lt;/code&gt; 仍然是快速地搭建博客或者企业网站的不二选择。&lt;/p&gt;
+
+&lt;p&gt;最近，边学边干地使用 &lt;code&gt;WordPres&lt;/code&gt;s 给兄弟公司搭建一个简单的官网。代码在本地调试好了。今天学习了如何学在服务器上发布这个程序。&lt;/p&gt;
+
+&lt;p&gt;备注：服务器是腾讯上的云主机， 操作系统是 &lt;code&gt;CentOS&lt;/code&gt; 6.8 64 位的。&lt;/p&gt;
+
+&lt;h2 id=&#34;1-准备-lnmp-环境&#34;&gt;1. 准备 LNMP 环境&lt;/h2&gt;
+
+&lt;p&gt;&lt;code&gt;LNMP&lt;/code&gt; 是 &lt;code&gt;Linux、Nginx、MySQL 和 PHP&lt;/code&gt; 的缩写，是 &lt;code&gt;WordPress&lt;/code&gt;博客系统依赖的基础运行环境。我们先来准备 LNMP 环境。&lt;/p&gt;
+
+&lt;h3 id=&#34;1-1-安装-nginx&#34;&gt;1.1 安装 Nginx&lt;/h3&gt;
+
+&lt;p&gt;使用 &lt;code&gt;yum&lt;/code&gt; 安装 &lt;code&gt;Nginx&lt;/code&gt;：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;yum install nginx -y
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;修改 &lt;code&gt;/etc/nginx/conf.d/default.conf&lt;/code&gt;，去除对 &lt;code&gt;IPv6&lt;/code&gt; 地址的监听（&lt;code&gt;CentOS 6&lt;/code&gt; 不支持 IPv6，需要取消对 IPv6 地址的监听，否则 &lt;code&gt;Nginx&lt;/code&gt; 不能成功启动），可参考下面的示例：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;server {
+    listen       80 default_server;
+    # listen       [::]:80 default_server;
+    server_name  _;
+    root         /usr/share/nginx/html;
+
+    # Load configuration files for the default server block.
+    include /etc/nginx/default.d/*.conf;
+
+    location / {
+    }
+
+    error_page 404 /404.html;
+        location = /40x.html {
+    }
+
+    error_page 500 502 503 504 /50x.html;
+        location = /50x.html {
+    }
+
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;修改完成后，启动 &lt;code&gt;Nginx&lt;/code&gt;：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;nginx
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;此时，可访问云主机的外网 HTTP 服务来确认是否已经安装成功。&lt;/p&gt;
+
+&lt;p&gt;将 &lt;code&gt;Nginx&lt;/code&gt; 设置为&lt;code&gt;开机自动启动&lt;/code&gt;：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;chkconfig nginx on
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;1-2-安装-mysql&#34;&gt;1.2 安装 MySQL&lt;/h3&gt;
+
+&lt;p&gt;使用 &lt;code&gt;yum&lt;/code&gt; 安装 &lt;code&gt;MySQL&lt;/code&gt;：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;yum install mysql-server -y
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;安装完成后，启动 &lt;code&gt;MySQL&lt;/code&gt; 服务：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;service mysqld restart
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;设置 &lt;code&gt;MySQL&lt;/code&gt; 账户 &lt;code&gt;root&lt;/code&gt; 密码：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt; /usr/bin/mysqladmin -u root password &#39;yourPassword4WordPress&#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;将 &lt;code&gt;MySQ&lt;/code&gt;L 设置为&lt;code&gt;开机自动启动&lt;/code&gt;：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;chkconfig mysqld on
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;1-3-安装-php&#34;&gt;1.3 安装 PHP&lt;/h3&gt;
+
+&lt;p&gt;使用 &lt;code&gt;yum&lt;/code&gt; 安装 &lt;code&gt;PHP&lt;/code&gt;：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;yum install php-fpm php-mysql -y
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;（CentOs 6 默认已经安装了 PHP-FPM 及 PHP-MYSQL，上述命令执行的可能会提示已经安装。）&lt;/p&gt;
+
+&lt;p&gt;安装之后，启动 &lt;code&gt;PHP-FPM&lt;/code&gt; 进程：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;service php-fpm start
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;启动之后，可以使用下面的命令查看 &lt;code&gt;PHP-FPM&lt;/code&gt; 进程监听哪个端口 （PHP-FPM 默认监听 9000 端口）&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;netstat -nlpt | grep php-fpm
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;把 &lt;code&gt;PHP-FPM&lt;/code&gt; 也设置成&lt;code&gt;开机自动启动&lt;/code&gt;：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;chkconfig php-fpm on
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;2-安装并配置-wordpress&#34;&gt;2. 安装并配置  WordPress&lt;/h2&gt;
+
+&lt;h3 id=&#34;2-1-安装-wordpress&#34;&gt;2.1 安装 WordPress&lt;/h3&gt;
+
+&lt;p&gt;配置好 &lt;code&gt;LNMP&lt;/code&gt; 环境后，继续使用 &lt;code&gt;yum&lt;/code&gt; 来安装 &lt;code&gt;WordPress&lt;/code&gt;：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;yum install wordpress -y
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;安装完成后，就可以在 &lt;code&gt;/usr/share/wordpress&lt;/code&gt; 看到 &lt;code&gt;WordPress&lt;/code&gt; 的源代码了。&lt;/p&gt;
+
+&lt;h3 id=&#34;2-2-配置-数据库&#34;&gt;2.2 配置 数据库&lt;/h3&gt;
+
+&lt;p&gt;配进入 &lt;code&gt;MySQL&lt;/code&gt;：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;mysql -uroot --password=&#39;yourPassword4WordPress&#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;为 &lt;code&gt;WordPress&lt;/code&gt; 创建一个数据库：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;CREATE DATABASE wordpress;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;MySQL&lt;/code&gt; 部分设置完了，我们退出 &lt;code&gt;MySQL&lt;/code&gt; 环境：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;exit
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;把上述的 &lt;code&gt;DB&lt;/code&gt; 配置同步到 &lt;code&gt;WordPress&lt;/code&gt; 的&lt;code&gt;配置文件&lt;/code&gt;中，可参考下面的配置：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;?php
+/**
+ * The base configuration for WordPress
+ *
+ * The wp-config.php creation script uses this file during the
+ * installation. You don&#39;t have to use the web site, you can
+ * copy this file to &amp;quot;wp-config.php&amp;quot; and fill in the values.
+ *
+ * This file contains the following configurations:
+ *
+ * * MySQL settings
+ * * Secret keys
+ * * Database table prefix
+ * * ABSPATH
+ *
+ * @link https://codex.wordpress.org/Editing_wp-config.php
+ *
+ * @package WordPress
+ */
+
+// ** MySQL settings - You can get this info from your web host ** //
+/** The name of the database for WordPress */
+define(&#39;DB_NAME&#39;, &#39;wordpress&#39;);
+
+/** MySQL database username */
+define(&#39;DB_USER&#39;, &#39;root&#39;);
+
+/** MySQL database password */
+define(&#39;DB_PASSWORD&#39;, &#39;yourPassword4WordPress&#39;);
+
+/** MySQL hostname */
+define(&#39;DB_HOST&#39;, &#39;localhost&#39;);
+
+/** Database Charset to use in creating database tables. */
+define(&#39;DB_CHARSET&#39;, &#39;utf8&#39;);
+
+/** The Database Collate type. Don&#39;t change this if in doubt. */
+define(&#39;DB_COLLATE&#39;, &#39;&#39;);
+
+/**#@+
+ * Authentication Unique Keys and Salts.
+ *
+ * Change these to different unique phrases!
+ * You can generate these using the {@link https://api.wordpress.org/secret-key/1.1/salt/ WordPress.org secret-key service}
+ * You can change these at any point in time to invalidate all existing cookies. This will force all users to have to log in again.
+ *
+ * @since 2.6.0
+ */
+define(&#39;AUTH_KEY&#39;,         &#39;put your unique phrase here&#39;);
+define(&#39;SECURE_AUTH_KEY&#39;,  &#39;put your unique phrase here&#39;);
+define(&#39;LOGGED_IN_KEY&#39;,    &#39;put your unique phrase here&#39;);
+define(&#39;NONCE_KEY&#39;,        &#39;put your unique phrase here&#39;);
+define(&#39;AUTH_SALT&#39;,        &#39;put your unique phrase here&#39;);
+define(&#39;SECURE_AUTH_SALT&#39;, &#39;put your unique phrase here&#39;);
+define(&#39;LOGGED_IN_SALT&#39;,   &#39;put your unique phrase here&#39;);
+define(&#39;NONCE_SALT&#39;,       &#39;put your unique phrase here&#39;);
+
+/**#@-*/
+
+/**
+ * WordPress Database Table prefix.
+ *
+ * You can have multiple installations in one database if you give each
+ * a unique prefix. Only numbers, letters, and underscores please!
+ */
+$table_prefix  = &#39;wp_&#39;;
+
+/**
+ * See http://make.wordpress.org/core/2013/10/25/the-definitive-guide-to-disabling-auto-updates-in-wordpress-3-7
+ */
+
+/* Disable all file change, as RPM base installation are read-only */
+define(&#39;DISALLOW_FILE_MODS&#39;, true);
+
+/* Disable automatic updater, in case you want to allow
+   above FILE_MODS for plugins, themes, ... */
+define(&#39;AUTOMATIC_UPDATER_DISABLED&#39;, true);
+
+/* Core update is always disabled, WP_AUTO_UPDATE_CORE value is ignore */
+
+/**
+ * For developers: WordPress debugging mode.
+ *
+ * Change this to true to enable the display of notices during development.
+ * It is strongly recommended that plugin and theme developers use WP_DEBUG
+ * in their development environments.
+ *
+ * For information on other constants that can be used for debugging,
+ * visit the Codex.
+ *
+ * @link https://codex.wordpress.org/Debugging_in_WordPress
+ */
+define(&#39;WP_DEBUG&#39;, false);
+
+/* That&#39;s all, stop editing! Happy blogging. */
+
+/** Absolute path to the WordPress directory. */
+if ( !defined(&#39;ABSPATH&#39;) )
+    define(&#39;ABSPATH&#39;, &#39;/usr/share/wordpress&#39;);
+
+/** Sets up WordPress vars and included files. */
+require_once(ABSPATH . &#39;wp-settings.php&#39;);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;2-3-配置-nginx&#34;&gt;2.3 配置 Nginx&lt;/h3&gt;
+
+&lt;p&gt;&lt;code&gt;WordPress&lt;/code&gt; 已经安装完毕，我们配置&lt;code&gt;Nginx&lt;/code&gt; 把请求转发给 &lt;code&gt;PHP-FPM&lt;/code&gt; 来处理。&lt;/p&gt;
+
+&lt;p&gt;首先，重命名默认的配置文件（因为默认的 Server 监听 80 端口，与 WordPress 的服务端口冲突，将其重命名为 .bak 后缀以禁用默认配置）&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;cd /etc/nginx/conf.d/
+
+mv default.conf defaut.conf.bak
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;在 /etc/nginx/conf.d 创建 wordpress.conf 配置，参考下面的内容：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;server {
+    listen 80;
+    root /usr/share/wordpress;
+    location / {
+        index index.php index.html index.htm;
+        try_files $uri $uri/ /index.php index.php;
+    }
+    # pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000
+    location ~ .php$ {
+        fastcgi_pass   127.0.0.1:9000;
+        fastcgi_index  index.php;
+        fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
+        include        fastcgi_params;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;配置后，通知 &lt;code&gt;Nginx&lt;/code&gt; 进程重新加载：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;nginx -s reload
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;3-准备域名和解析&#34;&gt;3. 准备域名和解析&lt;/h2&gt;
+
+&lt;h3 id=&#34;3-1域名注册&#34;&gt;3.1域名注册&lt;/h3&gt;
+
+&lt;h3 id=&#34;3-2域名解析&#34;&gt;3.2域名解析&lt;/h3&gt;
+
+&lt;p&gt;WordPress 博客已经部署完成。可以通过浏览器访问博客查看效果。&lt;/p&gt;
+
+&lt;p&gt;通过IP地址查看：&lt;/p&gt;
+
+&lt;p&gt;博客访问地址：&lt;code&gt;http://你的服务器公网ip地址/wp-admin/install.php&lt;/code&gt;。&lt;/p&gt;
+
+&lt;p&gt;通过域名查看：&lt;/p&gt;
+
+&lt;p&gt;博客访问地址：&lt;code&gt;http://你的域名/wp-admin/install.php&lt;/code&gt;。&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title> window 系统的 Node 版本管理工具 nvm-windows</title>
+      <link>http://www.wangxingfeng.com/nvm_for_window.html</link>
+      <pubDate>Thu, 20 Jul 2017 07:54:41 +0800</pubDate>
+      
+      <guid>http://www.wangxingfeng.com/nvm_for_window.html</guid>
+      <description>
+
+&lt;h2 id=&#34;简介&#34;&gt;简介:&lt;/h2&gt;
+
+&lt;p&gt;nvm-windows 是一款用 Go 语言写的 用于 window 操作系统的 Node 版本管理工具。&lt;a href=&#34;https://github.com/coreybutler/nvm-windows&#34;&gt;GitHub 主页&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;下载安装&#34;&gt;下载安装：&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/coreybutler/nvm-windows/releases&#34;&gt;下载地址：https://github.com/coreybutler/nvm-windows/releases&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;常用命令&#34;&gt;常用命令：&lt;/h2&gt;
+
+&lt;p&gt;1.安装指定版本的 Node：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;nvm install &amp;lt;version&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;示例：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;nvm install 6.2.0
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;命令行出现如下内容，表示正在下载安装 6.2.0 版本的 Node.js， 安装好之后，下载并安装对应的包管理工具 npm。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Downloading node.js version 6.2.0 (64-bit)...
+Complete                                                         
+Creating C:\Users\Administrator\AppData\Roaming\nvm\temp                                                          
+
+Downloading npm version 3.8.9... 
+Complete                        
+Installing npm v3.8.9...                                                                                          
+Installation complete. 
+If you want to use this version, type nvm use 6.2.0                                
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;2.使用指定版本的 Node：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;nvm use &amp;lt;version&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;示例：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;nvm use 6.2.0
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;指定后，会显示如下内容：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Now using node v6.2.0 (64-bit)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;可以查看当前使用的 Node 版本号和 npm 版本号：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;node -v
+
+npm -v
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;3.查看安装的所有 Node 版本&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;nvm list 
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;结果如下所示，前面带有 * 号的表示当前使用的 Node 版本：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt; 8.1.4
+*6.2.0 (Currently using 64-bit executable)
+ 6.1.0
+ 4.6.0
+ 4.4.7
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果加一个参数 available， 列出所有可下载的 node.js 版本：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;nvm list available
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;结果如下所示：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;|   CURRENT    |     LTS      |  OLD STABLE  | OLD UNSTABLE |
+|--------------|--------------|--------------|--------------|
+|    8.1.4     |    6.11.1    |   0.12.18    |   0.11.16    |
+|    8.1.3     |    6.11.0    |   0.12.17    |   0.11.15    |
+|    8.1.2     |    6.10.3    |   0.12.16    |   0.11.14    |
+|    8.1.1     |    6.10.2    |   0.12.15    |   0.11.13    |
+|    8.1.0     |    6.10.1    |   0.12.14    |   0.11.12    |
+|    8.0.0     |    6.10.0    |   0.12.13    |   0.11.11    |
+|    7.10.1    |    6.9.5     |   0.12.12    |   0.11.10    |
+|    7.10.0    |    6.9.4     |   0.12.11    |    0.11.9    |
+|    7.9.0     |    6.9.3     |   0.12.10    |    0.11.8    |
+|    7.8.0     |    6.9.2     |    0.12.9    |    0.11.7    |
+|    7.7.4     |    6.9.1     |    0.12.8    |    0.11.6    |
+|    7.7.3     |    6.9.0     |    0.12.7    |    0.11.5    |
+|    7.7.2     |    4.8.4     |    0.12.6    |    0.11.4    |
+|    7.7.1     |    4.8.3     |    0.12.5    |    0.11.3    |
+|    7.7.0     |    4.8.2     |    0.12.4    |    0.11.2    |
+|    7.6.0     |    4.8.1     |    0.12.3    |    0.11.1    |
+|    7.5.0     |    4.8.0     |    0.12.2    |    0.11.0    |
+|    7.4.0     |    4.7.3     |    0.12.1    |    0.9.12    |
+|    7.3.0     |    4.7.2     |    0.12.0    |    0.9.11    |
+|    7.2.1     |    4.7.1     |   0.10.48    |    0.9.10    |
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;4.卸载指定版本的 Node.js：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;nvm uninstall &amp;lt;version&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;示例：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;nvm uninstall 6.1.0
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;结果如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Uninstalling node v6.1.0... done
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;再用 nvm list 查看所有 Node 版本，已经没有 6.1.0 版本了。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt; 8.1.4
+*6.2.0 (Currently using 64-bit executable)
+ 4.6.0
+ 4.4.7
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果现在当前正在使用的版本会怎样呢？&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;nvm uninstall 6.2.0
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;结果如下，报错了，没法删除正在使用的版本。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Uninstalling node v6.2.0...Error removing node v6.2.0
+Manually remove C:\Users\Administrator\AppData\Roaming\nvm\v6.2.0.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;再用 nvm list 查看所有 Node 版本，发现没有 删除掉 6.2.0 版本，但是没有指定的正在使用的版本了。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;8.1.4
+6.2.0
+4.6.0
+4.4.7
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;试试用 node -v 查看，报错：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&#39;node&#39; 不是内部或外部命令，也不是可运行的程序或批处理文件。
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>TypeScript 入门</title>
+      <link>http://www.wangxingfeng.com/typescript_basic.html</link>
+      <pubDate>Sun, 16 Jul 2017 21:43:35 +0800</pubDate>
+      
+      <guid>http://www.wangxingfeng.com/typescript_basic.html</guid>
+      <description>
+
+&lt;h2 id=&#34;1-简介&#34;&gt;1.简介：&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.typescriptlang.org/&#34;&gt;TypeScript&lt;/a&gt; 是微软2012年推出的一种编程语言，属于 JavaScript 的&lt;code&gt;超集&lt;/code&gt;，可以编译为 JavaScript 执行。它拓展了 JavaScript 的语法，给 JavaScript 添加可选的&lt;code&gt;静态类型&lt;/code&gt;和&lt;code&gt;基于类&lt;/code&gt;的面向对象编程。&lt;/p&gt;
+
+&lt;p&gt;TypeScript文件拓展名为 &lt;code&gt;.ts&lt;/code&gt;。&lt;/p&gt;
+
+&lt;p&gt;TypeScript 不能直接运行在浏览器环境中，运行前需要编译成 JavaScript 才能在浏览器运行。&lt;/p&gt;
+
+&lt;p&gt;TypeScript 是&lt;code&gt;Angular2&lt;/code&gt;官方推荐的开发语言，同时也可以作为使用 React、Vue、ReactNative 等框架或者类库的项目的开发语言。&lt;/p&gt;
+
+&lt;p&gt;一个简单的 TypeScript 文件 demo.ts, 如下代码所示：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-typescript&#34;&gt;var book: string = &amp;quot;Angular 2&amp;quot;;  // 定义了一个 string 类型的变量 book
+
+var num: number = 123;  // 定义了一个 number 类型的变量 num
+
+function log(msg: string): void {  // 定义了一个 函数 log, 它的参数 msg 是 string 类型的， `：void`表示这个函数没有返回值 
+    console.log(msg);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;2-安装-typescript&#34;&gt;2.安装 TypeScript:&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;npm install -g typescript
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;3-编译&#34;&gt;3.编译:&lt;/h2&gt;
+
+&lt;p&gt;3.1 本地编译：命令行输入&lt;code&gt;tsc 文件名.ts&lt;/code&gt; 既可编译成&lt;code&gt;同名&lt;/code&gt;的 JavaScript 文件。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;tsc demo.ts
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;demo.ts 编译后得到 demo.js 文件，如下代码所示：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-typescript&#34;&gt;var book = &amp;quot;Angular 2&amp;quot;;
+var num = 123;
+function log(msg) {
+    console.log(msg);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;3.2 在线编译：TypeScript 官方提供&lt;a href=&#34;http://www.typescriptlang.org/play/index.html&#34;&gt;在线的实时编译&lt;/a&gt;。&lt;/p&gt;
+
+&lt;h2 id=&#34;4-编辑器-visual-studio-code&#34;&gt;4.编辑器: Visual Studio Code&lt;/h2&gt;
+
+&lt;p&gt;微软官方为 TypeScript 提供了一款轻量级但功能强大的编辑器 —— &lt;a href=&#34;https://code.visualstudio.com/&#34;&gt;VS Code&lt;/a&gt;。Visual Studio Code本身就是一个&lt;code&gt;文本编辑器&lt;/code&gt;，非常轻量级，搭配各种插件的话，就可以重现 Visual Studio的强大功能。&lt;/p&gt;
+
+&lt;h2 id=&#34;5-语法特性之一-类型注解&#34;&gt;5.语法特性之一：类型注解&lt;/h2&gt;
+
+&lt;p&gt;TypeScript里的&lt;code&gt;类型注解&lt;/code&gt;是一种轻量级的为函数或变量添加约束的方式。&lt;/p&gt;
+
+&lt;p&gt;在示例代码中里，我们希望 log 函数接收一个字符串参数。 然后尝试把 log 的调用改成传入一个数组：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-typescript&#34;&gt;function log(msg: string) {
+    return &amp;quot;Hello, &amp;quot; + msg;
+}
+
+var msg = [0, 1, 2];
+
+log(msg);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;TypeScript提供了静态的代码分析，它可以分析代码结构和提供的类型注解。所以上述代码在 VS Code 中会出现提示错误：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Argument of type &#39;number[]&#39; is not assignable to parameter of type string
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;6-语法特性之二-接口-interface&#34;&gt;6.语法特性之二：接口 Interface:&lt;/h2&gt;
+
+&lt;p&gt;TypeScript的核心原则之一是对值所具有的结构进行类型检查。 它有时被称做“鸭式辨型法”或“结构性子类型化”。&lt;/p&gt;
+
+&lt;p&gt;在TypeScript里，接口的作用就是为这些类型命名和为你的代码或第三方代码定义契约。&lt;/p&gt;
+
+&lt;p&gt;简单示例来观察接口是如何工作的：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-typescript&#34;&gt;function print(obj: { a: string }) {
+    console.log(obj.a);
+}
+
+let myObj = { 
+    size: 10, 
+    a: &amp;quot;Size 10 Object&amp;quot; 
+};
+
+print(myObj);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;类型检查器会查看函数 print()的调用。 它有一个对象参数，并且这个对象参数有一个名为a, 类型为 string 的属性。 需要注意的是，我们传入的对象参数实际上会包含很多属性，但是编译器只会检查那些必需的属性是否存在，并且其类型是否匹配。&lt;/p&gt;
+
+&lt;p&gt;关键字&lt;code&gt;interface&lt;/code&gt;用来定义&lt;code&gt;接口&lt;/code&gt;, 接口名&lt;code&gt;首字母大写&lt;/code&gt;。&lt;/p&gt;
+
+&lt;p&gt;下面我们重写上面的例子，这次使用&lt;code&gt;接口&lt;/code&gt;来描述：必须包含一个类型为 string 的属性 a。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-typescript&#34;&gt;interface MyValue {
+    a: string;
+}
+
+function print(obj: MyValue) {
+    console.log(obj.a);
+}
+
+let myObj = {
+    size: 10, 
+    a: &amp;quot;Size 10 Object&amp;quot;
+};
+print(myObj);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;7-语法特性之三-类-class&#34;&gt;7.语法特性之三：类 Class&lt;/h2&gt;
+
+&lt;h3 id=&#34;7-1-类的定义-关键字-class-用来定义一个类-类名-首字母大写&#34;&gt;7.1 类的定义：关键字&lt;code&gt;class&lt;/code&gt;用来定义一个类，类名&lt;code&gt;首字母大写&lt;/code&gt;。&lt;/h3&gt;
+
+&lt;p&gt;传统的 JavaScript 程序没有&lt;code&gt;类(Class)&lt;/code&gt;的概念, 通过基于&lt;code&gt;原型链&lt;/code&gt;的继承来实现面向对象的编程。从ECMAScript 2015(ES6) 开始，JavaScript 引入了类的概念，而 TypeScript 早就实现了类的继承。&lt;/p&gt;
+
+&lt;p&gt;示例代码：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-typescript&#34;&gt;class Greeter {
+    
+    // 定义了 string 类型的属性, 
+    greeting: string;
+
+    // 定义了类的构造函数，它参数为 string 类型
+    constructor(message: string) {
+
+        this.greeting = message;
+    }
+
+    // 定义了一个类的方法 
+    greet() {
+        return &amp;quot;Hello, &amp;quot; + this.greeting;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;上述代码声明了一个 Greeter类。这个类有3个成员：一个叫做 greeting 的属性，一个构造函数和一个 greet 方法。&lt;/p&gt;
+
+&lt;p&gt;我们在引用任何一个类成员的时候都用了&lt;code&gt;this&lt;/code&gt;, 它表示我们访问的是类的成员。&lt;/p&gt;
+
+&lt;h3 id=&#34;7-2-实例化-关键字-new-用来创建类的一个实例对象&#34;&gt;7.2 实例化：关键字&lt;code&gt;new&lt;/code&gt;用来创建类的一个实例对象。&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-typescript&#34;&gt;let greeter = new Greeter(&amp;quot;world&amp;quot;);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;使用&lt;code&gt;new&lt;/code&gt; 创建了Greeter类的一个实例。 它会调用之前定义的构造函数，创建一个 Greeter类型的新对象，并执行构造函数初始化它。&lt;/p&gt;
+
+&lt;h3 id=&#34;7-3-类的继承-关键字-extends-表示类的继承关系&#34;&gt;7.3 类的继承： 关键字&lt;code&gt;extends&lt;/code&gt;表示类的继承关系&lt;/h3&gt;
+
+&lt;p&gt;示例代码：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-typescript&#34;&gt;class Animal {
+    name:string;
+    constructor(theName: string) { 
+        this.name = theName; 
+    }
+    move(distanceInMeters: number = 0) {
+        console.log(`${this.name} moved ${distanceInMeters}m.`);
+    }
+}
+
+class Snake extends Animal {
+    constructor(name: string) {
+        super(name); //必须调用super()方法来执行父类的构造方法
+    }
+    move(distanceInMeters = 5) {
+        console.log(&amp;quot;Slithering...&amp;quot;);
+        super.move(distanceInMeters); 
+    }
+}
+
+class Horse extends Animal {
+    constructor(name: string) { 
+        super(name); 
+    }
+    move(distanceInMeters = 45) {
+        console.log(&amp;quot;Galloping...&amp;quot;);
+        super.move(distanceInMeters);
+    }
+}
+
+let sam = new Snake(&amp;quot;Sammy the Python&amp;quot;);
+let tom: Animal = new Horse(&amp;quot;Tommy the Palomino&amp;quot;);
+
+sam.move();
+tom.move(34);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;与其它语言类似，TypeScript 使用 关键字&lt;code&gt;extends&lt;/code&gt;来创建子类。你可以看到 Horse 和 Snake 都是 Animal 的子类，并且可以访问其属性和方法。&lt;/p&gt;
+
+&lt;p&gt;包含构造函数的派生类必须调用&lt;code&gt;super()&lt;/code&gt;，它会执行父类的构造方法。&lt;/p&gt;
+
+&lt;p&gt;在子类里可以重写父类的方法。上述代码中，Snake 类 和 Horse 类都创建了 move 方法，它们重写了从 Animal 继承来的 move 方法，使得 move 方法根据不同的类而具有不同的功能。&lt;/p&gt;
+
+&lt;h3 id=&#34;7-4-类的修饰符&#34;&gt;7.4 类的修饰符：&lt;/h3&gt;
+
+&lt;p&gt;7.4.1  public：默认修饰符&lt;/p&gt;
+
+&lt;p&gt;如果没有使用&lt;code&gt;修饰符&lt;/code&gt;来修饰类的成员（属性、方法），则默认为&lt;code&gt;public&lt;/code&gt;，表示我们可以自由地访问到类的这个成员。&lt;/p&gt;
+
+&lt;p&gt;7.4.2 private：修饰私有成员用&lt;/p&gt;
+
+&lt;p&gt;当成员被标记成&lt;code&gt;private&lt;/code&gt;时，它就不能在声明它的类的&lt;code&gt;外部&lt;/code&gt;访问。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-typescript&#34;&gt;class Animal {
+    private name: string;
+    constructor(theName: string) { 
+        this.name = theName; 
+    }
+}
+
+new Animal(&amp;quot;Cat&amp;quot;).name; // Error: &#39;name&#39; is private;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;7.4.3 protected：&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;protected&lt;/code&gt;修饰符与&lt;code&gt;private&lt;/code&gt;修饰符的行为很相似，但有一点不同，&lt;code&gt;protected&lt;/code&gt;成员在&lt;code&gt;派生类&lt;/code&gt;中仍然可以访问。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-typescript&#34;&gt;class Person {
+    protected name: string;
+    constructor(name: string) { 
+        this.name = name; 
+    }
+}
+
+class Employee extends Person {
+    private department: string;
+
+    constructor(name: string, department: string) {
+        super(name)
+        this.department = department;
+    }
+
+    public getElevatorPitch() {
+        return `Hello, my name is ${this.name} and I work in ${this.department}.`;
+    }
+}
+
+let howard = new Employee(&amp;quot;Howard&amp;quot;, &amp;quot;Sales&amp;quot;);
+console.log(howard.getElevatorPitch());
+console.log(howard.name); // error
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;我们不能在 Person 类外使用 name ，但是我们仍然可以通过 Employee 类的实例方法访问，因为 Employee 是由 Person 派生而来的。&lt;/p&gt;
+
+&lt;p&gt;7.4.4 readonly：只读修饰符&lt;/p&gt;
+
+&lt;p&gt;你可以使用&lt;code&gt;readonly&lt;/code&gt;关键字将属性设置为&lt;code&gt;只读&lt;/code&gt;的。 只读属性必须在&lt;code&gt;声明&lt;/code&gt;时或&lt;code&gt;构造函数&lt;/code&gt;里被初始化。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-typescript&#34;&gt;class Octopus {
+    readonly name: string;
+    readonly numberOfLegs: number = 8;
+    constructor (theName: string) {
+        this.name = theName;
+    }
+}
+
+let dad = new Octopus(&amp;quot;Man with the 8 strong legs&amp;quot;);
+
+dad.name = &amp;quot;Man with the 3-piece suit&amp;quot;; // error! name is readonly.
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>快速入门 Angular2 核心概念</title>
+      <link>http://www.wangxingfeng.com/angular2_basic.html</link>
+      <pubDate>Sat, 15 Jul 2017 17:13:18 +0800</pubDate>
+      
+      <guid>http://www.wangxingfeng.com/angular2_basic.html</guid>
+      <description>
+
+&lt;p&gt;&lt;img src=&#34;http://www.wangxingfeng.com/images/2017071501.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;1-components-组件&#34;&gt;1.Components 组件&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.wangxingfeng.com/images/2017071502.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;1-1-组件及示例代码&#34;&gt;1.1 组件及示例代码&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-typescript&#34;&gt;//装饰器
+@Component({
+    //元数据
+
+    selector: &#39;hello&#39;,
+
+    //定义组件的模板
+    template: &#39;&amp;lt;p&amp;gt;{{greeting}}&amp;lt;/p&amp;gt;
+})
+
+//组件类
+export class HelloComponent {
+    private greeting: string;
+    constructor() {
+        this.greeting = &#39;Hello, Welcome to Angular 2!&#39;;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.wangxingfeng.com/images/2017071505.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;装饰器：@Component&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;赋予一个类更丰富的信息,即将&lt;code&gt;元数据&lt;/code&gt; 注入到组件类中。&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;元数据：装饰器重定义的数据&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;模板：&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;可以在元数据内自定义模板template; 也可以通过templateUrl:&amp;ldquo;path/xx.html&amp;rdquo; 来引用外部模板xx.html&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;数据绑定：&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;1)插值：{{变量名}}。可以直接使用&lt;code&gt;组件类&lt;/code&gt;里的变量。&lt;/p&gt;
+
+&lt;p&gt;2)属性绑定：[]=&amp;ldquo;mydata&amp;rdquo;。把&lt;code&gt;组件类&lt;/code&gt;的数据传递&lt;code&gt;mydata&lt;/code&gt;到&lt;code&gt;模板&lt;/code&gt;中的，可以从&lt;code&gt;父组件&lt;/code&gt;向&lt;code&gt;子组件&lt;/code&gt;传递数据。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-typescript&#34;&gt;     &amp;lt;input [message]=&amp;quot;myData&amp;quot; /&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;3)事件绑定：(事件名)。把&lt;code&gt;模板&lt;/code&gt;产生的数据通过&lt;code&gt;函数调用&lt;/code&gt;的方式传递到&lt;code&gt;组件类&lt;/code&gt;中，可以从&lt;code&gt;子组件&lt;/code&gt;从&lt;code&gt;父组件&lt;/code&gt;传递数据。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-typescript&#34;&gt;    &amp;lt;input (keyup)=&amp;quot;handle($event)&amp;quot; /&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;4)双向绑定：[(ngModel)] 。实现模板和组件类的数据的双向流动，实时更新。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-typescript&#34;&gt;    &amp;lt;input [(ngModel)]=&amp;quot;myData&amp;quot; /&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;1-2-组件树&#34;&gt;1.2 组件树&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.wangxingfeng.com/images/2017071506.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;1-3-组件间的通讯机制及数据流向&#34;&gt;1.3 组件间的通讯机制及数据流向&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.wangxingfeng.com/images/2017071503.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.wangxingfeng.com/images/2017071507.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;1-4-组件的生命周期及其钩子&#34;&gt;1.4 组件的生命周期及其钩子&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.wangxingfeng.com/images/2017071504.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;1.Constructor 构造器初始化：变量的初始赋值&lt;/p&gt;
+
+&lt;p&gt;2.OnChanges 接收父组件传递的数据，第一次触发数据变化OnChanges钩子&lt;/p&gt;
+
+&lt;p&gt;3.OnInit 组件初始化：此时处理业务逻辑&lt;/p&gt;
+
+&lt;p&gt;4.OnChange 运行期间只要数据发生了变化，就会触发数据变化OnChange钩子&lt;/p&gt;
+
+&lt;p&gt;5.OnDestroy 组件销毁前会触发 OnDestroy 钩子：数据解绑、取消数据订阅等&lt;/p&gt;
+
+&lt;h2 id=&#34;2-directives-指令&#34;&gt;2. Directives 指令&lt;/h2&gt;
+
+&lt;p&gt;组件继承于指令，组件是自身带有模板的指令。&lt;/p&gt;
+
+&lt;h3 id=&#34;2-1-属性指令&#34;&gt;2.1 属性指令：&lt;/h3&gt;
+
+&lt;p&gt;改变组件模板的外观或行为的，如样式等。&lt;/p&gt;
+
+&lt;h3 id=&#34;2-2-结构指令&#34;&gt;2.2 结构指令：&lt;/h3&gt;
+
+&lt;p&gt;改变组件模板的DOM结构，如ngIf用来插入或者移除DOM节点。&lt;/p&gt;
+
+&lt;h3 id=&#34;2-3-自定义指令&#34;&gt;2.3 自定义指令：&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-typescript&#34;&gt;// 自定义指令highlight
+// 指令需要导入Directive, ElementRef, Renderer 来 辅助元素的渲染
+import { Directive, ElementRef, Renderer } from &#39;@angular/core&#39;;
+
+@Directive({
+    selector: &amp;quot;[highlight]&amp;quot; // 中括号表示指令使用在元素属性上
+})
+
+export class HighlightDirective {
+    constructor(private el: ElementRef, private renderer:Renderer) { 
+        renderer.setElementStyle(el.nativeElement, &#39;backgroundColor&#39;, &#39;pink&#39;);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;3-services-服务&#34;&gt;3. Services 服务&lt;/h2&gt;
+
+&lt;p&gt;服务是实现专一目的的逻辑单元（类），如日志服务。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-typescript&#34;&gt;export class LoggerService {
+    constructor() {}
+
+    debug(msg: string) {
+        console.log(msg);
+    }
+
+    error(msg: string) {
+        console.error(msg);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;4-dependency-injection-依赖注入&#34;&gt;4. Dependency Injection 依赖注入&lt;/h2&gt;
+
+&lt;h3 id=&#34;4-1-依赖注入&#34;&gt;4.1 依赖注入:&lt;/h3&gt;
+
+&lt;p&gt;&lt;code&gt;依赖注入&lt;/code&gt;是&lt;code&gt;组件&lt;/code&gt;引入&lt;code&gt;外部构建&lt;/code&gt;（如服务）的一种机制。最常见的是组件引入服务。引用服务其实引用的是&lt;code&gt;服务类的实例&lt;/code&gt;，所以服务在引入之前有一个&lt;code&gt;实例化&lt;/code&gt;的过程，并且&lt;code&gt;这个实例&lt;/code&gt;通常要被缓存起来&lt;code&gt;注入器对象&lt;/code&gt;中，以供其他组件使用。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.wangxingfeng.com/images/2017071508.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;示例：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-typescript&#34;&gt;@Component({
+    selector: &#39;hello&#39;,
+    template: &#39;&amp;lt;p&amp;gt;{{greeting}}&amp;lt;/p&amp;gt;
+    
+    //依赖注入的配置
+    providers:[LoggerService]
+})
+
+export class HelloComponent {
+    private greeting: string;
+
+    //组件构造函数 定义服务类LoggerService类型的参数
+    依赖注入机制会根据这个参数在注入器对象中尝试查找LoggerService的实例，找到之后，自动传入到这个构造函数中，组件内部获得了LoggerService实例的引用。
+    constructor(logger: LoggerService){
+        this.greeting = &#39;Hello, Angular2&#39;;
+        logger.debug(&#39;构造函数执行完毕&#39;);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;4-2-分层依赖注入-hierarchical-dependency-injection&#34;&gt;4.2 分层依赖注入 hierarchical dependency injection&lt;/h3&gt;
+
+&lt;p&gt;在父组件中依赖注入的服务，在&lt;code&gt;组件本身及其子组件&lt;/code&gt;都能使用。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.wangxingfeng.com/images/2017071509.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;5-modules-模块&#34;&gt;5. Modules 模块&lt;/h2&gt;
+
+&lt;h3 id=&#34;5-1-文件模块-框架代码以模块的形式组织&#34;&gt;5.1 文件模块：框架代码以模块的形式组织&lt;/h3&gt;
+
+&lt;p&gt;1.文件模块分类：&lt;/p&gt;
+
+&lt;p&gt;1)核心模块：@angular/core&lt;/p&gt;
+
+&lt;p&gt;2)通用模块：@angular/common&lt;/p&gt;
+
+&lt;p&gt;3)表单模块：@angular/forms&lt;/p&gt;
+
+&lt;p&gt;4)网络模块：@angular/http&lt;/p&gt;
+
+&lt;p&gt;5)其他模块&lt;/p&gt;
+
+&lt;p&gt;2.模块的使用：&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;文件模块&lt;/code&gt;在使用前，需要通过&lt;code&gt;import&lt;/code&gt;导入&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-typescript&#34;&gt;import { Http } from &amp;quot;@angular/http&amp;quot;;
+
+import { Component } from &amp;quot;@angular/core&amp;quot;;
+
+import { Directive } from &amp;quot;@angular/core&amp;quot;;
+
+import { ElementRef, Renderer } from &amp;quot;@angular/core&amp;quot;;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;5-2-应用模块-功能单元以模块的形式组织&#34;&gt;5.2 应用模块：功能单元以模块的形式组织&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.wangxingfeng.com/images/2017071510.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;1.应用模块：把有关联的组件、服务、指令等按功能进行归类包装成模块。&lt;/p&gt;
+
+&lt;p&gt;2.模块间的调用：&lt;/p&gt;
+
+&lt;p&gt;默认情况下，一个组件不能直接引用其他组件或指令的，要想使用就必须先导入。一个模块内的组件可以使用同模块的任意组件和指令。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-typescript&#34;&gt;// @NgModule 声明模块
+@NgModule({
+
+    // 包装组件或指令
+    declarations: [
+        AppComponent,
+        HelloComponent,
+        SomeDirective
+    ],
+
+    // 依赖注入服务
+    providers: [ LoggerService ],
+
+    // 导入其他模块
+    imports: [OtherModule ],
+
+    // 设置根组件
+    bootstrap: [ AppComponent],
+
+    // 导出该模块暴露的指令或模块以供其他组件调用
+    exports:[ SomeDirective ]
+})
+
+export class AppModule {}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;一个模块导入了另一个模块后，可以调用模块&lt;code&gt;exports出来的组件或指令&lt;/code&gt;，
+以及模块内依赖注入的服务（一个模块依赖注入了服务，那么整个应用内的所有组件里）。&lt;/p&gt;
+
+&lt;p&gt;3.根模块、特性模块、共享模块、核心模块&lt;/p&gt;
+
+&lt;p&gt;应用根据&lt;code&gt;功能&lt;/code&gt;可以切分为大大小小的各种模块。其中，&lt;code&gt;根模块&lt;/code&gt;作为应用启动的入口。各种&lt;code&gt;功能&lt;/code&gt;可以封装成一个个&lt;code&gt;特性模块&lt;/code&gt;。随着&lt;code&gt;特性模块&lt;/code&gt;越来越多，如果它们之间可以抽象出来一些相似的&lt;code&gt;功能组件&lt;/code&gt;，我们把这些&lt;code&gt;功能组件&lt;/code&gt;再封装成为独立的&lt;code&gt;共享模块&lt;/code&gt;。
+我们可以把一些全局的组件或者服务（如维护登录信息的服务、公共的头部、底部组件等）放在&lt;code&gt;根模块&lt;/code&gt;里，也可以抽离出来封装成独立的&lt;code&gt;核心模块&lt;/code&gt;，只在&lt;code&gt;根模块&lt;/code&gt;中导入。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.wangxingfeng.com/images/20170715011.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>JavaScript 的 Number 需要注意的一些特性</title>
+      <link>http://www.wangxingfeng.com/js-number.html</link>
+      <pubDate>Sun, 09 Jul 2017 21:45:51 +0800</pubDate>
+      
+      <guid>http://www.wangxingfeng.com/js-number.html</guid>
+      <description>
+
+&lt;h2 id=&#34;一-nan&#34;&gt;一、NaN：&lt;/h2&gt;
+
+&lt;p&gt;1.定义：&lt;code&gt;NaN&lt;/code&gt; 是 JavaScript 的一个特殊值，表示“非数字”（Not a Number），主要出现在将字符串解析成数字出错的场合。&lt;/p&gt;
+
+&lt;p&gt;2.&lt;code&gt;NaN&lt;/code&gt; 不是一种独立的数据类型，而是一种特殊数值，它的数据类型依然属于 &lt;code&gt;number&lt;/code&gt; ，使用 &lt;code&gt;typeof&lt;/code&gt; 运算符可以看得很清楚。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;typeof NaN // &#39;number&#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;3.NaN不等于任何值，包括它本身。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;NaN === NaN // false
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;4.isNaN()：可以用来判断一个值是否为 NaN 。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;注意:&lt;/code&gt; 如果传入的非数值(如字符串），会先进行类型转换, 转成 NaN, 所以这个方法并不可靠！用 isNaN() 之前需要判断一下数据类型是否为 number 。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;function isRealNaN(x){
+    return typeof x === &amp;quot;number&amp;quot; &amp;amp;&amp;amp; isNaN(x);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;或者利用 只有 NaN 是JavaScript之中唯一不等于自身的值这个特点，进行判断。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;function isTrueNaN(x){
+    return x !== x;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;二-infinity-与-isfinite&#34;&gt;二、Infinity 与 isFinite()&lt;/h2&gt;
+
+&lt;p&gt;1.&lt;code&gt;Infinity&lt;/code&gt;：表示“无穷”，是一个特殊的数值，用来表示两种场景。一种是一个正的数值太大，或一个负的数值太小，无法表示；另一种是非0数值除以0，得到 &lt;code&gt;Infinity&lt;/code&gt;。&lt;/p&gt;
+
+&lt;p&gt;2.&lt;code&gt;isFinite()&lt;/code&gt;：返回一个&lt;code&gt;布尔值&lt;/code&gt;，检查某个值是不是&lt;code&gt;正常数值&lt;/code&gt;。&lt;/p&gt;
+
+&lt;p&gt;如果对 &lt;code&gt;NaN&lt;/code&gt; 使用 &lt;code&gt;isFinite&lt;/code&gt; 函数，也返回 &lt;code&gt;false&lt;/code&gt;，表示 &lt;code&gt;NaN&lt;/code&gt; 不是一个正常值。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;isFinite(Infinity) // false
+isFinite(NaN) // false
+isFinite(&amp;quot;abc&amp;quot;) // false
+isFinite(undefined) //false
+isFinite({}) //false
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;注意参数为 &lt;code&gt;true&lt;/code&gt;, &lt;code&gt;false&lt;/code&gt;, &lt;code&gt;null&lt;/code&gt;, &lt;code&gt;[]&lt;/code&gt;, &lt;code&gt;&amp;quot;&amp;quot;&lt;/code&gt; 时返回 &lt;code&gt;true&lt;/code&gt;。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;isFinite(true) // true
+isFinite(false)// true
+isFinite(null) //true
+isFinite([]) //true
+isFinite(&amp;quot;&amp;quot;) //true
+isFinite(-1) // true
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;三-parseint-和parsefloat&#34;&gt;三、 parseInt() 和parseFloat()&lt;/h2&gt;
+
+&lt;p&gt;1.&lt;code&gt;parseInt()&lt;/code&gt; 用于将&lt;code&gt;字符串&lt;/code&gt;转为&lt;code&gt;整数&lt;/code&gt;; &lt;code&gt;parseFloat()&lt;/code&gt;用于将&lt;code&gt;字符串&lt;/code&gt;转为&lt;code&gt;浮点数&lt;/code&gt;。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;parseInt(&#39;123&#39;) // 123
+parseFloat(&#39;3.14&#39;) // 3.14
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;2.字符串转为整数或浮点数的时候，是&lt;code&gt;一个个字符依次转换&lt;/code&gt;，如果遇到不能转为数字的字符，就不再进行下去，返回已经转好的部分。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;parseInt(&#39;15px&#39;) // 15
+parseFloat(&#39;3.14abcd &#39;) // 3.14
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;3.如果字符串前后有&lt;code&gt;空格&lt;/code&gt;，空格会被自动去除。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;parseInt(&#39;   81&#39;) // 81
+parseFloat(&#39;\t\v\r12.34\n &#39;) // 12.34
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;4.如果字符串的第一个字符不能转化为数字（后面跟着数字的正负号除外），返回&lt;code&gt;NaN&lt;/code&gt;。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;parseInt(&#39;abc&#39;) // NaN
+parseInt(&#39;.3&#39;) // NaN
+parseInt(&#39;&#39;) // NaN
+parseInt(&#39;+&#39;) // NaN
+parseInt(&#39;+1&#39;) // 1
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;5.对于那些会自动转为&lt;code&gt;科学计数法&lt;/code&gt;的数字，parseInt()会将科学计数法的表示方法视为字符串，因此导致一些奇怪的结果。如果字符串符合科学计数法，parseFloat())则会进行相应的转换。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;parseInt(1000000000000000000000.5) // 1
+// 等同于
+parseInt(&#39;1e+21&#39;) // 1
+
+parseFloat(&#39;314e-2&#39;) // 3.14
+parseFloat(&#39;0.0314E+2&#39;) // 3.14
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;6.&lt;code&gt;parseInt()&lt;/code&gt;还可以接受第二个参数（2到36之间），表示被解析的值的进制，返回该值对应的十进制数。默认情况下，&lt;code&gt;parseInt&lt;/code&gt;的第二个参数为10，即默认是十进制转十进制。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;parseInt(&#39;1000&#39;) // 1000
+// 等同于
+parseInt(&#39;1000&#39;, 10) // 1000
+parseInt(&#39;1000&#39;, 2) // 8
+parseInt(&#39;1000&#39;, 6) // 216
+parseInt(&#39;1000&#39;, 8) // 512
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;7.如果字符串包含对于指定进制无意义的字符，则从最高位开始，只返回可以转换的数值。如果最高位无法转换，则直接返回&lt;code&gt;NaN&lt;/code&gt;。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;parseInt(&#39;1546&#39;, 2) // 1
+parseInt(&#39;546&#39;, 2) // NaN
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;8.如果&lt;code&gt;parseInt()&lt;/code&gt;的第一个参数不是字符串，会被先转为字符串。这会导致一些令人意外的结果。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;parseInt(0x11, 36) // 43
+// 等同于
+parseInt(&#39;17&#39;, 36)
+parseInt(String(0x11), 36)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;9.如果参数不是字符串，或者字符串的第一个字符不能转化为浮点数，则&lt;code&gt;parseFloat()&lt;/code&gt;返回&lt;code&gt;NaN&lt;/code&gt;。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;parseFloat([]) // NaN
+parseFloat(&#39;FF2&#39;) // NaN
+parseFloat(&#39;&#39;) // NaN
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;四-强制类型转换的函数-number&#34;&gt;四、强制类型转换的函数：Number()&lt;/h2&gt;
+
+&lt;p&gt;1.Number(): 可以将任意类型的值转化成数值。&lt;/p&gt;
+
+&lt;p&gt;2.&lt;code&gt;Number()&lt;/code&gt;将字符串转为数值，要比&lt;code&gt;parseInt()&lt;/code&gt;严格很多。基本上，只要有一个字符无法转成数值，整个&lt;code&gt;字符串&lt;/code&gt;就会被转为&lt;code&gt;NaN&lt;/code&gt;。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;parseFloat(&#39;123.45#&#39;) // 123.45
+Number(&#39;123.45#&#39;) // NaN
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;2.如果&lt;code&gt;Number()&lt;/code&gt;的参数是&lt;code&gt;null&lt;/code&gt;, &lt;code&gt;false&lt;/code&gt;, &lt;code&gt;&#39;&#39;&lt;/code&gt;, &lt;code&gt;[]&lt;/code&gt; 则结果为&lt;code&gt;0&lt;/code&gt;；如果为 &lt;code&gt;true&lt;/code&gt;，则结果为 &lt;code&gt;1&lt;/code&gt;。&lt;code&gt;parseInt()&lt;/code&gt;/&lt;code&gt;parseFloat()&lt;/code&gt;的参数如果是这些特殊值时，一律为 &lt;code&gt;NaN&lt;/code&gt;。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Number(null)  //0
+Number(&amp;quot;&amp;quot;)   //0
+Number(false)   //0
+Number([])   //0
+Number(true) // 1
+
+parseInt(null) // NaN
+parseFloat(null) // NaN
+parseInt(&amp;quot;&amp;quot;) // NaN
+parseFloat(&amp;quot;&amp;quot;) // NaN
+parseInt(false) // NaN
+parseFloat(false) // NaN
+parseInt([]) // NaN
+parseFloat([]) // NaN
+parseInt(true)  // NaN
+parseFloat(true)  // NaN
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;3.&lt;code&gt;Number()&lt;/code&gt;跟&lt;code&gt;parseInt()&lt;/code&gt;、&lt;code&gt;parseFloat()&lt;/code&gt;一样，会自动过滤字符串前后的&lt;code&gt;空格&lt;/code&gt;。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Number(&#39;\t\v\r12.34\n&#39;) // 12.34
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;4.如果参数是&lt;code&gt;对象&lt;/code&gt;时，将返回&lt;code&gt;NaN&lt;/code&gt;，除非是包含&lt;code&gt;单个数值的数组&lt;/code&gt;。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Number({a: 1}) // NaN
+Number([1, 2, 3]) // NaN
+Number([5]) // 5
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>撸了Google Cloud，自建了个梯子</title>
+      <link>http://www.wangxingfeng.com/ss.html</link>
+      <pubDate>Sun, 09 Jul 2017 11:37:11 +0800</pubDate>
+      
+      <guid>http://www.wangxingfeng.com/ss.html</guid>
+      <description>
+
+&lt;p&gt;鉴于最近科学上网变得越来越不方便了，不少之前坚挺的 VPN 都被迫停止服务了，只好自己动手，搭个梯子。网上找找资料，意外发现了&lt;a href=&#34;https://cloud.google.com/&#34;&gt;谷歌的云服务 (Google Cloud Platform)&lt;/a&gt;有免费试用服务（其实亚马逊云也有一年的免费试用）。 新用户注册赠送300刀，一年有效期，完全可以用来搭建个梯子玩玩。&lt;/p&gt;
+
+&lt;p&gt;目前撸这个的人应该不多，因为至少有两个门槛。第一，谷歌的服务在国内基本被墙了，所以必须得先能翻墙，注册了 Google 账号，才能登录 Google Cloud。第二，国内用户必须得有双币或者多币种的信用卡才能通过验证。&lt;/p&gt;
+
+&lt;p&gt;以下是我搭建梯子的流程：&lt;/p&gt;
+
+&lt;h3 id=&#34;1-注册登录&#34;&gt;1.注册登录：&lt;/h3&gt;
+
+&lt;p&gt;先用免费的蓝灯翻墙上&lt;a href=&#34;https://cloud.google.com/&#34;&gt;谷歌云&lt;/a&gt;，点击那个蓝色的 &amp;ldquo;TRY IT FREE&amp;rdquo;  按钮，需要用谷歌账号登录，然后填写一些个人信息，过程中需要绑定真实的信用卡。还有可能会发邮件给你，让你上传证件以及信用卡的照片用于身份认证。验证成功后会预扣费1美元用于验证卡的有效性，稍后它会自动返回。&lt;/p&gt;
+
+&lt;h3 id=&#34;2-创建项目&#34;&gt;2.创建项目：&lt;/h3&gt;
+
+&lt;p&gt;项目名称什么的可以随便填。&lt;/p&gt;
+
+&lt;h3 id=&#34;3-创建vm实例-计算引擎-vm实例&#34;&gt;3.创建VM实例： 计算引擎 &amp;ndash;&amp;gt; VM实例。&lt;/h3&gt;
+
+&lt;p&gt;1）地区：可以选择亚洲的节点；&lt;/p&gt;
+
+&lt;p&gt;2）机器类型：选择了最低配的，微型。&lt;/p&gt;
+
+&lt;p&gt;3）启动磁盘：我选了CentOS7的操作系统&lt;/p&gt;
+
+&lt;p&gt;4）网络：记得要新建静态IP地址，后面需要绑定到实例。&lt;/p&gt;
+
+&lt;h3 id=&#34;4-绑定外部ip地址&#34;&gt;4.绑定外部IP地址：&lt;/h3&gt;
+
+&lt;p&gt;网络 &amp;ndash;&amp;gt; 绑定外部IP地址 &amp;ndash;&amp;gt; 保留静态地址 （未附加到实例或负载平衡器的静态 IP 地址将按小时计费!!!）&lt;/p&gt;
+
+&lt;h3 id=&#34;5-防火墙设置&#34;&gt;5.防火墙设置：&lt;/h3&gt;
+
+&lt;p&gt;由于默认的防火墙限制太多，SS等可能用不了，所以我们把防火墙相应端口开一下。&lt;/p&gt;
+
+&lt;p&gt;网络 &amp;ndash;&amp;gt; 防火墙规则&amp;ndash;&amp;gt; 新建防火墙规则 &amp;ndash;&amp;gt; 来源过滤选择 “允许任意来源的流量” &amp;ndash;&amp;gt;设置协议和端口：“tcp:你的端口号”&lt;/p&gt;
+
+&lt;h3 id=&#34;6-在服务器上安装-配置ss&#34;&gt;6.在服务器上安装、配置SS:&lt;/h3&gt;
+
+&lt;p&gt;1)用 Google Cloud 有自带的SSH工具, 链接上服务器。&lt;/p&gt;
+
+&lt;p&gt;2)输入命令：&lt;code&gt;sudo -i&lt;/code&gt; 获取&lt;code&gt;root&lt;/code&gt;权限;&lt;/p&gt;
+
+&lt;p&gt;3)然后输入 &lt;code&gt;yum install -y emacs python python-pip&lt;/code&gt; 安装 Emacs 编辑器和 Python (编辑器用于编辑SS的配置文件，Python用于运行SS)。&lt;/p&gt;
+
+&lt;p&gt;4)等待一会儿后安装完毕，这时输入命令&lt;code&gt;pip install shadowsocks&lt;/code&gt; 安装SS;&lt;/p&gt;
+
+&lt;p&gt;5)输入命令&lt;code&gt;emacs /etc/ss.json&lt;/code&gt; 打开编辑器，并打开一个名为&lt;code&gt;ss.json&lt;/code&gt;的配置文件保存在&lt;code&gt;/etc/&lt;/code&gt;目录下。以下是SS官方的默认配置：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-json&#34;&gt;    {
+        &amp;quot;server&amp;quot;:&amp;quot;你的服务器静态IP地址&amp;quot;,
+        &amp;quot;server_port&amp;quot;:端口号, //端口号需要与步骤5设置的一致
+        &amp;quot;password&amp;quot;:&amp;quot;你的密码&amp;quot;,
+        &amp;quot;timeout&amp;quot;:600,
+        &amp;quot;method&amp;quot;:&amp;quot;rc4-md5&amp;quot;, 
+        &amp;quot;auth&amp;quot;: true
+    }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;6)配置完成后, 按&lt;code&gt;ctrl + x&lt;/code&gt; 然后 &lt;code&gt;ctrl + s&lt;/code&gt; 保存文件，再按 &lt;code&gt;ctrl + x&lt;/code&gt;然后 &lt;code&gt;ctrl + c&lt;/code&gt;退出编辑器。&lt;/p&gt;
+
+&lt;p&gt;7)最后输入命令&lt;code&gt;ssserver -c /etc/ss.json -d start&lt;/code&gt;即可启动 Shadowsocks 服务器。&lt;/p&gt;
+
+&lt;p&gt;要停止SS服务器（例如需要更改配置文件），输入&lt;code&gt;ssserver -d stop&lt;/code&gt;即可。&lt;/p&gt;
+
+&lt;p&gt;要让SS服务能在后台运行，输入&lt;code&gt;ssserver -p 你的端口号 -k 你的密码 -m rc4-md5 --user nobody -d start&lt;/code&gt;。到此为止，服务器端的配置已经搞定。&lt;/p&gt;
+
+&lt;h3 id=&#34;6-win7在配置客户端ss&#34;&gt;6.Win7在配置客户端SS:&lt;/h3&gt;
+
+&lt;p&gt;1)下载并解压&lt;a href=&#34;https://github.com/shadowsocks/shadowsocks-windows/releases&#34;&gt;ss客户端&lt;/a&gt;;&lt;/p&gt;
+
+&lt;p&gt;2)运行&lt;code&gt;Shadowsocks.exe&lt;/code&gt;，图标会出现在桌面右下方。&lt;/p&gt;
+
+&lt;p&gt;3)右击图标&amp;ndash;&amp;gt; 点击“系统代理” &amp;ndash;&amp;gt;“系统代理模式”选择“PAC模式” &amp;ndash;&amp;gt;选择“服务器” &amp;ndash;&amp;gt; “编辑服务器”&amp;ndash;&amp;gt; 填写服务器地址、端口号、密码、加密方式等信息&amp;ndash;&amp;gt;确定。&lt;/p&gt;
+
+&lt;p&gt;到此为止，你就可以畅游真正的互联网了。&lt;/p&gt;
+
+&lt;h3 id=&#34;7-安卓手机ss客户端配置&#34;&gt;7.安卓手机SS客户端配置：&lt;/h3&gt;
+
+&lt;p&gt;1）下载 “影梭”&lt;/p&gt;
+
+&lt;p&gt;2）填写相应的服务器地址、端口号、密码、加密方式等信息。&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>MySQL学习笔记：修改数据表的常用命令</title>
+      <link>http://www.wangxingfeng.com/mysql_notes_3.html</link>
+      <pubDate>Tue, 27 Jun 2017 22:57:29 +0800</pubDate>
+      
+      <guid>http://www.wangxingfeng.com/mysql_notes_3.html</guid>
+      <description>
+
+&lt;h2 id=&#34;1-新增或删除列&#34;&gt;1.新增或删除列&lt;/h2&gt;
+
+&lt;p&gt;1.1 添加单列&lt;/p&gt;
+
+&lt;p&gt;语法：&lt;code&gt;ALTER TABLE tbl_name ADD [COLUMN] col_name col_definition [FIRST | AFTER col_name];&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;指定位置关系的关键字：&lt;/p&gt;
+
+&lt;p&gt;1.FIRST：表示在数据表的第一列&lt;/p&gt;
+
+&lt;p&gt;2.AFTER: 参数col_name为某个数据列的名称，表示指定在该数据列的后面。&lt;/p&gt;
+
+&lt;p&gt;示例代码如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;ALTER TABLE users ADD age TINYINT UNSIGNED NOT NULL DEFAULT 10;
+
+ALTER TABLE users ADD password VARCHAR(20) NOT NULL AFTER username;
+
+ALTER TABLE users ADD truename VARCHAR(20) NOT NULL FIRST;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;1.2 添加多列（不能指定位置关系）&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;ALTER TABLE tbl_name ADD [COLUMN] (col_name1 col_definition, col_name2 col_definition,...);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;1.3 删除列&lt;/p&gt;
+
+&lt;p&gt;语法：`ALTER TABLE tbl_name DROP col_name1 [, DROP col_name2];&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;ALTER TABLE users DROP truename;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;2-添加约束&#34;&gt;2.添加约束&lt;/h2&gt;
+
+&lt;p&gt;2.1 添加主键约束：(数据表只能有一个主键)&lt;/p&gt;
+
+&lt;p&gt;语法：&lt;code&gt;ALTER TABLE tbl_name ADD [CONSTRAINT [symbol]] PRIMARY KEY [index_type] (index_col_name);&lt;/code&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;ALTER TABLE users3 ADD CONSTRAINT PK_users2_id PRIMARY KEY (id);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;2.2 添加唯一约束：唯一约束可以有多个&lt;/p&gt;
+
+&lt;p&gt;语法：&lt;code&gt;ALTER TABLE tbl_name ADD [CONSTRAINT [symbol]] UNIQUE [INDEX | KEY] [index_name] [ index_type] (index_col_name, ...);&lt;/code&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;ALTER TABLE users3 ADD UNIQUE (username);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;2.3 添加外键约束：&lt;/p&gt;
+
+&lt;p&gt;语法：&lt;code&gt;ALTER TABLE tbl_name ADD [CONSTRAINT [symbol]] FOREIGN KEY [index_name] (index_colo_name) reference_definition;&lt;/code&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;ALTER TABLE users3 ADD FOREIGEN KEY (pid) REFERENCE provinces (id);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;2.4 添加默认约束：&lt;/p&gt;
+
+&lt;p&gt;语法：&lt;code&gt;ALTER TABLE tbl_name ALTER [COLUMN] col_name SET DEFAULT literal;&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;给 age 字段添加默认约束，默认值为10：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;ALTER TABLE users3 ALTER age SET DEFAULT 10;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;3-删除约束&#34;&gt;3.删除约束：&lt;/h2&gt;
+
+&lt;p&gt;3.1 删除主键约束：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;ALTER TABLE users DROP PRIMARY KEY;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;3.2 删除唯一约束：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;ALTER TABLE users DROP INDEX username;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;3.3 删除外键约束：需指定外键名称&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;ALTER TABLE tbl_name DROP FOREIGN KEY fk_symbol
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;fk_symbol 是系统赋予外键的名字，通过如下命令可以查看到&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;SHOW CREATE TABLE users;
+
+ALTER TABLE users DROP FOREIGN KEY users_ibfk_1;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;3.4 删除默认约束：需指定字段&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;ALTER TABLE tbl_name ALTER [COLUMN] col_name DROP DEFAULT
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;比如：删除age 字段的默认约束&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;ALTER TABLE users3 ALTER age DROP DEFAULT;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;4-修改列定义&#34;&gt;4.修改列定义：&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;ALTER TABLE tbl_name MODIFY [COLUMN] col_name col_definition [FIRST | AFTER col_name]
+
+ALTER TABLE users MODIFY pid SMALLINT UNSIGNED NOT NULL FIRST;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;5-修改列的名称&#34;&gt;5.修改列的名称：&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;ALTER TABLE tbl_name CHANGE [COLUMN] old_col_name new_col_name column_definition [FIRST | AFTER col_name]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;6-数据表更名&#34;&gt;6.数据表更名：&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;ALTER TABLE tbl_name RENAME [TO|AS] new_tbl_name;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;或者&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;RENAME TABLE tbl_name TO new_tbl_name [, tbl_name2 TO new_tbl_name2 ,...]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;方法2可以同时为多张数据表更名。&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>一个Geek的评论系统Gitment</title>
+      <link>http://www.wangxingfeng.com/use_gitment_as_comment_system_for_your_blog.html</link>
+      <pubDate>Sat, 24 Jun 2017 17:04:42 +0800</pubDate>
+      
+      <guid>http://www.wangxingfeng.com/use_gitment_as_comment_system_for_your_blog.html</guid>
+      <description>
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/imsun/gitment&#34;&gt;Gitment&lt;/a&gt;是一个使用GitHub Issues 搭建的评论系统。本文教你如何使用Gitment作为自己博客的评论系统。&lt;/p&gt;
+
+&lt;h2 id=&#34;先简单介绍下优缺点&#34;&gt;先简单介绍下优缺点：&lt;/h2&gt;
+
+&lt;h3 id=&#34;1-优点&#34;&gt;1.优点：&lt;/h3&gt;
+
+&lt;p&gt;Gitment支持在前端直接引入，不需要任何后端代码，可以在页面进行登录、查看、评论、点赞等操作，同时有完整的 Markdown / GFM 和代码高亮支持，尤为适合各种基于 GitHub Pages 的静态博客或项目页面。&lt;/p&gt;
+
+&lt;h3 id=&#34;2-缺点&#34;&gt;2.缺点：&lt;/h3&gt;
+
+&lt;p&gt;只能使用 GitHub 账号进行评论。每篇文章需要自己手动用GitHub账号登录并初始化，其他用户才能评论。&lt;/p&gt;
+
+&lt;h2 id=&#34;使用方法&#34;&gt;使用方法：&lt;/h2&gt;
+
+&lt;h3 id=&#34;第一步-注册-oauth-application&#34;&gt;第一步: 注册 OAuth Application&lt;/h3&gt;
+
+&lt;p&gt;在 GitHub 上注册一个新的 &lt;a href=&#34;https://github.com/settings/applications/new&#34;&gt;OAuth Application&lt;/a&gt;。前面3项内容都可以随意填写，但要确保最后一个 &lt;code&gt;Authorization callback URL&lt;/code&gt; 是你的网站域名(比如&lt;a href=&#34;http://www.wangxingfeng.com)。&#34;&gt;http://www.wangxingfeng.com)。&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;成功注册之后，你将会得到一个 client ID 和一个 client secret，这个将被用于之后的实例化 Gitment。&lt;/p&gt;
+
+&lt;h3 id=&#34;第二步-页面引入-gitment-的静态资源文件&#34;&gt;第二步: 页面引入 Gitment 的静态资源文件&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-html&#34;&gt;&amp;lt;link rel=&amp;quot;stylesheet&amp;quot; href=&amp;quot;https://imsun.github.io/gitment/style/default.css&amp;quot;&amp;gt;
+&amp;lt;script src=&amp;quot;https://imsun.github.io/gitment/dist/gitment.browser.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;当然你也可以选择把这两个静态资源文件下载到本地，然后放到你的站点对应静态资源目录下。&lt;/p&gt;
+
+&lt;h3 id=&#34;第三步-实例化-gitment&#34;&gt;第三步: 实例化 Gitment&lt;/h3&gt;
+
+&lt;p&gt;1.在需要使用评论系统的页面（一般情况下，找到你的文章的模板页）新增一个DOM节点用于放置评论框区域的内容。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-html&#34;&gt;&amp;lt;div id=&amp;quot;comment&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;2.在该页面加入如下的配置脚本：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;
+var gitment = new Gitment({
+  id: &#39;页面 ID&#39;, 
+  owner: &#39;你的 GitHub ID&#39;,
+  repo: &#39;存储评论的 repo&#39;,
+  oauth: {
+    client_id: &#39;你的 client ID&#39;,
+    client_secret: &#39;你的 client secret&#39;,
+  },
+})
+gitment.render(&#39;comment&#39;)
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;注意：&lt;/p&gt;
+
+&lt;p&gt;1.&lt;code&gt;gitment.render()&lt;/code&gt;这个方法的参数就是你的评论区域 div 的 id 名;&lt;/p&gt;
+
+&lt;p&gt;2.页面 ID 如果不写，默认为 location.href。&lt;/p&gt;
+
+&lt;h3 id=&#34;第四步-初始化评论功能&#34;&gt;第四步：初始化评论功能&lt;/h3&gt;
+
+&lt;p&gt;第三步之后，你需要把你的网站部署到线上。如果前面三步没出错的话，应该能够看到评论框了。这个时候是不能够评论的。&lt;/p&gt;
+
+&lt;p&gt;点击在评论框的右侧&lt;code&gt;Login with GitHub&lt;/code&gt;, 用你的 GitHub 登录， 然后点击中间那个蓝色的 &lt;code&gt;Initialize Comments&lt;/code&gt;按钮，对该页面的评论功能进行初始化。&lt;/p&gt;
+
+&lt;p&gt;现在，你的这个页面的访客就可以使用 GitHub 账号登录进行评论了。唯一不足的是，每个页面的评论框都需要手动地初始化。&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Python操作MySQL学习笔记</title>
+      <link>http://www.wangxingfeng.com/python_mysqldb.html</link>
+      <pubDate>Tue, 20 Jun 2017 07:44:01 +0800</pubDate>
+      
+      <guid>http://www.wangxingfeng.com/python_mysqldb.html</guid>
+      <description>
+
+&lt;h2 id=&#34;一-应用架构&#34;&gt;一、应用架构&lt;/h2&gt;
+
+&lt;p&gt;客户端 &amp;ndash;&amp;gt; 业务逻辑层 &amp;ndash;&amp;gt; 数据访问层 &amp;ndash;&amp;gt; 数据库&lt;/p&gt;
+
+&lt;h2 id=&#34;二-python-db-api&#34;&gt;二、 Python DB API&lt;/h2&gt;
+
+&lt;p&gt;Python应用程序（包含SQL) &amp;ndash;&amp;gt; Python DB API（访问数据库的统一规范接口MySQLdb） &amp;ndash;&amp;gt; MySQL / Oracle / SQLServer等数据库&lt;/p&gt;
+
+&lt;p&gt;1.数据库连接对象：connection&lt;/p&gt;
+
+&lt;p&gt;2.数据库交互对象：cursor&lt;/p&gt;
+
+&lt;p&gt;3.数据库异常类: exceptions&lt;/p&gt;
+
+&lt;h2 id=&#34;三-访问数据库流程&#34;&gt;三、访问数据库流程：&lt;/h2&gt;
+
+&lt;p&gt;创建连接对象connection &amp;ndash;&amp;gt; 获取交互对象cursor &amp;ndash;&amp;gt; 执行查询/执行命令/获取数据/处理数据等 &amp;ndash;&amp;gt; 关闭cursor &amp;ndash;&amp;gt; 关闭connection&lt;/p&gt;
+
+&lt;h2 id=&#34;四-数据库连接对象-connection&#34;&gt;四、数据库连接对象：connection&lt;/h2&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;建立Python客户端与数据库的网络连接&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;创建方法： MySQLdb.Connect()&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;参数：&lt;/p&gt;
+
+&lt;p&gt;host 数据库服务器地址&lt;/p&gt;
+
+&lt;p&gt;port 端口号， 数字类型&lt;/p&gt;
+
+&lt;p&gt;user 用户名&lt;/p&gt;
+
+&lt;p&gt;passwd 密码&lt;/p&gt;
+
+&lt;p&gt;db 数据库名称&lt;/p&gt;
+
+&lt;p&gt;charset 编码格式, utf8&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;4.方法：&lt;/p&gt;
+
+&lt;p&gt;cursor() 获取交互对象（游标）&lt;/p&gt;
+
+&lt;p&gt;commit() 提交当前事务&lt;/p&gt;
+
+&lt;p&gt;rollback() 回滚当前事务&lt;/p&gt;
+
+&lt;p&gt;close() 关闭连接&lt;/p&gt;
+
+&lt;h2 id=&#34;五-数据库交互对象-游标-cursor-用于执行查询和获取结果&#34;&gt;五、数据库交互对象（游标）cursor: 用于执行查询和获取结果&lt;/h2&gt;
+
+&lt;p&gt;1.方法：&lt;/p&gt;
+
+&lt;p&gt;1）execute(op [, args] )    执行SQL,将结果从数据库获取到客户端，存在本地缓冲区。&lt;/p&gt;
+
+&lt;p&gt;2）fetch*() 方法：移动指针rownumber， 返回数据。&lt;/p&gt;
+
+&lt;p&gt;fetchone() 获取结果集的下一行&lt;/p&gt;
+
+&lt;p&gt;fetchmany(size) 获取结果集的下几行&lt;/p&gt;
+
+&lt;p&gt;fetchall() 获取结果集中剩下的所有行&lt;/p&gt;
+
+&lt;p&gt;3）close() 关闭游标对象&lt;/p&gt;
+
+&lt;p&gt;2.属性：rowcount 最近一次execute返回数据的行数或影响的行数。&lt;/p&gt;
+
+&lt;h2 id=&#34;六-事务&#34;&gt;六、事务&lt;/h2&gt;
+
+&lt;p&gt;1.访问和更新数据库的一个程序执行单元，可以包含多个SQL语句或命令的操作。&lt;/p&gt;
+
+&lt;p&gt;2.必须设置引擎为INNODB。&lt;/p&gt;
+
+&lt;p&gt;3.特性：&lt;/p&gt;
+
+&lt;p&gt;1）原子性：事务包含的所有操作，要么不做，要么都做。&lt;/p&gt;
+
+&lt;p&gt;2）一致性：事务必须使数据库从一致性状态变到另一个一致性状态。&lt;/p&gt;
+
+&lt;p&gt;3）隔离性：一个事务的执行不能被其他事务所干扰。&lt;/p&gt;
+
+&lt;p&gt;4）持久性：事务一旦提交，它对数据库的改变就是永久性的。&lt;/p&gt;
+
+&lt;p&gt;4.使用事务：&lt;/p&gt;
+
+&lt;p&gt;1）关闭自动commit：设置conn.autocommit(False);&lt;/p&gt;
+
+&lt;p&gt;2）正常结束事务：conn.commit();&lt;/p&gt;
+
+&lt;p&gt;3）异常结束事务：conn.rollback().&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>MySQL数据库的基本数据类型、表的操作和记录的操作</title>
+      <link>http://www.wangxingfeng.com/mysql-basic-2.html</link>
+      <pubDate>Thu, 08 Jun 2017 07:32:57 +0800</pubDate>
+      
+      <guid>http://www.wangxingfeng.com/mysql-basic-2.html</guid>
+      <description>
+
+&lt;h2 id=&#34;一-mysql的基本数据类型&#34;&gt;一、MySQL的基本数据类型：&lt;/h2&gt;
+
+&lt;h3 id=&#34;1-数值类型&#34;&gt;1. 数值类型：&lt;/h3&gt;
+
+&lt;p&gt;包括严格数值数据类型(INTEGER、SMALLINT、DECIMAL和NUMERIC)，以及近似数值数据类型(FLOAT、REAL和DOUBLE PRECISION)。&lt;/p&gt;
+
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;类型&lt;/th&gt;
+&lt;th align=&#34;center&#34;&gt;大小&lt;/th&gt;
+&lt;th align=&#34;center&#34;&gt;范围（有符号）&lt;/th&gt;
+&lt;th align=&#34;center&#34;&gt;范围（无符号）&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;用途&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;TINYINT&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;1 字节&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;(-128，127)&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;(0，255)&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;小整数值&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;SMALLINT&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;2 字节&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;(-2^15，2^15 -1)&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;(0，2^16 -1)&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;大整数值&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;MEDIUMINT&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;3 字节&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;(-2^23，2^23 -1)&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;(0，2^24 -1)&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;大整数值&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;INT或INTEGER&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;4 字节&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;(-2^31，2^31 -1)&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;(0，2^32 -1)&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;大整数值&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;BIGINT&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;8 字节&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;(-2^63，2^63 -1)&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;(0，2^64 -1)&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;极大整数值&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;FLOAT&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;4 字节&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;(-3.402 823 466 E+38，-1.175 494 351 E-38)，0，(1.175 494 351 E-38，3.402 823 466 351 E+38)&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;0，(1.175 494 351 E-38，3.402 823 466 E+38)&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;单精度浮点数值&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;DOUBLE&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;8 字节&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;(-1.797 693 134 862 315 7 E+308，-2.225 073 858 507 201 4 E-308)，0，(2.225 073 858 507 201 4 E-308，1.797 693 134 862 315 7 E+308)&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;0，(2.225 073 858 507 201 4 E-308，1.797 693 134 862 315 7 E+308)&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;双精度浮点数值&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;DECIMAL&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;DECIMAL(M,D)。如果M&amp;gt;D，为M+2否则为D+2&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;依附于M和D的值&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;依附于M和D的值&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;小数值&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;DECIMAL(M,D)：&lt;/p&gt;
+
+&lt;p&gt;M指定指定小数点左边和右边可以存储的十进制数字的最大个数，最大精度38。&lt;/p&gt;
+
+&lt;p&gt;D指定小数点右边可以存储的十进制数字的最大个数。小数位数必须是从 0 到 a之间的值。默认小数位数是 0。&lt;/p&gt;
+
+&lt;h3 id=&#34;2-字符型&#34;&gt;2. 字符型：&lt;/h3&gt;
+
+&lt;p&gt;字符串类型主要包括CHAR、VARCHAR、TEXT、MEDIUMTEXT、LONGTEXT、EMU等。&lt;/p&gt;
+
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;类型&lt;/th&gt;
+&lt;th align=&#34;center&#34;&gt;大小&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;用途&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;CHAR&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;0~2^8-1 (0~255) 字节&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;定长字符串&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;VARCHAR&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;0~2^16-1 (0~65536) 字节&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;变长字符串&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;TINYTEXT&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;0~2^8-1 (0~255) 字节&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;短文本字符串&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;TEXT&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;0~2^16-1 (0~65536)字节&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;长文本数据&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;MEDIUMTEXT&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;0~2^24-1 (0~16777215)字节&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;中等长度文本数据&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;LONGTEXT&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;0~2^32-1 (0~4294967296)&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;极大文本数据&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;定长字符串：没有达到指定长度，尾部空格补齐。&lt;/p&gt;
+
+&lt;h3 id=&#34;3-日期时间类型&#34;&gt;3. 日期时间类型：&lt;/h3&gt;
+
+&lt;p&gt;表示时间值的日期和时间类型为DATETIME、DATE、TIMESTAMP、TIME和YEAR。&lt;/p&gt;
+
+&lt;p&gt;每个时间类型有一个有效值范围和一个&amp;rdquo;零&amp;rdquo;值，当指定不合法的MySQL不能表示的值时使用&amp;rdquo;零&amp;rdquo;值。&lt;/p&gt;
+
+&lt;p&gt;类型  大小
+(字节)    范围  格式  用途
+DATE    3   1000-01-01/9999-12-31   YYYY-MM-DD  日期值
+TIME    3   &amp;lsquo;-838:59:59&amp;rsquo;/&amp;lsquo;838:59:59&amp;rsquo;    HH:MM:SS    时间值或持续时间
+YEAR    1   &lt;sup&gt;1901&lt;/sup&gt;&amp;frasl;&lt;sub&gt;2155&lt;/sub&gt;   YYYY    年份值
+DATETIME    8   1000-01-01 00:00:00/9999-12-31 23:59:59 YYYY-MM-DD HH:MM:SS 混合日期和时间值
+TIMESTAMP   4   1970-01-01 00:00:00/2037 年某时    YYYYMMDD HHMMSS 混合日期和时间值，时间戳&lt;/p&gt;
+
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;类型&lt;/th&gt;
+&lt;th align=&#34;center&#34;&gt;大小&lt;/th&gt;
+&lt;th align=&#34;center&#34;&gt;范围&lt;/th&gt;
+&lt;th align=&#34;center&#34;&gt;格式&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;用途&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;YEAR&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;1 字节&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;1901~2155&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;YYYY&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;年份值&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;DATE&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;3 字节&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;1000-01-01 ~ 9999-12-31&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;YYYY-MM-DD&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;日期值&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;TIME&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;3 字节&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;-838:59:59 ~ 838:59:59&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;HH:MM:SS&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;时间值或持续时间&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;DATETIME&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;8 字节&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;1000-01-01 00:00:00 ~ 9999-12-31 23:59:59&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;YYYY-MM-DD HH:MM:SS&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;混合日期和时间值&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;TIMESTAMP&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;4 字节&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;1970-01-01 00:00:00 ~ 2037&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;YYYYMMDD HHMMSS&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;时间戳&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h2 id=&#34;二-数据表的操作&#34;&gt;二、数据表的操作：&lt;/h2&gt;
+
+&lt;h3 id=&#34;1-查看当前数据库&#34;&gt;1.查看当前数据库&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;SELECT DATABASE();
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;2-创建数据表&#34;&gt;2.创建数据表&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;CREATE TABLE [IF NOT EXISTS] table_name ( column_name data_type,...);
+
+
+CREATE TABLE IF NOT EXISTS user(
+    username VARCHAR(20),
+    age TINYINT UNSIGNED,
+    salary FLOAT(8,2) UNSIGNED
+);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;3-查看数据表&#34;&gt;3.查看数据表&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;SHOW TABLES;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;查看其它数据库的数据表&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;SHOW TABLES FROM mysql;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;4-查看数据表结构&#34;&gt;4.查看数据表结构&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;SHOW COLUMNS FROM tbl_name;
+
+SHOW COLUMNS FROM user;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;三-记录的操作&#34;&gt;三、记录的操作：&lt;/h2&gt;
+
+&lt;p&gt;数据表里的行，被称为数据库的记录&lt;/p&gt;
+
+&lt;h3 id=&#34;1-插入记录&#34;&gt;1.插入记录&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;INSERT [INFO] tbl_name [(col_name,..)] VALUES(val,..);
+
+INSERT user VALUES(&#39;Frank&#39;, 22, 3500.18);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果省略了字段名（即列名），则值必须与字段的数量一致，否则会报错。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Column count doesn&#39;t match value count at row 1
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果对某部分字段赋值，则需要写明字段名。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;INSERT user(username,salary)  VALUES(&#39;Jack&#39;, 4500.18);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;2-查找记录&#34;&gt;2.查找记录&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;SELECT expr,... FROM tbl_name;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;查看全部记录&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;SELECT * FROM tbl_name; 
+
+SELECT * FROM user;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;3-空值&#34;&gt;3.空值&lt;/h3&gt;
+
+&lt;p&gt;NULL, 字段值可以为空；
+NOT NULL, 字段值不能为空。&lt;/p&gt;
+
+&lt;p&gt;CREATE TABLE tb2(
+    username VARCHAR(20) NOT NULL,
+    age TINYINT UNSIGNED NULL
+);&lt;/p&gt;
+
+&lt;h3 id=&#34;4-自动编号-auto-increment&#34;&gt;4.自动编号：AUTO_INCREMENT&lt;/h3&gt;
+
+&lt;p&gt;必须与主键组合使用。默认情况下，其实值为1，每次的增量为1.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;CREATE TABLE tb3(
+    id SMALLINT UNSIGNED AUTO_INCREMENT,
+    username VARCHAR(20) NOT NULL,
+    age TINYINT UNSIGNED NULL
+);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;报错：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;ERROR 1075(42000): Incorrect table definition; there can be only one auto column and it must be defined as a key.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;5-主键-primary-key&#34;&gt;5.主键：PRIMARY KEY&lt;/h3&gt;
+
+&lt;p&gt;1）每张数据表只能存在一个主键；&lt;/p&gt;
+
+&lt;p&gt;2）主键保证记录的唯一性；&lt;/p&gt;
+
+&lt;p&gt;3）主键自动为NOT NULL.&lt;/p&gt;
+
+&lt;p&gt;创建数据表tb4:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;CREATE TABLE tb4(
+    id SMALLINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(20) NOT NULL,
+    age TINYINT UNSIGNED NULL
+);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;插入记录：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;INSERT tb3(username) VALUES(&#39;Ross&#39;);
+INSERT tb3(username) VALUES(&#39;Richard&#39;);
+INSERT tb3(username) VALUES(&#39;Monica&#39;);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;5-唯一约束-unique-key&#34;&gt;5.唯一约束：UNIQUE KEY&lt;/h3&gt;
+
+&lt;p&gt;1）UNIQUE KEY可以保证记录的唯一性；&lt;/p&gt;
+
+&lt;p&gt;2）UNIQUE KEY可以为空值；&lt;/p&gt;
+
+&lt;p&gt;3）每张表里可以存在多个唯一约束。&lt;/p&gt;
+
+&lt;p&gt;创建数据表tb5:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;CREATE TABLE tb5(
+    id SMALLINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(20) NOT NULL UNIQUE KEY,
+    age TINYINT UNSIGNED NULL
+);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;查看刚刚创建的数据表tb5数据结构：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;SHOW COLUMNS FROM tb5;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;插入一条记录：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;INSERT tb5(username, age) VALUES(&#39;Ross&#39;, 30);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;插入成功，现在已经有一条记录的&lt;code&gt;username&lt;/code&gt;为&amp;rsquo;Ross&amp;rsquo;了。再插入一条记录：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;INSERT tb5(username, age) VALUES(&#39;Ross&#39;, 28);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;报错：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;ERROR 1062 (23000): Duplicate entry &#39;Ross&#39; for key &#39;username&#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;6-默认值-default&#34;&gt;6.默认值： DEFAULT&lt;/h3&gt;
+
+&lt;p&gt;当插入记录时，如果没有明确为字段赋值，则自动赋予默认值。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;CREATE TABLE tb6(
+    id SMALLINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(20) NOT NULL UNIQUE KEY,
+    sex ENUM(&#39;1&#39;, &#39;2&#39;, &#39;3&#39;) DEFAULT &#39;3&#39;
+);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;查看刚刚创建的数据表tb6数据结构：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;SHOW COLUMNS FROM tb6;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;插入一条记录：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;INSERT tb6(username) VALUES(&#39;Frank&#39;);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;查看记录：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;SELECT * FROM tb6;
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>MySQL入门：语句规范及常用命令</title>
+      <link>http://www.wangxingfeng.com/mysql-basic.html</link>
+      <pubDate>Sat, 03 Jun 2017 22:38:52 +0800</pubDate>
+      
+      <guid>http://www.wangxingfeng.com/mysql-basic.html</guid>
+      <description>
+
+&lt;h2 id=&#34;一-mysql语句规范&#34;&gt;一、MySQL语句规范：&lt;/h2&gt;
+
+&lt;p&gt;1.关键字、函数名全部大写；&lt;/p&gt;
+
+&lt;p&gt;2.数据库名、表名、字段名一律小写；&lt;/p&gt;
+
+&lt;p&gt;3.SQL语句必须以分号结尾。&lt;/p&gt;
+
+&lt;h2 id=&#34;二-mysql常用命令&#34;&gt;二、MySQL常用命令：&lt;/h2&gt;
+
+&lt;p&gt;1.显示当前数据库版本&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;SELECT VERSION();
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;2.显示当前时间:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;SELECT NOW();
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;3.显示当前用户：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;SELECT USER();
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;4.创建数据库：&lt;/p&gt;
+
+&lt;p&gt;语法为：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;CREATE {DATABASE | SCHEMA} [IF NOT EXISTS] db_name [DEFAULT] CHARACTER SET [=] charset_name;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;输入如下语句，将会创建数据库test2:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;CREATE DATABASE test2;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果数据库test2已经存在，将会报错：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;ERROR 1007 (HY000): Can&#39;t create database &#39;test2&#39;; database exists
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果创建数据库的时候加了 &lt;code&gt;IF NOT EXISTS&lt;/code&gt;, 遇到已经存在的数据库，将不会报错，但会有一条&lt;code&gt;WARNING&lt;/code&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;CREATE DATABASE IF NOT EXISTS test2;
+Query OK, 1 row affected, 1 warning (0.00 sec)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果想要查看WARNING信息，只需输入&lt;code&gt;SHOW WARNING;&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;4.查看数据库：&lt;/p&gt;
+
+&lt;p&gt;语法为：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;SHOW {DATABASES | SCHEMAS} [LIKE &#39;pattern&#39; | WHERE expr];
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;输入如下语句，可以查看&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;SHOW DATABASES;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;5.删除数据库：&lt;/p&gt;
+
+&lt;p&gt;语法：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;DROP {DATABASE | SCHEMA} [IF EXISTS] db_name
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果数据库test2, 输入以下语句，可以删除该数据库：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;DROP DATABASE test2;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果需要删除的数据库test2不存在，则会报错。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;ERROR 1008 (HY000): Can&#39;t drop database &#39;test2&#39;; database doesn&#39;t exist
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果删除时添加了 &lt;code&gt;IF EXISTS&lt;/code&gt;，则不会报错，而是会有一条WARNING:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;DROP DATABASE IF EXISTS test2;
+Query OK, 1 row affected, 1 warning (0.00 sec)
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Win7系统MySQL报错ERROR1045及其处理方法</title>
+      <link>http://www.wangxingfeng.com/mysql-error-1045.html</link>
+      <pubDate>Sat, 03 Jun 2017 21:52:09 +0800</pubDate>
+      
+      <guid>http://www.wangxingfeng.com/mysql-error-1045.html</guid>
+      <description>&lt;p&gt;最近自学数据库，在&lt;code&gt;Win7&lt;/code&gt;系统下使用&lt;code&gt;MySQL&lt;/code&gt;遇到了一些报错，做个记录，方便以后查阅。&lt;/p&gt;
+
+&lt;p&gt;MySQL官网下载的&lt;code&gt;MySQL 5.5.56&lt;/code&gt;的社区版，安装正常。当我在命令行输入&lt;code&gt;mysql -u root -p&lt;/code&gt; 出现了报错信息，无法连接数据库。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;C:\Windows\system32&amp;gt; mysql -u root -p
+Enter password: 
+ERROR 1045 (28000): Access denied for user &#39;root&#39;@&#39;localhost&#39; (using password: YES)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;网上找到的解决方法如下：&lt;/p&gt;
+
+&lt;p&gt;1.编辑mysql配置文件&lt;code&gt;my.ini&lt;/code&gt;，在&lt;code&gt;[mysqld]&lt;/code&gt;这个条目下加入&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;skip-grant-tables
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;2.保存&lt;code&gt;my.ini&lt;/code&gt;退出后重启mysql。&lt;/p&gt;
+
+&lt;p&gt;命令行输入 &lt;code&gt;net stop mysql&lt;/code&gt; 停止MySQL服务；&lt;/p&gt;
+
+&lt;p&gt;命令行输入 &lt;code&gt;net start mysql&lt;/code&gt; 重启MySQL服务；&lt;/p&gt;
+
+&lt;p&gt;3.重置密码：
+现在在命令行输入&lt;code&gt;mysql -u root -p&lt;/code&gt;就可以不用密码登录了，出现&lt;code&gt;password：&lt;/code&gt;的时候直接回车可以进入，不会出现&lt;code&gt;ERROR 1045 (28000)&lt;/code&gt;。&lt;/p&gt;
+
+&lt;p&gt;1）进入mysql数据库：输入&lt;code&gt;use mysql&lt;/code&gt;, 会出现&lt;code&gt;Database changed&lt;/code&gt;的提示信息。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;mysql&amp;gt; use mysql;
+
+Database changed
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;2）给root用户设置新密码：输入&lt;code&gt;update user set password=password(&amp;quot;新密码&amp;quot;) where user=&amp;quot;root&amp;quot;;&lt;/code&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;mysql&amp;gt; update user set password=password(&amp;quot;新密码&amp;quot;) where user=&amp;quot;root&amp;quot;;
+Query OK, 1 rows affected (0.01 sec)
+Rows matched: 1 Changed: 1 Warnings: 0
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;3)刷新数据库: 输入&lt;code&gt;flush privileges;&lt;/code&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;mysql&amp;gt; flush privileges;
+Query OK, 0 rows affected (0.00 sec)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;4)退出mysql：输入&lt;code&gt;quit&lt;/code&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;mysql&amp;gt; quit
+Bye
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;4.重新修改配置文件&lt;code&gt;my.ini&lt;/code&gt;，把刚才加入的&lt;code&gt;skip-grant-tables&lt;/code&gt;这行代码删除，保存退出再重启mysql服务就可以了。&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>两个Safari浏览器不兼容的坑</title>
+      <link>http://www.wangxingfeng.com/safari-not-support.html</link>
+      <pubDate>Thu, 01 Jun 2017 07:35:15 +0800</pubDate>
+      
+      <guid>http://www.wangxingfeng.com/safari-not-support.html</guid>
+      <description>
+
+&lt;h2 id=&#34;一-苹果手机的safari浏览器不兼容-new-date-日期转换格式的坑&#34;&gt;一、 苹果手机的Safari浏览器不兼容  new Date()日期转换格式的坑&lt;/h2&gt;
+
+&lt;p&gt;做Web项目的开发，&lt;code&gt;倒计时&lt;/code&gt;是个很常见的需求。我的需求是做一个演唱会门票开售时间的倒计时。&lt;/p&gt;
+
+&lt;h3 id=&#34;思路如下&#34;&gt;思路如下：&lt;/h3&gt;
+
+&lt;p&gt;取到 &lt;code&gt;开售时间&lt;/code&gt;和&lt;code&gt;服务器上现在的时间&lt;/code&gt;，用&lt;code&gt;开售时间&lt;/code&gt;减去&lt;code&gt;现在的时间&lt;/code&gt;，得出一个时间毫秒数，然后再转换成xx天xx小时xx分xx秒。&lt;/p&gt;
+
+&lt;p&gt;跟后台技术小哥简单沟通了一下，后台会将&lt;code&gt;开售时间&lt;/code&gt;和&lt;code&gt;现在的时间&lt;/code&gt;传到页面上，放在&lt;code&gt;隐藏域&lt;/code&gt;里，这样我用JavaScript就能取到时间了。so easy! 然后我就开始写代码了。&lt;/p&gt;
+
+&lt;p&gt;一开始我是这样写的：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;function preSellCount(){
+    // 如果没有设置开售时间，则取演出时间，取到的时间格式为2017-06-01 10:00
+    var preSt = $(&#39;#preSellTime&#39;).val() || $(&#39;#showTime&#39;).val();  
+
+    var nowTime = $(&#39;#nowTime&#39;).val();
+
+    // 如果没有设置开售时间，也没有设置演出的时间，则倒计时处显示“开售时间待定”
+    if (!preSt) {
+        $(&#39;#preSellCount&#39;).text(&amp;quot;开售时间待定&amp;quot;);
+    }else{
+
+        //取到的开售时间是一个字符串，先转换成毫秒数，
+        var sellTime = new Date(preSt).getTime();
+
+        //现在的毫秒数
+        var now = new Date(nowTime).getTime();
+
+        var count, d, h, min, sec, timeStr, timer;
+
+        count = now &amp;gt; sellTime ? 0 : Math.floor((sellTime-now)/1000);
+
+        //进来页面的时间不为零，才执行定时器
+        if(count!==0){
+            // 定时器
+            timer = setInterval(function() {
+                if (count === 0) {
+                    clearInterval(timer);
+
+                    // 倒计时为零时，自动刷新页面
+                    window.location.reload();
+                }else{
+                    
+                    // 天数
+                    d = Math.floor(count/86400); 
+
+                    // 小时数
+                    h = Math.floor(count%86400/3600); 
+
+                    // 分钟数
+                    min = Math.floor(count%86400%3600/60); 
+
+                    // 秒钟数
+                    sec = Math.floor(count%86400%3600%60);
+
+                    // 小于10的时候，前面补一个‘0’。
+                    if (min &amp;lt; 10) {
+                        min = &#39;0&#39; + min;
+                    }
+                    if (sec &amp;lt; 10 ) {
+                        sec = &#39;0&#39; + sec;
+                    }
+
+                    if (d == 0) {
+                        timeStr =  h + &amp;quot;小时&amp;quot; + min + &amp;quot;分&amp;quot; + s + &amp;quot;秒&amp;quot;;
+                    }else{
+                        timeStr = d + &amp;quot;天&amp;quot; + h + &amp;quot;小时&amp;quot; + min + &amp;quot;分&amp;quot; + s + &amp;quot;秒&amp;quot;;
+                    }
+                    // 得到倒计时的时间字符串
+                    timeStr = d + &amp;quot;天&amp;quot; + h + &amp;quot;小时&amp;quot; + min + &amp;quot;分&amp;quot; + sec + &amp;quot;秒&amp;quot;;
+
+                    // 将字倒计时显示到页面上
+                    $(&#39;#preSellCount&#39;).text(timeStr);
+
+                    count -= 1;
+                }
+            }, 1000);
+        }
+    }
+}
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;用 Chrome 模拟各种手机调试都是一切正常。发布到本地测试环境，然后用自己的安卓手机访问，也一切正常。再用同事的苹果手机测试，倒计时不显示。WTF?&lt;/p&gt;
+
+&lt;p&gt;想想哪里可能会有兼容性问题呢？&lt;/p&gt;
+
+&lt;p&gt;从头检查一遍代码。获取开售时间没有问题。取到的开售时间是一个字符串的日期，用&lt;code&gt;new Date(preSt).getTime()&lt;/code&gt;转换成毫秒数，有没有问题呢？Google一下&lt;code&gt;new Date() iOS&lt;/code&gt;。
+果然发现有不少相关文章提到iOS下日期转换问题。由于Safari在iOS5及以下对&lt;code&gt;YYYY-MM-DD&lt;/code&gt;格式的日期不支持，所以需要转换格式。&lt;/p&gt;
+
+&lt;p&gt;最简单的是用&lt;code&gt;正则表达式&lt;/code&gt;把日期转换成 &lt;code&gt;YYYY/MM/DD&lt;/code&gt;格式。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;
+    preSt.replace(/-/g, &amp;quot;/&amp;quot;)
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;最终的代码是这样的：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;
+function preSellCount(){
+    // 如果没有设置开售时间，则取演出时间，取到的时间格式为2017-06-01 10:00
+    var preSt = $(&#39;#preSellTime&#39;).val() || $(&#39;#showTime&#39;).val();  
+    var nowTime = $(&#39;#nowTime&#39;).val();
+    // 如果没有设置开售时间，也没有设置演出的时间，则倒计时处显示“开售时间待定”
+    if (!preSt) {
+        $(&#39;#preSellCount&#39;).text(&amp;quot;开售时间待定&amp;quot;);
+    }else{
+
+        //取到的开售时间是一个字符串，先转换成毫秒数，
+        var sellTime = new Date(preSt.replace(/-/g, &amp;quot;/&amp;quot;)).getTime();
+
+        //现在的毫秒数
+        var now = new Date(nowTime.replace(/-/g, &amp;quot;/&amp;quot;)).getTime();
+
+        var count, d, h, min, sec, timeStr, timer;
+
+        count = now &amp;gt; sellTime ? 0 : Math.floor((sellTime-now)/1000);
+
+        //进来页面的时间不为零，才执行定时器
+        if(count!==0){
+            // 定时器
+            timer = setInterval(function() {
+                if (count === 0) {
+                    clearInterval(timer);
+
+                    // 倒计时为零时，自动刷新页面
+                    window.location.reload();
+                }else{
+                    
+                    // 天数
+                    d = Math.floor(count/86400); 
+
+                    // 小时数
+                    h = Math.floor(count%86400/3600); 
+
+                    // 分钟数
+                    min = Math.floor(count%86400%3600/60); 
+
+                    // 秒钟数
+                    sec = Math.floor(count%86400%3600%60);
+
+                    // 小于10的时候，前面补一个‘0’。
+                    if (min &amp;lt; 10) {
+                        min = &#39;0&#39; + min;
+                    }
+                    if (sec &amp;lt; 10 ) {
+                        sec = &#39;0&#39; + sec;
+                    }
+
+                    if (d == 0) {
+                        timeStr =  h + &amp;quot;小时&amp;quot; + min + &amp;quot;分&amp;quot; + s + &amp;quot;秒&amp;quot;;
+                    }else{
+                        timeStr = d + &amp;quot;天&amp;quot; + h + &amp;quot;小时&amp;quot; + min + &amp;quot;分&amp;quot; + s + &amp;quot;秒&amp;quot;;
+                    }
+                    // 得到倒计时的时间字符串
+                    timeStr = d + &amp;quot;天&amp;quot; + h + &amp;quot;小时&amp;quot; + min + &amp;quot;分&amp;quot; + sec + &amp;quot;秒&amp;quot;;
+
+                    // 将字倒计时显示到页面上
+                    $(&#39;#preSellCount&#39;).text(timeStr);
+
+                    count -= 1;
+                }
+            }, 1000);
+        }
+    }
+}
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;二-苹果手机的safari浏览器不支持-keydown-keypress-keyup-change等事件的坑&#34;&gt;二、苹果手机的Safari浏览器不支持  keydown, keypress, keyup, change等事件的坑。&lt;/h2&gt;
+
+&lt;p&gt;需求:在输入框中输入内容时，输入框后边显示清除按钮，点击可以清除输入框中的所有内容&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;var keyword = $(&amp;quot;#search-keyword&amp;quot;);
+var clear = $(&#39;.clear&#39;);
+
+keyword.on(&#39;keyup&#39;, function(event) {
+    if($(this).val().length&amp;gt;0){
+
+        //显示清空输入框的小图标
+        clear.show();
+
+    }else{
+
+        // 隐藏清空输入框的小图标
+        clear.hide();
+    }
+});
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;但是在 iOS 的 Safari 中, keydown、keypress、 keyup、change等事件都无效，考虑监听 input 和 propertychange 事件作为代替。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;var keyword = $(&amp;quot;#search-keyword&amp;quot;);
+var clear = $(&#39;.clear&#39;);
+
+keyword.on(&#39;input propertychange&#39;, function(event) {
+    if($(this).val().length&amp;gt;0){
+        //显示清空输入框的小图标
+        clear.show();
+    }else{
+        // 隐藏清空输入框的小图标
+        clear.hide();
+    }
+});
+
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>用border-image&#43;SVG实现切角效果</title>
+      <link>http://www.wangxingfeng.com/bevel-corners-svg.html</link>
+      <pubDate>Sat, 06 May 2017 16:19:48 +0800</pubDate>
+      
+      <guid>http://www.wangxingfeng.com/bevel-corners-svg.html</guid>
+      <description>
+
+&lt;p&gt;之前写了一篇文章，介绍了&lt;a href=&#34;http://www.wangxingfeng.com/bevel-corners.html&#34;&gt;基于CSS渐变来实现切角效果&lt;/a&gt;的方法。今天再来介绍另一种方法，即使用&lt;code&gt;border-image&lt;/code&gt;+&lt;code&gt;SVG&lt;/code&gt;的方式来实现&lt;code&gt;切角效果&lt;/code&gt;。&lt;/p&gt;
+
+&lt;h2 id=&#34;border-image的工作原理&#34;&gt;border-image的工作原理&lt;/h2&gt;
+
+&lt;p&gt;给一个元素设置边框，我们会使用&lt;code&gt;border&lt;/code&gt;这个属性。&lt;code&gt;border&lt;/code&gt;是&lt;code&gt;border-width&lt;/code&gt;、&lt;code&gt;border-style&lt;/code&gt;、&lt;code&gt;border-color&lt;/code&gt;等3个属性的简写形式。&lt;/p&gt;
+
+&lt;p&gt;我们给div设置一个宽20px、实线、颜色为&lt;code&gt;#58a&lt;/code&gt;的边框。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-css&#34;&gt;    div{
+        width:200px;
+        height:150px; 
+        margin:20px auto;
+        border:40px solid #58a;
+    }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;div style=&#34;width:200px; height:150px; margin:20px auto; border:40px solid #58a;&#34;&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;code&gt;border-image&lt;/code&gt;是CSS3的新属性，用于指定元素边框的背景图片。使用 border-image 时，border-style属性所设置的边框样式solid、dashed或dotted将不起作用。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;border-image&lt;/code&gt;属性也是一个简写：包含&lt;code&gt;border-image-source&lt;/code&gt;、&lt;code&gt;border-image-slice&lt;/code&gt;、&lt;code&gt;border-image-width&lt;/code&gt;、&lt;code&gt;border-image-outset&lt;/code&gt;、&lt;code&gt;border-image-repeat&lt;/code&gt;等5个属性。&lt;/p&gt;
+
+&lt;h3 id=&#34;1-border-image-source&#34;&gt;1. &lt;code&gt;border-image-source&lt;/code&gt;:&lt;/h3&gt;
+
+&lt;p&gt;从这个属性的英文命名，我们就可以知道它表示的是边框背景图片资源的路径，默认值是&lt;code&gt;none&lt;/code&gt;。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-css&#34;&gt;    div{
+        width:200px;
+        height:150px;
+        margin:20px auto;
+        border:40px solid #58a;
+        border-image-source:url(/images/adamcatlace.jpg);
+    }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;div style=&#34;width:200px; height:150px; margin:20px auto; border:40px solid #58a; border-image-source:url(/images/adamcatlace.jpg)&#34;&gt;&lt;/div&gt;
+
+&lt;h3 id=&#34;2-border-image-slice&#34;&gt;2. &lt;code&gt;border-image-slice&lt;/code&gt;:&lt;/h3&gt;
+
+&lt;p&gt;&lt;code&gt;border-image-slice&lt;/code&gt;属性指定图像的边界向内偏移。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-css&#34;&gt;    div{
+        width:200px;
+        height:150px;
+        margin:20px auto;
+        border:40px solid #58a;
+        border-image-source:url(/images/adamcatlace.jpg);
+        border-image-slice:10% 20% 30% 40%; 
+        border-image-repeat: none;
+    }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;div style=&#34;width:200px; height:150px; margin:20px auto; border:40px solid #58a; border-image:url(/images/adamcatlace.jpg);border-image-slice:10% 20% 30% 40%; border-image-repeat: round stretch;&#34;&gt;&lt;/div&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-css&#34;&gt;    div{
+        width:200px;
+        height:150px;
+        margin:20px auto;
+        border:40px solid #58a;
+        border-image-source:url(/images/adamcatlace.jpg);
+        border-image-slice: 10% 30%;
+    }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;div style=&#34;width:200px; height:150px; margin:20px auto; border:40px solid #58a; border-image:url(/images/adamcatlace.jpg); border-image-slice: 10% 30%;&#34;&gt;&lt;/div&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-css&#34;&gt;    div{
+        width:200px;
+        height:150px;
+        margin:20px auto;
+        border:40px solid #58a;
+        border-image-source:url(/images/adamcatlace.jpg);
+        border-image-slice: 30 30% 45;
+    }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;div style=&#34;width:200px; height:150px; margin:20px auto; border:40px solid #58a; border-image:url(/images/adamcatlace.jpg); border-image-slice: 30 30% 45;&#34;&gt;&lt;/div&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-css&#34;&gt;    div{
+        width:200px;
+        height:150px;
+        margin:20px auto;
+        border:40px solid #58a;
+        border-image-source:url(/images/adamcatlace.jpg);
+        border-image-slice: 7 12 14 5; 
+    }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;div style=&#34;width:200px; height:150px; margin:20px auto; border:40px solid #58a; border-image:url(/images/adamcatlace.jpg); border-image-slice: 7 12 14 5; &#34;&gt;&lt;/div&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-css&#34;&gt;    div{
+        width:200px;
+        height:150px;
+        margin:20px auto;
+        border:40px solid #58a;
+        border-image-source:url(/images/adamcatlace.jpg);
+        border-image-slice: 10% fill 7 12; 
+    }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;div style=&#34;width:200px; height:150px; margin:20px auto; border:40px solid #58a; border-image:url(/images/adamcatlace.jpg); border-image-slice: border-image-slice: 10% fill 7 12; &#34;&gt;&lt;/div&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-css&#34;&gt;    .demo{
+        border:30px solid transparent;
+        border-image:1 url(&#39;data:image/svg+xml,\
+            &amp;lt;svg xmlns=&amp;quot;http://www.w3.org/2000/svg&amp;quot; width=&amp;quot;3&amp;quot; height=&amp;quot;3&amp;quot; fill=&amp;quot;red&amp;quot;&amp;gt;\
+              &amp;lt;polygon points=&amp;quot;0,1 1,0 2, 0 3, 1 3, 2 2, 3 1, 3 0, 2&amp;quot;/&amp;gt;\
+            &amp;lt;/svg&amp;gt;&#39;);
+    }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;svg xmlns=&#34;http://www.w3.org/2000/svg&#34; width=&#34;300&#34; height=&#34;300&#34; fill=&#34;purple&#34;&gt;
+    &lt;polygon points=&#34;0, 100 100, 0 200, 0 300, 100 300, 200 200, 300 100, 300 0, 200&#34;/&gt;
+&lt;/svg&gt;
+&lt;div class=&#34;demo bevel-corners-8&#34;&gt;
+&lt;/div&gt;&lt;/p&gt;
+
+&lt;div&gt;
+    
+&lt;/div&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>CSS实现切角效果</title>
+      <link>http://www.wangxingfeng.com/bevel-corners.html</link>
+      <pubDate>Tue, 02 May 2017 22:52:17 +0800</pubDate>
+      
+      <guid>http://www.wangxingfeng.com/bevel-corners.html</guid>
+      <description>
+
+&lt;p&gt;扁平化设计风格中，很流行斜面切角，即把元素的一个或多个角切成45度的缺口。大多数网页开发者倾向于使用背景图片来实现切角效果。但使用背景图片会增加额外的HTTP请求，增加网页加载的时间，难以修改和维护。实际上，CSS已经足够强大，可以提供纯CSS的解决方案，我们仅用CSS代码就能实现切角效果。&lt;/p&gt;
+
+&lt;h2 id=&#34;基于-css渐变-的切角效果&#34;&gt;基于&lt;code&gt;CSS渐变&lt;/code&gt;的切角效果&lt;/h2&gt;
+
+&lt;p&gt;如果你对CSS渐变不陌生的话，应该知道CSS渐变可以接受&lt;code&gt;一个角度&lt;/code&gt;作为方向，还可以设置百分比的色标的位置。当然，色标的位置也可以设置为绝对的长度值。
+&lt;style&gt;
+    .demo{
+        width:300px;
+        height: 200px;
+        margin:10px auto;
+    }
+    .demo1{
+        background: linear-gradient(-45deg, red, green);
+    }
+    .demo2{
+        background: linear-gradient(-45deg, red 20%, green 70%);
+    }
+    .demo3{
+        background: linear-gradient(-45deg, red 20%, green 0);
+    }
+    .demo4{
+        background: linear-gradient(-45deg, transparent 20%, green 0);
+    }
+    .demo5{
+        background: linear-gradient(-45deg, transparent 30px, green 0),
+                    linear-gradient(45deg, transparent 30px, red 0);
+    }
+    .demo6{
+        background: linear-gradient(-45deg, transparent 30px, green 0) right,
+                    linear-gradient(45deg, transparent 30px, red 0) left;
+        background-size:50% 100%;
+        background-repeat:no-repeat;
+    }
+    .demo7{
+        background: linear-gradient(135deg, transparent 30px, green 0) top left,
+            linear-gradient(-135deg, transparent 30px, red 0) top right,
+            linear-gradient(-45deg, transparent 30px, pink 0) bottom right,
+            linear-gradient(45deg, transparent 30px, blue 0) bottom left;
+        background-size: 50% 50%;
+        background-repeat: no-repeat;
+    }
+&lt;/style&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;1-普通的线性渐变&#34;&gt;1.普通的线性渐变&lt;/h3&gt;
+
+&lt;p&gt;我们设置-45度为渐变方向，即从右下角到左上角渐变的方向。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-css&#34;&gt;.demo{
+    background: linear-gradient(-45deg, red, green);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;渲染的效果是这样的：&lt;/p&gt;
+
+&lt;div class=&#34;demo demo1&#34;&gt;&lt;/div&gt;
+
+&lt;h3 id=&#34;2-设置色标值的线性渐变&#34;&gt;2.设置色标值的线性渐变&lt;/h3&gt;
+
+&lt;p&gt;我们给这两个色标设置一个百分比，看看会是什么效果。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-css&#34;&gt;.demo{
+    background: linear-gradient(-45deg, red 20%, green 70%);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;上述代码的意思从右下角到左上角渐变的方向上，0~20%的区域是纯红色的，20%-70%的区域是渐变，70%-100%的区域是纯绿色的。
+&lt;div class=&#34;demo demo2&#34;&gt;&lt;/div&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;3-色标值为0的线性渐变&#34;&gt;3.色标值为0的线性渐变&lt;/h3&gt;
+
+&lt;p&gt;如果我们再稍微做些修改，把第二个色标值改为0，会是什么效果呢？&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-css&#34;&gt;.demo{
+    background: linear-gradient(-45deg, red 20%, green 0);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;div class=&#34;demo demo3&#34;&gt;&lt;/div&gt;
+
+&lt;p&gt;是不是有点惊讶？！&lt;/p&gt;
+
+&lt;p&gt;我们得到的图形是没有渐变的。从右下角到左上角渐变的方向上，0-20%的区域是纯红色，20%-100%的区域就是纯绿色。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;注意：只要第二个色标值小于前一个色标值，那么浏览器就会默认解析为前一个色标值的。
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;上面的CSS代码等价于：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-css&#34;&gt;.demo{
+    background: linear-gradient(-45deg, red 20%, green 20%);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;4-切角效果&#34;&gt;4.切角效果&lt;/h3&gt;
+
+&lt;p&gt;将上面的代码再稍作改动，把右下角的&lt;code&gt;红色&lt;/code&gt;改成&lt;code&gt;透明色&lt;/code&gt;, 就能得到一个右下角的&lt;code&gt;切角效果&lt;/code&gt;。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-css&#34;&gt;.demo{
+    background: linear-gradient(-45deg, transparent 20%, green 0);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;div class=&#34;demo demo4&#34;&gt;&lt;/div&gt;
+
+&lt;p&gt;其实，实际的网页开发中，我们更倾向于一个固定大小的切角。那么，我们可以把百分比改为绝对的长度值，比如把20%改为30px.&lt;/p&gt;
+
+&lt;h3 id=&#34;5-两个切角效果&#34;&gt;5.两个切角效果&lt;/h3&gt;
+
+&lt;p&gt;如果我们需要的切角不止一个，怎么实现呢？&lt;/p&gt;
+
+&lt;p&gt;是不是可以声明两条渐变规则呢？我们来试一下效果。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-css&#34;&gt;.demo{
+    background: linear-gradient(-45deg, transparent 30px, green 0),
+                linear-gradient(45deg, transparent 30px, red 0);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;div class=&#34;demo demo5&#34;&gt;&lt;/div&gt;
+
+&lt;p&gt;尝试失败。因为默认情况下，两层渐变都会填满整个元素，导致相互重叠。这个时候，我们就需要用到&lt;code&gt;background-size&lt;/code&gt;和&lt;code&gt;background-repeat&lt;/code&gt;,让每层渐变分别占据整个元素的一半。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-css&#34;&gt;.demo{
+    background: linear-gradient(-45deg, transparent 30px, green 0) right,
+                linear-gradient(45deg, transparent 30px, red 0) left;
+    background-size:50% 100%;
+    background-repeat:no-repeat;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;div class=&#34;demo demo6&#34;&gt;&lt;/div&gt;
+
+&lt;h3 id=&#34;6-四个切角效果&#34;&gt;6.四个切角效果&lt;/h3&gt;
+
+&lt;p&gt;看了两个切角的实现方式，想必你也能推断出实现&lt;code&gt;四个切角效果&lt;/code&gt;的思路了。我们需要&lt;code&gt;4层渐变&lt;/code&gt;，每层只占整个元素的&lt;code&gt;4分之一&lt;/code&gt;。下面的例子，我用了4种不同的颜色表示，这样可以更加直观的看出来每层渐变的大小和位置。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-css&#34;&gt;.demo{
+    background: linear-gradient(135deg, transparent 30px, green 0) top left,
+        linear-gradient(-135deg, transparent 30px, red 0) top right,
+        linear-gradient(-45deg, transparent 30px, pink 0) bottom right,
+        linear-gradient(45deg, transparent 30px, blue 0) bottom left;
+    background-size: 50% 50%;
+    background-repeat: no-repeat;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;div class=&#34;demo demo7&#34;&gt;&lt;/div&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

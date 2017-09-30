@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>两个Safari浏览器不兼容的坑 - Frank Wang&#39;s Coding World</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="Frank Wang" /><meta name="description" content="苹果手机的Safari浏览器不兼容new Date()日期转换格式的坑, Safari在iOS5及以下对YYYY-MM-DD格式的日期不支持，所以需要转换日期的格式为YYYY/MM/DD。苹果手机的Safari浏览器不支持 keydown, keypress, keyup, change等事件的坑,在iOS的Safari中。 keydown、keypress、 keyup、change等事件都无效，考虑监听input和propertychange事件作为代替" />
+<meta name="keywords" content="iOS系统, Safari浏览器, new Date()日期转换, 事件不兼容" />
+
+
+
+<meta name="baidu-site-verification" content="WSqfBuzd3t" />
+
+
+
+<meta name="generator" content="Hugo 0.19" />
+
+
+<link rel="canonical" href="http://www.wangxingfeng.com/safari-not-support.html" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="icon" href="/favicon.ico" />
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+<link href="/dist/even.min.css?v=2.6.1" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+<meta property="og:title" content="两个Safari浏览器不兼容的坑" />
+<meta property="og:description" content="苹果手机的Safari浏览器不兼容new Date()日期转换格式的坑, Safari在iOS5及以下对YYYY-MM-DD格式的日期不支持，所以需要转换日期的格式为YYYY/MM/DD。苹果手机的Safari浏览器不支持 keydown, keypress, keyup, change等事件的坑,在iOS的Safari中。 keydown、keypress、 keyup、change等事件都无效，考虑监听input和propertychange事件作为代替" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.wangxingfeng.com/safari-not-support.html" />
+
+
+
+<meta property="article:published_time" content="2017-06-01T07:35:15&#43;08:00"/>
+<meta property="article:modified_time" content="2017-06-01T07:35:15&#43;08:00"/>
+
+
+
+
+
+
+
+
+
+
+
+<meta itemprop="name" content="两个Safari浏览器不兼容的坑">
+<meta itemprop="description" content="苹果手机的Safari浏览器不兼容new Date()日期转换格式的坑, Safari在iOS5及以下对YYYY-MM-DD格式的日期不支持，所以需要转换日期的格式为YYYY/MM/DD。苹果手机的Safari浏览器不支持 keydown, keypress, keyup, change等事件的坑,在iOS的Safari中。 keydown、keypress、 keyup、change等事件都无效，考虑监听input和propertychange事件作为代替">
+
+
+<meta itemprop="dateModified" content="2017-06-01T07:35:15&#43;08:00" />
+<meta itemprop="wordCount" content="1808">
+
+
+
+<meta itemprop="keywords" content="database,english,frontend,node,python,tools,angular2,bug,cdn,clipboard,css,css3,git,github,gitment,hugo,javascript,markdown,mysql,node,nvm,python,regexp,seo,shadowsocks,sublime-text,tab切换,typescript,useragent,wordpress,下拉菜单,块级作用域,攒词汇,数组,服务器,返回顶部," />
+
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:text:title" content="两个Safari浏览器不兼容的坑"/>
+<meta name="twitter:title" content="两个Safari浏览器不兼容的坑"/>
+<meta name="twitter:description" content="苹果手机的Safari浏览器不兼容new Date()日期转换格式的坑, Safari在iOS5及以下对YYYY-MM-DD格式的日期不支持，所以需要转换日期的格式为YYYY/MM/DD。苹果手机的Safari浏览器不支持 keydown, keypress, keyup, change等事件的坑,在iOS的Safari中。 keydown、keypress、 keyup、change等事件都无效，考虑监听input和propertychange事件作为代替"/>
+
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+<script>
+  var _hmt = _hmt || [];
+  (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?7d0fc5a9b2d70433d9b1dd477606dc3c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+  }
+  )();
+</script>
+<script>
+  (function() {
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+          bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+      } else {
+          bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+  }
+  )();
+</script>
+<script>
+  (function(i, s, o, g, r, a, m) {
+      i['GoogleAnalyticsObject'] = r;
+      i[r] = i[r] || function() {
+          (i[r].q = i[r].q || []).push(arguments)
+      }
+      ,
+      i[r].l = 1 * new Date();
+      a = s.createElement(o),
+      m = s.getElementsByTagName(o)[0];
+      a.async = 1;
+      a.src = g;
+      m.parentNode.insertBefore(a, m)
+  }
+  )(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+  ga('create', 'UA-101812896-1', 'auto');
+  ga('send', 'pageview');
+</script>
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Frank Wang’s Coding World</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Frank Wang’s Coding World</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">两个Safari浏览器不兼容的坑</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2017-06-01 </span>
+        <div class="post-category">
+            <a href="/categories/frontend/">frontend</a>
+          </div>
+        <span class="more-meta"> 约 1808 字 </span>
+        <span class="more-meta"> 预计阅读 4 分钟 </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content">
+      <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#一-苹果手机的safari浏览器不兼容-new-date-日期转换格式的坑">一、 苹果手机的Safari浏览器不兼容  new Date()日期转换格式的坑</a>
+<ul>
+<li><a href="#思路如下">思路如下：</a></li>
+</ul></li>
+<li><a href="#二-苹果手机的safari浏览器不支持-keydown-keypress-keyup-change等事件的坑">二、苹果手机的Safari浏览器不支持  keydown, keypress, keyup, change等事件的坑。</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+    <iframe src="https://rcm-cn.amazon-adsystem.com/e/cm?o=28&p=12&l=ur1&category=books&banner=0CQKPCZXE9QEVSSXN002&f=ifr&linkID=adf25941500ff7304f5193004b357dff&t=frankwang09-23&tracking_id=frankwang09-23" width="300" height="250" scrolling="no" border="0" marginwidth="0" style="border:none;" frameborder="0"></iframe>
+    <iframe src="https://rcm-cn.amazon-adsystem.com/e/cm?o=28&p=12&l=ur1&category=books&banner=1N4AHFJRK48P743G2QR2&f=ifr&linkID=7551f551ae22dc5bee3805c6bfb79010&t=frankwang09-23&tracking_id=frankwang09-23" width="300" height="250" scrolling="no" border="0" marginwidth="0" style="border:none;" frameborder="0"></iframe>
+    
+    <div class="post-content">
+      
+
+<h2 id="一-苹果手机的safari浏览器不兼容-new-date-日期转换格式的坑">一、 苹果手机的Safari浏览器不兼容  new Date()日期转换格式的坑</h2>
+
+<p>做Web项目的开发，<code>倒计时</code>是个很常见的需求。我的需求是做一个演唱会门票开售时间的倒计时。</p>
+
+<h3 id="思路如下">思路如下：</h3>
+
+<p>取到 <code>开售时间</code>和<code>服务器上现在的时间</code>，用<code>开售时间</code>减去<code>现在的时间</code>，得出一个时间毫秒数，然后再转换成xx天xx小时xx分xx秒。</p>
+
+<p>跟后台技术小哥简单沟通了一下，后台会将<code>开售时间</code>和<code>现在的时间</code>传到页面上，放在<code>隐藏域</code>里，这样我用JavaScript就能取到时间了。so easy! 然后我就开始写代码了。</p>
+
+<p>一开始我是这样写的：</p>
+
+<pre><code class="language-javascript">function preSellCount(){
+    // 如果没有设置开售时间，则取演出时间，取到的时间格式为2017-06-01 10:00
+    var preSt = $('#preSellTime').val() || $('#showTime').val();  
+
+    var nowTime = $('#nowTime').val();
+
+    // 如果没有设置开售时间，也没有设置演出的时间，则倒计时处显示“开售时间待定”
+    if (!preSt) {
+        $('#preSellCount').text(&quot;开售时间待定&quot;);
+    }else{
+
+        //取到的开售时间是一个字符串，先转换成毫秒数，
+        var sellTime = new Date(preSt).getTime();
+
+        //现在的毫秒数
+        var now = new Date(nowTime).getTime();
+
+        var count, d, h, min, sec, timeStr, timer;
+
+        count = now &gt; sellTime ? 0 : Math.floor((sellTime-now)/1000);
+
+        //进来页面的时间不为零，才执行定时器
+        if(count!==0){
+            // 定时器
+            timer = setInterval(function() {
+                if (count === 0) {
+                    clearInterval(timer);
+
+                    // 倒计时为零时，自动刷新页面
+                    window.location.reload();
+                }else{
+                    
+                    // 天数
+                    d = Math.floor(count/86400); 
+
+                    // 小时数
+                    h = Math.floor(count%86400/3600); 
+
+                    // 分钟数
+                    min = Math.floor(count%86400%3600/60); 
+
+                    // 秒钟数
+                    sec = Math.floor(count%86400%3600%60);
+
+                    // 小于10的时候，前面补一个‘0’。
+                    if (min &lt; 10) {
+                        min = '0' + min;
+                    }
+                    if (sec &lt; 10 ) {
+                        sec = '0' + sec;
+                    }
+
+                    if (d == 0) {
+                        timeStr =  h + &quot;小时&quot; + min + &quot;分&quot; + s + &quot;秒&quot;;
+                    }else{
+                        timeStr = d + &quot;天&quot; + h + &quot;小时&quot; + min + &quot;分&quot; + s + &quot;秒&quot;;
+                    }
+                    // 得到倒计时的时间字符串
+                    timeStr = d + &quot;天&quot; + h + &quot;小时&quot; + min + &quot;分&quot; + sec + &quot;秒&quot;;
+
+                    // 将字倒计时显示到页面上
+                    $('#preSellCount').text(timeStr);
+
+                    count -= 1;
+                }
+            }, 1000);
+        }
+    }
+}
+
+</code></pre>
+
+<p>用 Chrome 模拟各种手机调试都是一切正常。发布到本地测试环境，然后用自己的安卓手机访问，也一切正常。再用同事的苹果手机测试，倒计时不显示。WTF?</p>
+
+<p>想想哪里可能会有兼容性问题呢？</p>
+
+<p>从头检查一遍代码。获取开售时间没有问题。取到的开售时间是一个字符串的日期，用<code>new Date(preSt).getTime()</code>转换成毫秒数，有没有问题呢？Google一下<code>new Date() iOS</code>。
+果然发现有不少相关文章提到iOS下日期转换问题。由于Safari在iOS5及以下对<code>YYYY-MM-DD</code>格式的日期不支持，所以需要转换格式。</p>
+
+<p>最简单的是用<code>正则表达式</code>把日期转换成 <code>YYYY/MM/DD</code>格式。</p>
+
+<pre><code class="language-javascript">
+    preSt.replace(/-/g, &quot;/&quot;)
+
+</code></pre>
+
+<p>最终的代码是这样的：</p>
+
+<pre><code class="language-javascript">
+function preSellCount(){
+    // 如果没有设置开售时间，则取演出时间，取到的时间格式为2017-06-01 10:00
+    var preSt = $('#preSellTime').val() || $('#showTime').val();  
+    var nowTime = $('#nowTime').val();
+    // 如果没有设置开售时间，也没有设置演出的时间，则倒计时处显示“开售时间待定”
+    if (!preSt) {
+        $('#preSellCount').text(&quot;开售时间待定&quot;);
+    }else{
+
+        //取到的开售时间是一个字符串，先转换成毫秒数，
+        var sellTime = new Date(preSt.replace(/-/g, &quot;/&quot;)).getTime();
+
+        //现在的毫秒数
+        var now = new Date(nowTime.replace(/-/g, &quot;/&quot;)).getTime();
+
+        var count, d, h, min, sec, timeStr, timer;
+
+        count = now &gt; sellTime ? 0 : Math.floor((sellTime-now)/1000);
+
+        //进来页面的时间不为零，才执行定时器
+        if(count!==0){
+            // 定时器
+            timer = setInterval(function() {
+                if (count === 0) {
+                    clearInterval(timer);
+
+                    // 倒计时为零时，自动刷新页面
+                    window.location.reload();
+                }else{
+                    
+                    // 天数
+                    d = Math.floor(count/86400); 
+
+                    // 小时数
+                    h = Math.floor(count%86400/3600); 
+
+                    // 分钟数
+                    min = Math.floor(count%86400%3600/60); 
+
+                    // 秒钟数
+                    sec = Math.floor(count%86400%3600%60);
+
+                    // 小于10的时候，前面补一个‘0’。
+                    if (min &lt; 10) {
+                        min = '0' + min;
+                    }
+                    if (sec &lt; 10 ) {
+                        sec = '0' + sec;
+                    }
+
+                    if (d == 0) {
+                        timeStr =  h + &quot;小时&quot; + min + &quot;分&quot; + s + &quot;秒&quot;;
+                    }else{
+                        timeStr = d + &quot;天&quot; + h + &quot;小时&quot; + min + &quot;分&quot; + s + &quot;秒&quot;;
+                    }
+                    // 得到倒计时的时间字符串
+                    timeStr = d + &quot;天&quot; + h + &quot;小时&quot; + min + &quot;分&quot; + sec + &quot;秒&quot;;
+
+                    // 将字倒计时显示到页面上
+                    $('#preSellCount').text(timeStr);
+
+                    count -= 1;
+                }
+            }, 1000);
+        }
+    }
+}
+
+</code></pre>
+
+<h2 id="二-苹果手机的safari浏览器不支持-keydown-keypress-keyup-change等事件的坑">二、苹果手机的Safari浏览器不支持  keydown, keypress, keyup, change等事件的坑。</h2>
+
+<p>需求:在输入框中输入内容时，输入框后边显示清除按钮，点击可以清除输入框中的所有内容</p>
+
+<pre><code class="language-javascript">var keyword = $(&quot;#search-keyword&quot;);
+var clear = $('.clear');
+
+keyword.on('keyup', function(event) {
+    if($(this).val().length&gt;0){
+
+        //显示清空输入框的小图标
+        clear.show();
+
+    }else{
+
+        // 隐藏清空输入框的小图标
+        clear.hide();
+    }
+});
+
+</code></pre>
+
+<p>但是在 iOS 的 Safari 中, keydown、keypress、 keyup、change等事件都无效，考虑监听 input 和 propertychange 事件作为代替。</p>
+
+<pre><code class="language-javascript">var keyword = $(&quot;#search-keyword&quot;);
+var clear = $('.clear');
+
+keyword.on('input propertychange', function(event) {
+    if($(this).val().length&gt;0){
+        //显示清空输入框的小图标
+        clear.show();
+    }else{
+        // 隐藏清空输入框的小图标
+        clear.hide();
+    }
+});
+
+</code></pre>
+
+    </div>
+    
+    
+    
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Frank Wang</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">2017-06-01</span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      <div class="post-tags">
+          
+          <a href="/tags/javascript/">JavaScript</a>
+          
+        </div>
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/mysql-error-1045.html">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Win7系统MySQL报错ERROR1045及其处理方法</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        
+          <a class="next" href="/bevel-corners-svg.html">
+            <span class="next-text nav-default">用border-image&#43;SVG实现切角效果</span>
+            <span class="prev-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+      </div>  
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:frankwang0909@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://www.twitter.com/frankwang0909" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="https://www.github.com/frankwang0909" class="iconfont icon-github" title="github"></a>
+  <a href="http://www.wangxingfeng.com/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    &copy; 
+    
+      2016 - 
+    2017
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Frank Wang</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js"></script>
+<script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+<script type="text/javascript" src="/dist/even.min.js?v=2.6.1"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script async src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML'></script>
+
+
+
+
+</body>
+</html>

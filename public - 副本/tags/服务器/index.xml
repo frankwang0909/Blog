@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>服务器 on Frank Wang&#39;s Coding World</title>
+    <link>http://www.wangxingfeng.com/tags/%E6%9C%8D%E5%8A%A1%E5%99%A8/index.xml</link>
+    <description>Recent content in 服务器 on Frank Wang&#39;s Coding World</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <atom:link href="http://www.wangxingfeng.com/tags/%E6%9C%8D%E5%8A%A1%E5%99%A8/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>快速启动Node服务器，调试本地静态文件代码</title>
+      <link>http://www.wangxingfeng.com/anywhere-npm.html</link>
+      <pubDate>Tue, 04 Apr 2017 17:41:35 +0800</pubDate>
+      
+      <guid>http://www.wangxingfeng.com/anywhere-npm.html</guid>
+      <description>
+
+&lt;h2 id=&#34;如何在移动设备上测试静态文件&#34;&gt;如何在移动设备上测试静态文件？&lt;/h2&gt;
+
+&lt;p&gt;现在移动端优先的情况下，前端工程师写好静态页面后，通常是需要测试不同的设备上效果，看看有没有兼容性的问题。谷歌浏览器有一个模拟手机的调试功能，一般，我们先用谷歌调试好。但毕竟是模拟的，为了保险起见，还是需要用真机测试的。&lt;/p&gt;
+
+&lt;p&gt;可是静态的html文件怎么放到手机上调试呢？难不成把文件拷一份，放到不同的手机上？显然不是。&lt;/p&gt;
+
+&lt;p&gt;NodeJS的一个&lt;code&gt;npm&lt;/code&gt;模块&lt;code&gt;anywhere&lt;/code&gt; 就可以快速地把你的当前目录变成一个静态文件服务器的根目录。&lt;/p&gt;
+
+&lt;h2 id=&#34;anywhere-的安装及使用&#34;&gt;&lt;code&gt;anywhere&lt;/code&gt;的安装及使用&lt;/h2&gt;
+
+&lt;p&gt;首先，安装Node。具体操作请看&lt;a href=&#34;https://nodejs.org&#34;&gt;Node的官网&lt;/a&gt;。傻瓜式地安装。&lt;/p&gt;
+
+&lt;p&gt;其次，安装&lt;code&gt;anywhere&lt;/code&gt;。在命令行输入&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;npm install anywhere -g
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;npm install + 模块名&lt;/code&gt; 从NPM服务器下载别人编写的第三方包的固定写法。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;-g&lt;/code&gt; 表示全局安装，在电脑的任何部门都可以使用anywhere模块。&lt;/p&gt;
+
+&lt;p&gt;启动服务：&lt;/p&gt;
+
+&lt;p&gt;在命令行切换到项目的根目录，然后输入&lt;code&gt;anywhere&lt;/code&gt;即可。服务启动后，会自动打开你的默认浏览器，&lt;a href=&#34;http://192.168.31.192:8000/。&#34;&gt;http://192.168.31.192:8000/。&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;此时，如果你想在手机上测试index.html页面，你只需要在手机上访问 &lt;code&gt;http://192.168.31.192:8000/index.html&lt;/code&gt; 即可看到效果。&lt;/p&gt;
+
+&lt;p&gt;当然，这里有一个前提，就是你的手机和电脑是在同一个局域网内的。&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

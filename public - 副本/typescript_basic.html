@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>TypeScript 入门 - Frank Wang&#39;s Coding World</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="Frank Wang" /><meta name="description" content="TypeScript 是微软2012年推出的一种编程语言，属于 JavaScript 的超集，可以编译为 JavaScript 执行。它拓展了 JavaScript 的语法，给 JavaScript 添加可选的静态类型和基于类的面向对象编程。" />
+<meta name="keywords" content="TypeScript, JavaScript, 静态类型, 类型注解, 类 Class, 接口 Interface" />
+
+
+
+<meta name="baidu-site-verification" content="WSqfBuzd3t" />
+
+
+
+<meta name="generator" content="Hugo 0.19" />
+
+
+<link rel="canonical" href="http://www.wangxingfeng.com/typescript_basic.html" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="icon" href="/favicon.ico" />
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+<link href="/dist/even.min.css?v=2.6.1" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+<meta property="og:title" content="TypeScript 入门" />
+<meta property="og:description" content="TypeScript 是微软2012年推出的一种编程语言，属于 JavaScript 的超集，可以编译为 JavaScript 执行。它拓展了 JavaScript 的语法，给 JavaScript 添加可选的静态类型和基于类的面向对象编程。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.wangxingfeng.com/typescript_basic.html" />
+
+
+
+<meta property="article:published_time" content="2017-07-16T21:43:35&#43;08:00"/>
+<meta property="article:modified_time" content="2017-07-16T21:43:35&#43;08:00"/>
+
+
+
+
+
+
+
+
+
+
+
+<meta itemprop="name" content="TypeScript 入门">
+<meta itemprop="description" content="TypeScript 是微软2012年推出的一种编程语言，属于 JavaScript 的超集，可以编译为 JavaScript 执行。它拓展了 JavaScript 的语法，给 JavaScript 添加可选的静态类型和基于类的面向对象编程。">
+
+
+<meta itemprop="dateModified" content="2017-07-16T21:43:35&#43;08:00" />
+<meta itemprop="wordCount" content="2110">
+
+
+
+<meta itemprop="keywords" content="database,english,frontend,node,python,tools,angular2,bug,cdn,clipboard,css,css3,git,github,gitment,hugo,javascript,markdown,mysql,node,nvm,python,regexp,seo,shadowsocks,sublime-text,tab切换,typescript,useragent,wordpress,下拉菜单,块级作用域,攒词汇,数组,服务器,返回顶部," />
+
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:text:title" content="TypeScript 入门"/>
+<meta name="twitter:title" content="TypeScript 入门"/>
+<meta name="twitter:description" content="TypeScript 是微软2012年推出的一种编程语言，属于 JavaScript 的超集，可以编译为 JavaScript 执行。它拓展了 JavaScript 的语法，给 JavaScript 添加可选的静态类型和基于类的面向对象编程。"/>
+
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+<script>
+  var _hmt = _hmt || [];
+  (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?7d0fc5a9b2d70433d9b1dd477606dc3c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+  }
+  )();
+</script>
+<script>
+  (function() {
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+          bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+      } else {
+          bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+  }
+  )();
+</script>
+<script>
+  (function(i, s, o, g, r, a, m) {
+      i['GoogleAnalyticsObject'] = r;
+      i[r] = i[r] || function() {
+          (i[r].q = i[r].q || []).push(arguments)
+      }
+      ,
+      i[r].l = 1 * new Date();
+      a = s.createElement(o),
+      m = s.getElementsByTagName(o)[0];
+      a.async = 1;
+      a.src = g;
+      m.parentNode.insertBefore(a, m)
+  }
+  )(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+  ga('create', 'UA-101812896-1', 'auto');
+  ga('send', 'pageview');
+</script>
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Frank Wang’s Coding World</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Frank Wang’s Coding World</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">TypeScript 入门</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2017-07-16 </span>
+        <div class="post-category">
+            <a href="/categories/frontend/">frontend</a>
+          </div>
+        <span class="more-meta"> 约 2110 字 </span>
+        <span class="more-meta"> 预计阅读 5 分钟 </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content">
+      <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#1-简介">1.简介：</a></li>
+<li><a href="#2-安装-typescript">2.安装 TypeScript:</a></li>
+<li><a href="#3-编译">3.编译:</a></li>
+<li><a href="#4-编辑器-visual-studio-code">4.编辑器: Visual Studio Code</a></li>
+<li><a href="#5-语法特性之一-类型注解">5.语法特性之一：类型注解</a></li>
+<li><a href="#6-语法特性之二-接口-interface">6.语法特性之二：接口 Interface:</a></li>
+<li><a href="#7-语法特性之三-类-class">7.语法特性之三：类 Class</a>
+<ul>
+<li><a href="#7-1-类的定义-关键字-class-用来定义一个类-类名-首字母大写">7.1 类的定义：关键字<code>class</code>用来定义一个类，类名<code>首字母大写</code>。</a></li>
+<li><a href="#7-2-实例化-关键字-new-用来创建类的一个实例对象">7.2 实例化：关键字<code>new</code>用来创建类的一个实例对象。</a></li>
+<li><a href="#7-3-类的继承-关键字-extends-表示类的继承关系">7.3 类的继承： 关键字<code>extends</code>表示类的继承关系</a></li>
+<li><a href="#7-4-类的修饰符">7.4 类的修饰符：</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+    <iframe src="https://rcm-cn.amazon-adsystem.com/e/cm?o=28&p=12&l=ur1&category=books&banner=0CQKPCZXE9QEVSSXN002&f=ifr&linkID=adf25941500ff7304f5193004b357dff&t=frankwang09-23&tracking_id=frankwang09-23" width="300" height="250" scrolling="no" border="0" marginwidth="0" style="border:none;" frameborder="0"></iframe>
+    <iframe src="https://rcm-cn.amazon-adsystem.com/e/cm?o=28&p=12&l=ur1&category=books&banner=1N4AHFJRK48P743G2QR2&f=ifr&linkID=7551f551ae22dc5bee3805c6bfb79010&t=frankwang09-23&tracking_id=frankwang09-23" width="300" height="250" scrolling="no" border="0" marginwidth="0" style="border:none;" frameborder="0"></iframe>
+    
+    <div class="post-content">
+      
+
+<h2 id="1-简介">1.简介：</h2>
+
+<p><a href="http://www.typescriptlang.org/">TypeScript</a> 是微软2012年推出的一种编程语言，属于 JavaScript 的<code>超集</code>，可以编译为 JavaScript 执行。它拓展了 JavaScript 的语法，给 JavaScript 添加可选的<code>静态类型</code>和<code>基于类</code>的面向对象编程。</p>
+
+<p>TypeScript文件拓展名为 <code>.ts</code>。</p>
+
+<p>TypeScript 不能直接运行在浏览器环境中，运行前需要编译成 JavaScript 才能在浏览器运行。</p>
+
+<p>TypeScript 是<code>Angular2</code>官方推荐的开发语言，同时也可以作为使用 React、Vue、ReactNative 等框架或者类库的项目的开发语言。</p>
+
+<p>一个简单的 TypeScript 文件 demo.ts, 如下代码所示：</p>
+
+<pre><code class="language-typescript">var book: string = &quot;Angular 2&quot;;  // 定义了一个 string 类型的变量 book
+
+var num: number = 123;  // 定义了一个 number 类型的变量 num
+
+function log(msg: string): void {  // 定义了一个 函数 log, 它的参数 msg 是 string 类型的， `：void`表示这个函数没有返回值 
+    console.log(msg);
+}
+</code></pre>
+
+<h2 id="2-安装-typescript">2.安装 TypeScript:</h2>
+
+<pre><code class="language-shell">npm install -g typescript
+</code></pre>
+
+<h2 id="3-编译">3.编译:</h2>
+
+<p>3.1 本地编译：命令行输入<code>tsc 文件名.ts</code> 既可编译成<code>同名</code>的 JavaScript 文件。</p>
+
+<pre><code class="language-shell">tsc demo.ts
+</code></pre>
+
+<p>demo.ts 编译后得到 demo.js 文件，如下代码所示：</p>
+
+<pre><code class="language-typescript">var book = &quot;Angular 2&quot;;
+var num = 123;
+function log(msg) {
+    console.log(msg);
+}
+</code></pre>
+
+<p>3.2 在线编译：TypeScript 官方提供<a href="http://www.typescriptlang.org/play/index.html">在线的实时编译</a>。</p>
+
+<h2 id="4-编辑器-visual-studio-code">4.编辑器: Visual Studio Code</h2>
+
+<p>微软官方为 TypeScript 提供了一款轻量级但功能强大的编辑器 —— <a href="https://code.visualstudio.com/">VS Code</a>。Visual Studio Code本身就是一个<code>文本编辑器</code>，非常轻量级，搭配各种插件的话，就可以重现 Visual Studio的强大功能。</p>
+
+<h2 id="5-语法特性之一-类型注解">5.语法特性之一：类型注解</h2>
+
+<p>TypeScript里的<code>类型注解</code>是一种轻量级的为函数或变量添加约束的方式。</p>
+
+<p>在示例代码中里，我们希望 log 函数接收一个字符串参数。 然后尝试把 log 的调用改成传入一个数组：</p>
+
+<pre><code class="language-typescript">function log(msg: string) {
+    return &quot;Hello, &quot; + msg;
+}
+
+var msg = [0, 1, 2];
+
+log(msg);
+</code></pre>
+
+<p>TypeScript提供了静态的代码分析，它可以分析代码结构和提供的类型注解。所以上述代码在 VS Code 中会出现提示错误：</p>
+
+<pre><code>Argument of type 'number[]' is not assignable to parameter of type string
+</code></pre>
+
+<h2 id="6-语法特性之二-接口-interface">6.语法特性之二：接口 Interface:</h2>
+
+<p>TypeScript的核心原则之一是对值所具有的结构进行类型检查。 它有时被称做“鸭式辨型法”或“结构性子类型化”。</p>
+
+<p>在TypeScript里，接口的作用就是为这些类型命名和为你的代码或第三方代码定义契约。</p>
+
+<p>简单示例来观察接口是如何工作的：</p>
+
+<pre><code class="language-typescript">function print(obj: { a: string }) {
+    console.log(obj.a);
+}
+
+let myObj = { 
+    size: 10, 
+    a: &quot;Size 10 Object&quot; 
+};
+
+print(myObj);
+</code></pre>
+
+<p>类型检查器会查看函数 print()的调用。 它有一个对象参数，并且这个对象参数有一个名为a, 类型为 string 的属性。 需要注意的是，我们传入的对象参数实际上会包含很多属性，但是编译器只会检查那些必需的属性是否存在，并且其类型是否匹配。</p>
+
+<p>关键字<code>interface</code>用来定义<code>接口</code>, 接口名<code>首字母大写</code>。</p>
+
+<p>下面我们重写上面的例子，这次使用<code>接口</code>来描述：必须包含一个类型为 string 的属性 a。</p>
+
+<pre><code class="language-typescript">interface MyValue {
+    a: string;
+}
+
+function print(obj: MyValue) {
+    console.log(obj.a);
+}
+
+let myObj = {
+    size: 10, 
+    a: &quot;Size 10 Object&quot;
+};
+print(myObj);
+</code></pre>
+
+<h2 id="7-语法特性之三-类-class">7.语法特性之三：类 Class</h2>
+
+<h3 id="7-1-类的定义-关键字-class-用来定义一个类-类名-首字母大写">7.1 类的定义：关键字<code>class</code>用来定义一个类，类名<code>首字母大写</code>。</h3>
+
+<p>传统的 JavaScript 程序没有<code>类(Class)</code>的概念, 通过基于<code>原型链</code>的继承来实现面向对象的编程。从ECMAScript 2015(ES6) 开始，JavaScript 引入了类的概念，而 TypeScript 早就实现了类的继承。</p>
+
+<p>示例代码：</p>
+
+<pre><code class="language-typescript">class Greeter {
+    
+    // 定义了 string 类型的属性, 
+    greeting: string;
+
+    // 定义了类的构造函数，它参数为 string 类型
+    constructor(message: string) {
+
+        this.greeting = message;
+    }
+
+    // 定义了一个类的方法 
+    greet() {
+        return &quot;Hello, &quot; + this.greeting;
+    }
+}
+</code></pre>
+
+<p>上述代码声明了一个 Greeter类。这个类有3个成员：一个叫做 greeting 的属性，一个构造函数和一个 greet 方法。</p>
+
+<p>我们在引用任何一个类成员的时候都用了<code>this</code>, 它表示我们访问的是类的成员。</p>
+
+<h3 id="7-2-实例化-关键字-new-用来创建类的一个实例对象">7.2 实例化：关键字<code>new</code>用来创建类的一个实例对象。</h3>
+
+<pre><code class="language-typescript">let greeter = new Greeter(&quot;world&quot;);
+</code></pre>
+
+<p>使用<code>new</code> 创建了Greeter类的一个实例。 它会调用之前定义的构造函数，创建一个 Greeter类型的新对象，并执行构造函数初始化它。</p>
+
+<h3 id="7-3-类的继承-关键字-extends-表示类的继承关系">7.3 类的继承： 关键字<code>extends</code>表示类的继承关系</h3>
+
+<p>示例代码：</p>
+
+<pre><code class="language-typescript">class Animal {
+    name:string;
+    constructor(theName: string) { 
+        this.name = theName; 
+    }
+    move(distanceInMeters: number = 0) {
+        console.log(`${this.name} moved ${distanceInMeters}m.`);
+    }
+}
+
+class Snake extends Animal {
+    constructor(name: string) {
+        super(name); //必须调用super()方法来执行父类的构造方法
+    }
+    move(distanceInMeters = 5) {
+        console.log(&quot;Slithering...&quot;);
+        super.move(distanceInMeters); 
+    }
+}
+
+class Horse extends Animal {
+    constructor(name: string) { 
+        super(name); 
+    }
+    move(distanceInMeters = 45) {
+        console.log(&quot;Galloping...&quot;);
+        super.move(distanceInMeters);
+    }
+}
+
+let sam = new Snake(&quot;Sammy the Python&quot;);
+let tom: Animal = new Horse(&quot;Tommy the Palomino&quot;);
+
+sam.move();
+tom.move(34);
+</code></pre>
+
+<p>与其它语言类似，TypeScript 使用 关键字<code>extends</code>来创建子类。你可以看到 Horse 和 Snake 都是 Animal 的子类，并且可以访问其属性和方法。</p>
+
+<p>包含构造函数的派生类必须调用<code>super()</code>，它会执行父类的构造方法。</p>
+
+<p>在子类里可以重写父类的方法。上述代码中，Snake 类 和 Horse 类都创建了 move 方法，它们重写了从 Animal 继承来的 move 方法，使得 move 方法根据不同的类而具有不同的功能。</p>
+
+<h3 id="7-4-类的修饰符">7.4 类的修饰符：</h3>
+
+<p>7.4.1  public：默认修饰符</p>
+
+<p>如果没有使用<code>修饰符</code>来修饰类的成员（属性、方法），则默认为<code>public</code>，表示我们可以自由地访问到类的这个成员。</p>
+
+<p>7.4.2 private：修饰私有成员用</p>
+
+<p>当成员被标记成<code>private</code>时，它就不能在声明它的类的<code>外部</code>访问。</p>
+
+<pre><code class="language-typescript">class Animal {
+    private name: string;
+    constructor(theName: string) { 
+        this.name = theName; 
+    }
+}
+
+new Animal(&quot;Cat&quot;).name; // Error: 'name' is private;
+</code></pre>
+
+<p>7.4.3 protected：</p>
+
+<p><code>protected</code>修饰符与<code>private</code>修饰符的行为很相似，但有一点不同，<code>protected</code>成员在<code>派生类</code>中仍然可以访问。</p>
+
+<pre><code class="language-typescript">class Person {
+    protected name: string;
+    constructor(name: string) { 
+        this.name = name; 
+    }
+}
+
+class Employee extends Person {
+    private department: string;
+
+    constructor(name: string, department: string) {
+        super(name)
+        this.department = department;
+    }
+
+    public getElevatorPitch() {
+        return `Hello, my name is ${this.name} and I work in ${this.department}.`;
+    }
+}
+
+let howard = new Employee(&quot;Howard&quot;, &quot;Sales&quot;);
+console.log(howard.getElevatorPitch());
+console.log(howard.name); // error
+</code></pre>
+
+<p>我们不能在 Person 类外使用 name ，但是我们仍然可以通过 Employee 类的实例方法访问，因为 Employee 是由 Person 派生而来的。</p>
+
+<p>7.4.4 readonly：只读修饰符</p>
+
+<p>你可以使用<code>readonly</code>关键字将属性设置为<code>只读</code>的。 只读属性必须在<code>声明</code>时或<code>构造函数</code>里被初始化。</p>
+
+<pre><code class="language-typescript">class Octopus {
+    readonly name: string;
+    readonly numberOfLegs: number = 8;
+    constructor (theName: string) {
+        this.name = theName;
+    }
+}
+
+let dad = new Octopus(&quot;Man with the 8 strong legs&quot;);
+
+dad.name = &quot;Man with the 3-piece suit&quot;; // error! name is readonly.
+</code></pre>
+
+    </div>
+    
+    
+    
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Frank Wang</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">2017-07-16</span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      <div class="post-tags">
+          
+          <a href="/tags/typescript/">TypeScript</a>
+          
+        </div>
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/nvm_for_window.html">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default"> window 系统的 Node 版本管理工具 nvm-windows</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        
+          <a class="next" href="/angular2_basic.html">
+            <span class="next-text nav-default">快速入门 Angular2 核心概念</span>
+            <span class="prev-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+      </div>  
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:frankwang0909@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://www.twitter.com/frankwang0909" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="https://www.github.com/frankwang0909" class="iconfont icon-github" title="github"></a>
+  <a href="http://www.wangxingfeng.com/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    &copy; 
+    
+      2016 - 
+    2017
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Frank Wang</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js"></script>
+<script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+<script type="text/javascript" src="/dist/even.min.js?v=2.6.1"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script async src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML'></script>
+
+
+
+
+</body>
+</html>

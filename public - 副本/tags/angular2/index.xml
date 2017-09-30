@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Angular2 on Frank Wang&#39;s Coding World</title>
+    <link>http://www.wangxingfeng.com/tags/angular2/index.xml</link>
+    <description>Recent content in Angular2 on Frank Wang&#39;s Coding World</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <atom:link href="http://www.wangxingfeng.com/tags/angular2/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>快速入门 Angular2 核心概念</title>
+      <link>http://www.wangxingfeng.com/angular2_basic.html</link>
+      <pubDate>Sat, 15 Jul 2017 17:13:18 +0800</pubDate>
+      
+      <guid>http://www.wangxingfeng.com/angular2_basic.html</guid>
+      <description>
+
+&lt;p&gt;&lt;img src=&#34;http://www.wangxingfeng.com/images/2017071501.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;1-components-组件&#34;&gt;1.Components 组件&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.wangxingfeng.com/images/2017071502.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;1-1-组件及示例代码&#34;&gt;1.1 组件及示例代码&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-typescript&#34;&gt;//装饰器
+@Component({
+    //元数据
+
+    selector: &#39;hello&#39;,
+
+    //定义组件的模板
+    template: &#39;&amp;lt;p&amp;gt;{{greeting}}&amp;lt;/p&amp;gt;
+})
+
+//组件类
+export class HelloComponent {
+    private greeting: string;
+    constructor() {
+        this.greeting = &#39;Hello, Welcome to Angular 2!&#39;;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.wangxingfeng.com/images/2017071505.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;装饰器：@Component&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;赋予一个类更丰富的信息,即将&lt;code&gt;元数据&lt;/code&gt; 注入到组件类中。&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;元数据：装饰器重定义的数据&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;模板：&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;可以在元数据内自定义模板template; 也可以通过templateUrl:&amp;ldquo;path/xx.html&amp;rdquo; 来引用外部模板xx.html&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;数据绑定：&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;1)插值：{{变量名}}。可以直接使用&lt;code&gt;组件类&lt;/code&gt;里的变量。&lt;/p&gt;
+
+&lt;p&gt;2)属性绑定：[]=&amp;ldquo;mydata&amp;rdquo;。把&lt;code&gt;组件类&lt;/code&gt;的数据传递&lt;code&gt;mydata&lt;/code&gt;到&lt;code&gt;模板&lt;/code&gt;中的，可以从&lt;code&gt;父组件&lt;/code&gt;向&lt;code&gt;子组件&lt;/code&gt;传递数据。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-typescript&#34;&gt;     &amp;lt;input [message]=&amp;quot;myData&amp;quot; /&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;3)事件绑定：(事件名)。把&lt;code&gt;模板&lt;/code&gt;产生的数据通过&lt;code&gt;函数调用&lt;/code&gt;的方式传递到&lt;code&gt;组件类&lt;/code&gt;中，可以从&lt;code&gt;子组件&lt;/code&gt;从&lt;code&gt;父组件&lt;/code&gt;传递数据。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-typescript&#34;&gt;    &amp;lt;input (keyup)=&amp;quot;handle($event)&amp;quot; /&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;4)双向绑定：[(ngModel)] 。实现模板和组件类的数据的双向流动，实时更新。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-typescript&#34;&gt;    &amp;lt;input [(ngModel)]=&amp;quot;myData&amp;quot; /&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;1-2-组件树&#34;&gt;1.2 组件树&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.wangxingfeng.com/images/2017071506.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;1-3-组件间的通讯机制及数据流向&#34;&gt;1.3 组件间的通讯机制及数据流向&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.wangxingfeng.com/images/2017071503.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.wangxingfeng.com/images/2017071507.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;1-4-组件的生命周期及其钩子&#34;&gt;1.4 组件的生命周期及其钩子&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.wangxingfeng.com/images/2017071504.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;1.Constructor 构造器初始化：变量的初始赋值&lt;/p&gt;
+
+&lt;p&gt;2.OnChanges 接收父组件传递的数据，第一次触发数据变化OnChanges钩子&lt;/p&gt;
+
+&lt;p&gt;3.OnInit 组件初始化：此时处理业务逻辑&lt;/p&gt;
+
+&lt;p&gt;4.OnChange 运行期间只要数据发生了变化，就会触发数据变化OnChange钩子&lt;/p&gt;
+
+&lt;p&gt;5.OnDestroy 组件销毁前会触发 OnDestroy 钩子：数据解绑、取消数据订阅等&lt;/p&gt;
+
+&lt;h2 id=&#34;2-directives-指令&#34;&gt;2. Directives 指令&lt;/h2&gt;
+
+&lt;p&gt;组件继承于指令，组件是自身带有模板的指令。&lt;/p&gt;
+
+&lt;h3 id=&#34;2-1-属性指令&#34;&gt;2.1 属性指令：&lt;/h3&gt;
+
+&lt;p&gt;改变组件模板的外观或行为的，如样式等。&lt;/p&gt;
+
+&lt;h3 id=&#34;2-2-结构指令&#34;&gt;2.2 结构指令：&lt;/h3&gt;
+
+&lt;p&gt;改变组件模板的DOM结构，如ngIf用来插入或者移除DOM节点。&lt;/p&gt;
+
+&lt;h3 id=&#34;2-3-自定义指令&#34;&gt;2.3 自定义指令：&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-typescript&#34;&gt;// 自定义指令highlight
+// 指令需要导入Directive, ElementRef, Renderer 来 辅助元素的渲染
+import { Directive, ElementRef, Renderer } from &#39;@angular/core&#39;;
+
+@Directive({
+    selector: &amp;quot;[highlight]&amp;quot; // 中括号表示指令使用在元素属性上
+})
+
+export class HighlightDirective {
+    constructor(private el: ElementRef, private renderer:Renderer) { 
+        renderer.setElementStyle(el.nativeElement, &#39;backgroundColor&#39;, &#39;pink&#39;);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;3-services-服务&#34;&gt;3. Services 服务&lt;/h2&gt;
+
+&lt;p&gt;服务是实现专一目的的逻辑单元（类），如日志服务。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-typescript&#34;&gt;export class LoggerService {
+    constructor() {}
+
+    debug(msg: string) {
+        console.log(msg);
+    }
+
+    error(msg: string) {
+        console.error(msg);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;4-dependency-injection-依赖注入&#34;&gt;4. Dependency Injection 依赖注入&lt;/h2&gt;
+
+&lt;h3 id=&#34;4-1-依赖注入&#34;&gt;4.1 依赖注入:&lt;/h3&gt;
+
+&lt;p&gt;&lt;code&gt;依赖注入&lt;/code&gt;是&lt;code&gt;组件&lt;/code&gt;引入&lt;code&gt;外部构建&lt;/code&gt;（如服务）的一种机制。最常见的是组件引入服务。引用服务其实引用的是&lt;code&gt;服务类的实例&lt;/code&gt;，所以服务在引入之前有一个&lt;code&gt;实例化&lt;/code&gt;的过程，并且&lt;code&gt;这个实例&lt;/code&gt;通常要被缓存起来&lt;code&gt;注入器对象&lt;/code&gt;中，以供其他组件使用。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.wangxingfeng.com/images/2017071508.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;示例：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-typescript&#34;&gt;@Component({
+    selector: &#39;hello&#39;,
+    template: &#39;&amp;lt;p&amp;gt;{{greeting}}&amp;lt;/p&amp;gt;
+    
+    //依赖注入的配置
+    providers:[LoggerService]
+})
+
+export class HelloComponent {
+    private greeting: string;
+
+    //组件构造函数 定义服务类LoggerService类型的参数
+    依赖注入机制会根据这个参数在注入器对象中尝试查找LoggerService的实例，找到之后，自动传入到这个构造函数中，组件内部获得了LoggerService实例的引用。
+    constructor(logger: LoggerService){
+        this.greeting = &#39;Hello, Angular2&#39;;
+        logger.debug(&#39;构造函数执行完毕&#39;);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;4-2-分层依赖注入-hierarchical-dependency-injection&#34;&gt;4.2 分层依赖注入 hierarchical dependency injection&lt;/h3&gt;
+
+&lt;p&gt;在父组件中依赖注入的服务，在&lt;code&gt;组件本身及其子组件&lt;/code&gt;都能使用。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.wangxingfeng.com/images/2017071509.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;5-modules-模块&#34;&gt;5. Modules 模块&lt;/h2&gt;
+
+&lt;h3 id=&#34;5-1-文件模块-框架代码以模块的形式组织&#34;&gt;5.1 文件模块：框架代码以模块的形式组织&lt;/h3&gt;
+
+&lt;p&gt;1.文件模块分类：&lt;/p&gt;
+
+&lt;p&gt;1)核心模块：@angular/core&lt;/p&gt;
+
+&lt;p&gt;2)通用模块：@angular/common&lt;/p&gt;
+
+&lt;p&gt;3)表单模块：@angular/forms&lt;/p&gt;
+
+&lt;p&gt;4)网络模块：@angular/http&lt;/p&gt;
+
+&lt;p&gt;5)其他模块&lt;/p&gt;
+
+&lt;p&gt;2.模块的使用：&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;文件模块&lt;/code&gt;在使用前，需要通过&lt;code&gt;import&lt;/code&gt;导入&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-typescript&#34;&gt;import { Http } from &amp;quot;@angular/http&amp;quot;;
+
+import { Component } from &amp;quot;@angular/core&amp;quot;;
+
+import { Directive } from &amp;quot;@angular/core&amp;quot;;
+
+import { ElementRef, Renderer } from &amp;quot;@angular/core&amp;quot;;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;5-2-应用模块-功能单元以模块的形式组织&#34;&gt;5.2 应用模块：功能单元以模块的形式组织&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.wangxingfeng.com/images/2017071510.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;1.应用模块：把有关联的组件、服务、指令等按功能进行归类包装成模块。&lt;/p&gt;
+
+&lt;p&gt;2.模块间的调用：&lt;/p&gt;
+
+&lt;p&gt;默认情况下，一个组件不能直接引用其他组件或指令的，要想使用就必须先导入。一个模块内的组件可以使用同模块的任意组件和指令。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-typescript&#34;&gt;// @NgModule 声明模块
+@NgModule({
+
+    // 包装组件或指令
+    declarations: [
+        AppComponent,
+        HelloComponent,
+        SomeDirective
+    ],
+
+    // 依赖注入服务
+    providers: [ LoggerService ],
+
+    // 导入其他模块
+    imports: [OtherModule ],
+
+    // 设置根组件
+    bootstrap: [ AppComponent],
+
+    // 导出该模块暴露的指令或模块以供其他组件调用
+    exports:[ SomeDirective ]
+})
+
+export class AppModule {}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;一个模块导入了另一个模块后，可以调用模块&lt;code&gt;exports出来的组件或指令&lt;/code&gt;，
+以及模块内依赖注入的服务（一个模块依赖注入了服务，那么整个应用内的所有组件里）。&lt;/p&gt;
+
+&lt;p&gt;3.根模块、特性模块、共享模块、核心模块&lt;/p&gt;
+
+&lt;p&gt;应用根据&lt;code&gt;功能&lt;/code&gt;可以切分为大大小小的各种模块。其中，&lt;code&gt;根模块&lt;/code&gt;作为应用启动的入口。各种&lt;code&gt;功能&lt;/code&gt;可以封装成一个个&lt;code&gt;特性模块&lt;/code&gt;。随着&lt;code&gt;特性模块&lt;/code&gt;越来越多，如果它们之间可以抽象出来一些相似的&lt;code&gt;功能组件&lt;/code&gt;，我们把这些&lt;code&gt;功能组件&lt;/code&gt;再封装成为独立的&lt;code&gt;共享模块&lt;/code&gt;。
+我们可以把一些全局的组件或者服务（如维护登录信息的服务、公共的头部、底部组件等）放在&lt;code&gt;根模块&lt;/code&gt;里，也可以抽离出来封装成独立的&lt;code&gt;核心模块&lt;/code&gt;，只在&lt;code&gt;根模块&lt;/code&gt;中导入。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.wangxingfeng.com/images/20170715011.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

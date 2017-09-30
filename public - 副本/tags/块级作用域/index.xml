@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>块级作用域 on Frank Wang&#39;s Coding World</title>
+    <link>http://www.wangxingfeng.com/tags/%E5%9D%97%E7%BA%A7%E4%BD%9C%E7%94%A8%E5%9F%9F/index.xml</link>
+    <description>Recent content in 块级作用域 on Frank Wang&#39;s Coding World</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <atom:link href="http://www.wangxingfeng.com/tags/%E5%9D%97%E7%BA%A7%E4%BD%9C%E7%94%A8%E5%9F%9F/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>ES6的块级作用域以及let、const命令</title>
+      <link>http://www.wangxingfeng.com/es6-let-const.html</link>
+      <pubDate>Fri, 07 Apr 2017 20:18:56 +0800</pubDate>
+      
+      <guid>http://www.wangxingfeng.com/es6-let-const.html</guid>
+      <description>
+
+&lt;h2 id=&#34;1-块级作用域&#34;&gt;1. 块级作用域&lt;/h2&gt;
+
+&lt;p&gt;&lt;code&gt;ES5&lt;/code&gt; 只有&lt;code&gt;全局作用域&lt;/code&gt;和&lt;code&gt;函数作用域&lt;/code&gt;，没有&lt;code&gt;块级作用域&lt;/code&gt;。&lt;/p&gt;
+
+&lt;p&gt;在函数外部声明的变量，都是全局变量，容易导致变量冲突。因此，我们不得不使用&lt;code&gt;立即执行函数&lt;/code&gt;来避免全局变量的冲突。另外，在循环内用来计数的变量也会泄露成全局变量。&lt;/p&gt;
+
+&lt;p&gt;为此，&lt;code&gt;ES6&lt;/code&gt; 引入了&lt;code&gt;块级作用域&lt;/code&gt;的概念。&lt;/p&gt;
+
+&lt;h2 id=&#34;2-let-声明变量&#34;&gt;2. let 声明变量&lt;/h2&gt;
+
+&lt;p&gt;2.1 &lt;code&gt;let&lt;/code&gt;声明的变量，只在它所在的代码块（块级作用域）内有效。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;    {
+        var a = 1;
+        let b = 2;
+    }
+    a //1 
+    b // Uncaught ReferenceError: b is not defined
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;2.2 &lt;code&gt;for循环&lt;/code&gt;的计数器使用&lt;code&gt;let&lt;/code&gt;命令来声明。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;    for (let i = 0; i &amp;lt; 10; i++) {
+        //
+    }
+    console.log(i);  //ReferenceError: i is not defined
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;2.3 不存在&lt;code&gt;变量提升&lt;/code&gt;。变量应该遵循&lt;code&gt;先声明后使用&lt;/code&gt;的原则。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;var&lt;/code&gt;声明的变量会提升到作用域的顶部,在变量可以在声明之前可以使用，值为&lt;code&gt;undefined&lt;/code&gt;。&lt;code&gt;let&lt;/code&gt;声明的变量不存在&lt;code&gt;变量提升&lt;/code&gt;, 声明之前使用，会报错。&lt;/p&gt;
+
+&lt;p&gt;2.4 暂时性死区(temporal dead zone，简称 TDZ):&lt;/p&gt;
+
+&lt;p&gt;只要&lt;code&gt;块级作用域&lt;/code&gt;内存在&lt;code&gt;let命令&lt;/code&gt;，它所声明的变量就“绑定”（binding）这个区域，不再受外部的影响。在let命令声明该变量之前的区域内，该变量不能使用，即使外部声明了该变量。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;    let a = 1;
+    if (true) {
+        // TDZ开始
+        console.log(a); //Uncaught ReferenceError: a is not defined
+
+        let a;  //TDZ结束
+    }
+
+    let b = 1;
+    if (true) {
+        let b = 100; 
+        console.log(b);  //100
+    } 
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;可以这么理解&lt;code&gt;暂时性死区&lt;/code&gt;：只要一进入当前的块级作用域，所有将要使用的变量就已经存在了，但是还暂时无法获取，只有等到声明变量之后，才可以获取和使用该变量。&lt;/p&gt;
+
+&lt;p&gt;2.5 不能重复声明变量&lt;/p&gt;
+
+&lt;p&gt;在同一个作用域内，&lt;code&gt;let&lt;/code&gt;命令不能重复声明同一个变量。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;    function () {
+        let x = 10;
+        var x = 20;
+    }
+    // Uncaught SyntaxError: Identifier &#39;x&#39; has already been declared
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;3-const-声明常量&#34;&gt;3. const 声明常量&lt;/h2&gt;
+
+&lt;p&gt;3.1 &lt;code&gt;ES6&lt;/code&gt; 引入了&lt;code&gt;常量&lt;/code&gt;的概念。&lt;code&gt;const 命令&lt;/code&gt;是用来声明&lt;code&gt;常量&lt;/code&gt;的, 通常用&lt;code&gt;大写字母&lt;/code&gt;表示常量。一旦声明，常量的值就不能改变。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;    const PI = 3.1415;
+    PI = 3; //Uncaught TypeError: Assignment to constant variable.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;3.2 声明变量时，必须立即赋值。否则会报错。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;    const SIN //Uncaught SyntaxError: Missing initializer in const declaration
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;3.3 &lt;code&gt;const&lt;/code&gt;的作用域与&lt;code&gt;let&lt;/code&gt;命令相同：常量只在它声明时所在的&lt;code&gt;块级作用域&lt;/code&gt;内有效。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;    if (true) {
+      const A = 5;
+    }
+    A // Uncaught ReferenceError: A is not defined
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;3.4 &lt;code&gt;const&lt;/code&gt;命令声明的常量也是不提升，同样存在&lt;code&gt;暂时性死区&lt;/code&gt;，只能在声明的位置后面使用。同时，也不能重复声明。&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

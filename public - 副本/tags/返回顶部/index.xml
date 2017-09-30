@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>返回顶部 on Frank Wang&#39;s Coding World</title>
+    <link>http://www.wangxingfeng.com/tags/%E8%BF%94%E5%9B%9E%E9%A1%B6%E9%83%A8/index.xml</link>
+    <description>Recent content in 返回顶部 on Frank Wang&#39;s Coding World</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <atom:link href="http://www.wangxingfeng.com/tags/%E8%BF%94%E5%9B%9E%E9%A1%B6%E9%83%A8/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>实现返回顶部效果的3种方式</title>
+      <link>http://www.wangxingfeng.com/back-to-top.html</link>
+      <pubDate>Fri, 22 Apr 2016 22:56:30 +0800</pubDate>
+      
+      <guid>http://www.wangxingfeng.com/back-to-top.html</guid>
+      <description>
+
+&lt;p&gt;现在的网页内容比较多，基本上无法在一屏完全显示出来。这个时候，用户需要移动滚动条（滑动鼠标滚轮）来查看全部内容，如果想要返回顶部同样需要移动滚动条。如果页面太长，这样的体验显然不够好。因此，&lt;code&gt;返回顶部&lt;/code&gt;的按钮就应运而生了。&lt;/p&gt;
+
+&lt;p&gt;返回顶部的实现方式主要有以下3种。&lt;/p&gt;
+
+&lt;h2 id=&#34;实现方式一-设置锚链接&#34;&gt;实现方式一：设置锚链接&lt;/h2&gt;
+
+&lt;p&gt;最简单快捷的方式是设置锚链接&lt;code&gt;&amp;lt;a href=&amp;quot;#&amp;quot;&amp;gt;&lt;/code&gt; 。&lt;code&gt;京东&lt;/code&gt;就是使用这种方式。&lt;/p&gt;
+
+&lt;p&gt;优点：简单快速，没有浏览器兼容问题。&lt;/p&gt;
+
+&lt;p&gt;参考代码如下：&lt;/p&gt;
+
+&lt;p&gt;HTML代码&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;    &amp;lt;div id=&amp;quot;go-top&amp;quot;&amp;gt;
+        &amp;lt;a href=&amp;quot;#&amp;quot;  id=&amp;quot;gotop-btn&amp;quot;&amp;gt;&amp;lt;/a&amp;gt;&amp;lt;!-- 直接使用锚链接来返回顶部 --&amp;gt;
+    &amp;lt;/div&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;实现方式二-借助jquery来实现&#34;&gt;实现方式二：借助jQuery来实现&lt;/h2&gt;
+
+&lt;p&gt;参考代码如下：&lt;/p&gt;
+
+&lt;p&gt;HTML代码&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;div id=&amp;quot;go-top&amp;quot;&amp;gt;
+    &amp;lt;a href=&amp;quot;javascript:;&amp;quot;  id=&amp;quot;gotop-btn&amp;quot;&amp;gt;&amp;lt;/a&amp;gt;
+&amp;lt;/div&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;JavaScript代码&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;script type=&amp;quot;text/javascript&amp;quot;&amp;gt;
+    $(function() {
+        $(window).scroll(function(){
+            // 当滚动条距顶部超过100像素时，返回顶部按钮出现，否则消失
+    if ($(window).scrollTop()&amp;gt;=100){
+        $(&amp;quot;#gotop-btn&amp;quot;).fadeIn(500);
+    }
+    else{
+        $(&amp;quot;#gotop-btn&amp;quot;).fadeOut(500);
+    }
+    });
+    //当点击跳转链接后，回到页面顶部位置
+    $(&amp;quot;#gotop-btn&amp;quot;).click(function(){
+        $(&#39;body,html&#39;).animate({scrollTop:0},300);
+    });
+});
+&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;实现方式三-通过原生javascript来动态操作&#34;&gt;实现方式三：通过原生JavaScript来动态操作。&lt;/h2&gt;
+
+&lt;p&gt;需要用到以下知识&lt;/p&gt;
+
+&lt;h3 id=&#34;dom-操作&#34;&gt;DOM 操作：&lt;/h3&gt;
+
+&lt;p&gt;1.根据ID获取元素：&lt;code&gt;document.getElementById&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;2.滚动条的数值，可读写：&lt;code&gt;document.documentElment.scrollTop&lt;/code&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;事件运用&#34;&gt;事件运用：&lt;/h3&gt;
+
+&lt;p&gt;1.页面加载完毕后触发&lt;code&gt;window.onload&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;2.点击后触发&lt;code&gt;onclick&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;3.滚动条滚动时触发 &lt;code&gt;window.onscroll&lt;/code&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;定时器&#34;&gt;定时器：&lt;/h3&gt;
+
+&lt;p&gt;1.&lt;code&gt;setInterval()&lt;/code&gt; : 设置定时器，需要传两个参数。&lt;/p&gt;
+
+&lt;p&gt;2.&lt;code&gt;clearInterval()&lt;/code&gt;: 关闭定时器，需要传两个参数。&lt;/p&gt;
+
+&lt;p&gt;参考代码：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;HTML代码
+&amp;lt;div id=&amp;quot;go-top&amp;quot;&amp;gt;
+    &amp;lt;a href=&amp;quot;javascript:;&amp;quot;  id=&amp;quot;gotop-btn&amp;quot;&amp;gt;&amp;lt;/a&amp;gt;
+&amp;lt;/div&amp;gt;
+
+js代码
+&amp;lt;script  type=&amp;quot;text/javascript&amp;quot; &amp;gt;
+    // 加载后触发事件
+    window.onload = function() {
+        var obtn = document.getElementById(&#39;gotop-btn&#39;);
+        // 获取页面可视区域高度
+        var clientHeight = document.documentElement.clientHeight;
+        var timer = null;
+        var isTop = true;
+        // 滚动条滚动时触发事件，清除定时器，停在当前位置。
+        window.onscroll = function() {
+            // 获取滚动条距离顶部的数值
+            var osTop = document.documentElement.scrollTop || document.body.scrollTop; 
+
+            if(osTop &amp;gt;= clientHeight){
+                // 显示返回按钮
+                obtn.style.display = &amp;quot;block&amp;quot;;
+            }
+            else{
+                // 隐藏返回按钮
+                obtn.style.display = &amp;quot;none&amp;quot;;
+            }
+            if(!isTop){
+                clearInterval(timer);
+            }
+            isTop = false;
+        }
+        obtn.onclick = function() {
+            // 设置定时器
+            timer = setInterval(function() {
+                var osTop = document.documentElement.scrollTop || document.body.scrollTop; 
+                // chrome使用document.body.scrollTop 来获取滚动条到顶部的距离。
+                // 滚动条滚动由快到慢，即减少的距离从大到小。
+                var ispeed = Math.floor(-osTop /6);
+                // Math.floor()向下取整, 如果ispeed去正数，会导致osTop最后无法等于0，从而无法消除定时器。
+                document.documentElement.scrollTop = document.body.scrollTop = osTop + ispeed;
+                //滚动条到了顶部之后，清除定时器，否则会一直返回顶部没法下拉滚动条看底下的网页内容。
+                isTop = true;
+                // console.log(osTop-ispeed);
+                if(osTop == 0){
+                    clearInterval(timer);
+                }
+            },50)
+        }
+    }
+&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

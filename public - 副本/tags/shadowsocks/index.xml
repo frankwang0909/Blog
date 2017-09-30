@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Shadowsocks on Frank Wang&#39;s Coding World</title>
+    <link>http://www.wangxingfeng.com/tags/shadowsocks/index.xml</link>
+    <description>Recent content in Shadowsocks on Frank Wang&#39;s Coding World</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <atom:link href="http://www.wangxingfeng.com/tags/shadowsocks/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>撸了Google Cloud，自建了个梯子</title>
+      <link>http://www.wangxingfeng.com/ss.html</link>
+      <pubDate>Sun, 09 Jul 2017 11:37:11 +0800</pubDate>
+      
+      <guid>http://www.wangxingfeng.com/ss.html</guid>
+      <description>
+
+&lt;p&gt;鉴于最近科学上网变得越来越不方便了，不少之前坚挺的 VPN 都被迫停止服务了，只好自己动手，搭个梯子。网上找找资料，意外发现了&lt;a href=&#34;https://cloud.google.com/&#34;&gt;谷歌的云服务 (Google Cloud Platform)&lt;/a&gt;有免费试用服务（其实亚马逊云也有一年的免费试用）。 新用户注册赠送300刀，一年有效期，完全可以用来搭建个梯子玩玩。&lt;/p&gt;
+
+&lt;p&gt;目前撸这个的人应该不多，因为至少有两个门槛。第一，谷歌的服务在国内基本被墙了，所以必须得先能翻墙，注册了 Google 账号，才能登录 Google Cloud。第二，国内用户必须得有双币或者多币种的信用卡才能通过验证。&lt;/p&gt;
+
+&lt;p&gt;以下是我搭建梯子的流程：&lt;/p&gt;
+
+&lt;h3 id=&#34;1-注册登录&#34;&gt;1.注册登录：&lt;/h3&gt;
+
+&lt;p&gt;先用免费的蓝灯翻墙上&lt;a href=&#34;https://cloud.google.com/&#34;&gt;谷歌云&lt;/a&gt;，点击那个蓝色的 &amp;ldquo;TRY IT FREE&amp;rdquo;  按钮，需要用谷歌账号登录，然后填写一些个人信息，过程中需要绑定真实的信用卡。还有可能会发邮件给你，让你上传证件以及信用卡的照片用于身份认证。验证成功后会预扣费1美元用于验证卡的有效性，稍后它会自动返回。&lt;/p&gt;
+
+&lt;h3 id=&#34;2-创建项目&#34;&gt;2.创建项目：&lt;/h3&gt;
+
+&lt;p&gt;项目名称什么的可以随便填。&lt;/p&gt;
+
+&lt;h3 id=&#34;3-创建vm实例-计算引擎-vm实例&#34;&gt;3.创建VM实例： 计算引擎 &amp;ndash;&amp;gt; VM实例。&lt;/h3&gt;
+
+&lt;p&gt;1）地区：可以选择亚洲的节点；&lt;/p&gt;
+
+&lt;p&gt;2）机器类型：选择了最低配的，微型。&lt;/p&gt;
+
+&lt;p&gt;3）启动磁盘：我选了CentOS7的操作系统&lt;/p&gt;
+
+&lt;p&gt;4）网络：记得要新建静态IP地址，后面需要绑定到实例。&lt;/p&gt;
+
+&lt;h3 id=&#34;4-绑定外部ip地址&#34;&gt;4.绑定外部IP地址：&lt;/h3&gt;
+
+&lt;p&gt;网络 &amp;ndash;&amp;gt; 绑定外部IP地址 &amp;ndash;&amp;gt; 保留静态地址 （未附加到实例或负载平衡器的静态 IP 地址将按小时计费!!!）&lt;/p&gt;
+
+&lt;h3 id=&#34;5-防火墙设置&#34;&gt;5.防火墙设置：&lt;/h3&gt;
+
+&lt;p&gt;由于默认的防火墙限制太多，SS等可能用不了，所以我们把防火墙相应端口开一下。&lt;/p&gt;
+
+&lt;p&gt;网络 &amp;ndash;&amp;gt; 防火墙规则&amp;ndash;&amp;gt; 新建防火墙规则 &amp;ndash;&amp;gt; 来源过滤选择 “允许任意来源的流量” &amp;ndash;&amp;gt;设置协议和端口：“tcp:你的端口号”&lt;/p&gt;
+
+&lt;h3 id=&#34;6-在服务器上安装-配置ss&#34;&gt;6.在服务器上安装、配置SS:&lt;/h3&gt;
+
+&lt;p&gt;1)用 Google Cloud 有自带的SSH工具, 链接上服务器。&lt;/p&gt;
+
+&lt;p&gt;2)输入命令：&lt;code&gt;sudo -i&lt;/code&gt; 获取&lt;code&gt;root&lt;/code&gt;权限;&lt;/p&gt;
+
+&lt;p&gt;3)然后输入 &lt;code&gt;yum install -y emacs python python-pip&lt;/code&gt; 安装 Emacs 编辑器和 Python (编辑器用于编辑SS的配置文件，Python用于运行SS)。&lt;/p&gt;
+
+&lt;p&gt;4)等待一会儿后安装完毕，这时输入命令&lt;code&gt;pip install shadowsocks&lt;/code&gt; 安装SS;&lt;/p&gt;
+
+&lt;p&gt;5)输入命令&lt;code&gt;emacs /etc/ss.json&lt;/code&gt; 打开编辑器，并打开一个名为&lt;code&gt;ss.json&lt;/code&gt;的配置文件保存在&lt;code&gt;/etc/&lt;/code&gt;目录下。以下是SS官方的默认配置：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-json&#34;&gt;    {
+        &amp;quot;server&amp;quot;:&amp;quot;你的服务器静态IP地址&amp;quot;,
+        &amp;quot;server_port&amp;quot;:端口号, //端口号需要与步骤5设置的一致
+        &amp;quot;password&amp;quot;:&amp;quot;你的密码&amp;quot;,
+        &amp;quot;timeout&amp;quot;:600,
+        &amp;quot;method&amp;quot;:&amp;quot;rc4-md5&amp;quot;, 
+        &amp;quot;auth&amp;quot;: true
+    }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;6)配置完成后, 按&lt;code&gt;ctrl + x&lt;/code&gt; 然后 &lt;code&gt;ctrl + s&lt;/code&gt; 保存文件，再按 &lt;code&gt;ctrl + x&lt;/code&gt;然后 &lt;code&gt;ctrl + c&lt;/code&gt;退出编辑器。&lt;/p&gt;
+
+&lt;p&gt;7)最后输入命令&lt;code&gt;ssserver -c /etc/ss.json -d start&lt;/code&gt;即可启动 Shadowsocks 服务器。&lt;/p&gt;
+
+&lt;p&gt;要停止SS服务器（例如需要更改配置文件），输入&lt;code&gt;ssserver -d stop&lt;/code&gt;即可。&lt;/p&gt;
+
+&lt;p&gt;要让SS服务能在后台运行，输入&lt;code&gt;ssserver -p 你的端口号 -k 你的密码 -m rc4-md5 --user nobody -d start&lt;/code&gt;。到此为止，服务器端的配置已经搞定。&lt;/p&gt;
+
+&lt;h3 id=&#34;6-win7在配置客户端ss&#34;&gt;6.Win7在配置客户端SS:&lt;/h3&gt;
+
+&lt;p&gt;1)下载并解压&lt;a href=&#34;https://github.com/shadowsocks/shadowsocks-windows/releases&#34;&gt;ss客户端&lt;/a&gt;;&lt;/p&gt;
+
+&lt;p&gt;2)运行&lt;code&gt;Shadowsocks.exe&lt;/code&gt;，图标会出现在桌面右下方。&lt;/p&gt;
+
+&lt;p&gt;3)右击图标&amp;ndash;&amp;gt; 点击“系统代理” &amp;ndash;&amp;gt;“系统代理模式”选择“PAC模式” &amp;ndash;&amp;gt;选择“服务器” &amp;ndash;&amp;gt; “编辑服务器”&amp;ndash;&amp;gt; 填写服务器地址、端口号、密码、加密方式等信息&amp;ndash;&amp;gt;确定。&lt;/p&gt;
+
+&lt;p&gt;到此为止，你就可以畅游真正的互联网了。&lt;/p&gt;
+
+&lt;h3 id=&#34;7-安卓手机ss客户端配置&#34;&gt;7.安卓手机SS客户端配置：&lt;/h3&gt;
+
+&lt;p&gt;1）下载 “影梭”&lt;/p&gt;
+
+&lt;p&gt;2）填写相应的服务器地址、端口号、密码、加密方式等信息。&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

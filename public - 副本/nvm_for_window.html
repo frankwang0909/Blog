@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title> window 系统的 Node 版本管理工具 nvm-windows - Frank Wang&#39;s Coding World</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="Frank Wang" /><meta name="description" content=" nvm-windows 是一款用 Go 语言写的 用于 window 操作系统的 Node 版本管理工具。" />
+<meta name="keywords" content="Node, 版本管理工具, nvm, windows" />
+
+
+
+<meta name="baidu-site-verification" content="WSqfBuzd3t" />
+
+
+
+<meta name="generator" content="Hugo 0.19" />
+
+
+<link rel="canonical" href="http://www.wangxingfeng.com/nvm_for_window.html" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="icon" href="/favicon.ico" />
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+<link href="/dist/even.min.css?v=2.6.1" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+<meta property="og:title" content=" window 系统的 Node 版本管理工具 nvm-windows" />
+<meta property="og:description" content=" nvm-windows 是一款用 Go 语言写的 用于 window 操作系统的 Node 版本管理工具。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.wangxingfeng.com/nvm_for_window.html" />
+
+
+
+<meta property="article:published_time" content="2017-07-20T07:54:41&#43;08:00"/>
+<meta property="article:modified_time" content="2017-07-20T07:54:41&#43;08:00"/>
+
+
+
+
+
+
+
+
+
+
+
+<meta itemprop="name" content=" window 系统的 Node 版本管理工具 nvm-windows">
+<meta itemprop="description" content=" nvm-windows 是一款用 Go 语言写的 用于 window 操作系统的 Node 版本管理工具。">
+
+
+<meta itemprop="dateModified" content="2017-07-20T07:54:41&#43;08:00" />
+<meta itemprop="wordCount" content="718">
+
+
+
+<meta itemprop="keywords" content="database,english,frontend,node,python,tools,angular2,bug,cdn,clipboard,css,css3,git,github,gitment,hugo,javascript,markdown,mysql,node,nvm,python,regexp,seo,shadowsocks,sublime-text,tab切换,typescript,useragent,wordpress,下拉菜单,块级作用域,攒词汇,数组,服务器,返回顶部," />
+
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:text:title" content=" window 系统的 Node 版本管理工具 nvm-windows"/>
+<meta name="twitter:title" content=" window 系统的 Node 版本管理工具 nvm-windows"/>
+<meta name="twitter:description" content=" nvm-windows 是一款用 Go 语言写的 用于 window 操作系统的 Node 版本管理工具。"/>
+
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+<script>
+  var _hmt = _hmt || [];
+  (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?7d0fc5a9b2d70433d9b1dd477606dc3c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+  }
+  )();
+</script>
+<script>
+  (function() {
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+          bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+      } else {
+          bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+  }
+  )();
+</script>
+<script>
+  (function(i, s, o, g, r, a, m) {
+      i['GoogleAnalyticsObject'] = r;
+      i[r] = i[r] || function() {
+          (i[r].q = i[r].q || []).push(arguments)
+      }
+      ,
+      i[r].l = 1 * new Date();
+      a = s.createElement(o),
+      m = s.getElementsByTagName(o)[0];
+      a.async = 1;
+      a.src = g;
+      m.parentNode.insertBefore(a, m)
+  }
+  )(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+  ga('create', 'UA-101812896-1', 'auto');
+  ga('send', 'pageview');
+</script>
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Frank Wang’s Coding World</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Frank Wang’s Coding World</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title"> window 系统的 Node 版本管理工具 nvm-windows</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2017-07-20 </span>
+        <div class="post-category">
+            <a href="/categories/node/">Node</a><a href="/categories/tools/">tools</a>
+          </div>
+        <span class="more-meta"> 约 718 字 </span>
+        <span class="more-meta"> 预计阅读 2 分钟 </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content">
+      <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#简介">简介:</a></li>
+<li><a href="#下载安装">下载安装：</a></li>
+<li><a href="#常用命令">常用命令：</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+    <iframe src="https://rcm-cn.amazon-adsystem.com/e/cm?o=28&p=12&l=ur1&category=books&banner=0CQKPCZXE9QEVSSXN002&f=ifr&linkID=adf25941500ff7304f5193004b357dff&t=frankwang09-23&tracking_id=frankwang09-23" width="300" height="250" scrolling="no" border="0" marginwidth="0" style="border:none;" frameborder="0"></iframe>
+    <iframe src="https://rcm-cn.amazon-adsystem.com/e/cm?o=28&p=12&l=ur1&category=books&banner=1N4AHFJRK48P743G2QR2&f=ifr&linkID=7551f551ae22dc5bee3805c6bfb79010&t=frankwang09-23&tracking_id=frankwang09-23" width="300" height="250" scrolling="no" border="0" marginwidth="0" style="border:none;" frameborder="0"></iframe>
+    
+    <div class="post-content">
+      
+
+<h2 id="简介">简介:</h2>
+
+<p>nvm-windows 是一款用 Go 语言写的 用于 window 操作系统的 Node 版本管理工具。<a href="https://github.com/coreybutler/nvm-windows">GitHub 主页</a></p>
+
+<h2 id="下载安装">下载安装：</h2>
+
+<p><a href="https://github.com/coreybutler/nvm-windows/releases">下载地址：https://github.com/coreybutler/nvm-windows/releases</a></p>
+
+<h2 id="常用命令">常用命令：</h2>
+
+<p>1.安装指定版本的 Node：</p>
+
+<pre><code>nvm install &lt;version&gt;
+</code></pre>
+
+<p>示例：</p>
+
+<pre><code>nvm install 6.2.0
+</code></pre>
+
+<p>命令行出现如下内容，表示正在下载安装 6.2.0 版本的 Node.js， 安装好之后，下载并安装对应的包管理工具 npm。</p>
+
+<pre><code>Downloading node.js version 6.2.0 (64-bit)...
+Complete                                                         
+Creating C:\Users\Administrator\AppData\Roaming\nvm\temp                                                          
+
+Downloading npm version 3.8.9... 
+Complete                        
+Installing npm v3.8.9...                                                                                          
+Installation complete. 
+If you want to use this version, type nvm use 6.2.0                                
+</code></pre>
+
+<p>2.使用指定版本的 Node：</p>
+
+<pre><code>nvm use &lt;version&gt;
+</code></pre>
+
+<p>示例：</p>
+
+<pre><code>nvm use 6.2.0
+</code></pre>
+
+<p>指定后，会显示如下内容：</p>
+
+<pre><code>Now using node v6.2.0 (64-bit)
+</code></pre>
+
+<p>可以查看当前使用的 Node 版本号和 npm 版本号：</p>
+
+<pre><code>node -v
+
+npm -v
+</code></pre>
+
+<p>3.查看安装的所有 Node 版本</p>
+
+<pre><code>nvm list 
+</code></pre>
+
+<p>结果如下所示，前面带有 * 号的表示当前使用的 Node 版本：</p>
+
+<pre><code> 8.1.4
+*6.2.0 (Currently using 64-bit executable)
+ 6.1.0
+ 4.6.0
+ 4.4.7
+</code></pre>
+
+<p>如果加一个参数 available， 列出所有可下载的 node.js 版本：</p>
+
+<pre><code>nvm list available
+</code></pre>
+
+<p>结果如下所示：</p>
+
+<pre><code>|   CURRENT    |     LTS      |  OLD STABLE  | OLD UNSTABLE |
+|--------------|--------------|--------------|--------------|
+|    8.1.4     |    6.11.1    |   0.12.18    |   0.11.16    |
+|    8.1.3     |    6.11.0    |   0.12.17    |   0.11.15    |
+|    8.1.2     |    6.10.3    |   0.12.16    |   0.11.14    |
+|    8.1.1     |    6.10.2    |   0.12.15    |   0.11.13    |
+|    8.1.0     |    6.10.1    |   0.12.14    |   0.11.12    |
+|    8.0.0     |    6.10.0    |   0.12.13    |   0.11.11    |
+|    7.10.1    |    6.9.5     |   0.12.12    |   0.11.10    |
+|    7.10.0    |    6.9.4     |   0.12.11    |    0.11.9    |
+|    7.9.0     |    6.9.3     |   0.12.10    |    0.11.8    |
+|    7.8.0     |    6.9.2     |    0.12.9    |    0.11.7    |
+|    7.7.4     |    6.9.1     |    0.12.8    |    0.11.6    |
+|    7.7.3     |    6.9.0     |    0.12.7    |    0.11.5    |
+|    7.7.2     |    4.8.4     |    0.12.6    |    0.11.4    |
+|    7.7.1     |    4.8.3     |    0.12.5    |    0.11.3    |
+|    7.7.0     |    4.8.2     |    0.12.4    |    0.11.2    |
+|    7.6.0     |    4.8.1     |    0.12.3    |    0.11.1    |
+|    7.5.0     |    4.8.0     |    0.12.2    |    0.11.0    |
+|    7.4.0     |    4.7.3     |    0.12.1    |    0.9.12    |
+|    7.3.0     |    4.7.2     |    0.12.0    |    0.9.11    |
+|    7.2.1     |    4.7.1     |   0.10.48    |    0.9.10    |
+</code></pre>
+
+<p>4.卸载指定版本的 Node.js：</p>
+
+<pre><code>nvm uninstall &lt;version&gt;
+</code></pre>
+
+<p>示例：</p>
+
+<pre><code>nvm uninstall 6.1.0
+</code></pre>
+
+<p>结果如下：</p>
+
+<pre><code>Uninstalling node v6.1.0... done
+</code></pre>
+
+<p>再用 nvm list 查看所有 Node 版本，已经没有 6.1.0 版本了。</p>
+
+<pre><code> 8.1.4
+*6.2.0 (Currently using 64-bit executable)
+ 4.6.0
+ 4.4.7
+</code></pre>
+
+<p>如果现在当前正在使用的版本会怎样呢？</p>
+
+<pre><code>nvm uninstall 6.2.0
+</code></pre>
+
+<p>结果如下，报错了，没法删除正在使用的版本。</p>
+
+<pre><code>Uninstalling node v6.2.0...Error removing node v6.2.0
+Manually remove C:\Users\Administrator\AppData\Roaming\nvm\v6.2.0.
+</code></pre>
+
+<p>再用 nvm list 查看所有 Node 版本，发现没有 删除掉 6.2.0 版本，但是没有指定的正在使用的版本了。</p>
+
+<pre><code>8.1.4
+6.2.0
+4.6.0
+4.4.7
+</code></pre>
+
+<p>试试用 node -v 查看，报错：</p>
+
+<pre><code>'node' 不是内部或外部命令，也不是可运行的程序或批处理文件。
+</code></pre>
+
+    </div>
+    
+    
+    
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Frank Wang</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">2017-07-20</span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      <div class="post-tags">
+          
+          <a href="/tags/node/">Node</a>
+          
+          <a href="/tags/nvm/">nvm</a>
+          
+        </div>
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/centos_wordpress.html">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">在 CentOS 上搭建 WordPress 博客</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        
+          <a class="next" href="/typescript_basic.html">
+            <span class="next-text nav-default">TypeScript 入门</span>
+            <span class="prev-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+      </div>  
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:frankwang0909@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://www.twitter.com/frankwang0909" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="https://www.github.com/frankwang0909" class="iconfont icon-github" title="github"></a>
+  <a href="http://www.wangxingfeng.com/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    &copy; 
+    
+      2016 - 
+    2017
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Frank Wang</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js"></script>
+<script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+<script type="text/javascript" src="/dist/even.min.js?v=2.6.1"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script async src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML'></script>
+
+
+
+
+</body>
+</html>

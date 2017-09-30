@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Typescript on Frank Wang&#39;s Coding World</title>
+    <link>http://www.wangxingfeng.com/tags/typescript/index.xml</link>
+    <description>Recent content in Typescript on Frank Wang&#39;s Coding World</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <atom:link href="http://www.wangxingfeng.com/tags/typescript/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>TypeScript 入门</title>
+      <link>http://www.wangxingfeng.com/typescript_basic.html</link>
+      <pubDate>Sun, 16 Jul 2017 21:43:35 +0800</pubDate>
+      
+      <guid>http://www.wangxingfeng.com/typescript_basic.html</guid>
+      <description>
+
+&lt;h2 id=&#34;1-简介&#34;&gt;1.简介：&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.typescriptlang.org/&#34;&gt;TypeScript&lt;/a&gt; 是微软2012年推出的一种编程语言，属于 JavaScript 的&lt;code&gt;超集&lt;/code&gt;，可以编译为 JavaScript 执行。它拓展了 JavaScript 的语法，给 JavaScript 添加可选的&lt;code&gt;静态类型&lt;/code&gt;和&lt;code&gt;基于类&lt;/code&gt;的面向对象编程。&lt;/p&gt;
+
+&lt;p&gt;TypeScript文件拓展名为 &lt;code&gt;.ts&lt;/code&gt;。&lt;/p&gt;
+
+&lt;p&gt;TypeScript 不能直接运行在浏览器环境中，运行前需要编译成 JavaScript 才能在浏览器运行。&lt;/p&gt;
+
+&lt;p&gt;TypeScript 是&lt;code&gt;Angular2&lt;/code&gt;官方推荐的开发语言，同时也可以作为使用 React、Vue、ReactNative 等框架或者类库的项目的开发语言。&lt;/p&gt;
+
+&lt;p&gt;一个简单的 TypeScript 文件 demo.ts, 如下代码所示：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-typescript&#34;&gt;var book: string = &amp;quot;Angular 2&amp;quot;;  // 定义了一个 string 类型的变量 book
+
+var num: number = 123;  // 定义了一个 number 类型的变量 num
+
+function log(msg: string): void {  // 定义了一个 函数 log, 它的参数 msg 是 string 类型的， `：void`表示这个函数没有返回值 
+    console.log(msg);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;2-安装-typescript&#34;&gt;2.安装 TypeScript:&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;npm install -g typescript
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;3-编译&#34;&gt;3.编译:&lt;/h2&gt;
+
+&lt;p&gt;3.1 本地编译：命令行输入&lt;code&gt;tsc 文件名.ts&lt;/code&gt; 既可编译成&lt;code&gt;同名&lt;/code&gt;的 JavaScript 文件。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;tsc demo.ts
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;demo.ts 编译后得到 demo.js 文件，如下代码所示：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-typescript&#34;&gt;var book = &amp;quot;Angular 2&amp;quot;;
+var num = 123;
+function log(msg) {
+    console.log(msg);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;3.2 在线编译：TypeScript 官方提供&lt;a href=&#34;http://www.typescriptlang.org/play/index.html&#34;&gt;在线的实时编译&lt;/a&gt;。&lt;/p&gt;
+
+&lt;h2 id=&#34;4-编辑器-visual-studio-code&#34;&gt;4.编辑器: Visual Studio Code&lt;/h2&gt;
+
+&lt;p&gt;微软官方为 TypeScript 提供了一款轻量级但功能强大的编辑器 —— &lt;a href=&#34;https://code.visualstudio.com/&#34;&gt;VS Code&lt;/a&gt;。Visual Studio Code本身就是一个&lt;code&gt;文本编辑器&lt;/code&gt;，非常轻量级，搭配各种插件的话，就可以重现 Visual Studio的强大功能。&lt;/p&gt;
+
+&lt;h2 id=&#34;5-语法特性之一-类型注解&#34;&gt;5.语法特性之一：类型注解&lt;/h2&gt;
+
+&lt;p&gt;TypeScript里的&lt;code&gt;类型注解&lt;/code&gt;是一种轻量级的为函数或变量添加约束的方式。&lt;/p&gt;
+
+&lt;p&gt;在示例代码中里，我们希望 log 函数接收一个字符串参数。 然后尝试把 log 的调用改成传入一个数组：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-typescript&#34;&gt;function log(msg: string) {
+    return &amp;quot;Hello, &amp;quot; + msg;
+}
+
+var msg = [0, 1, 2];
+
+log(msg);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;TypeScript提供了静态的代码分析，它可以分析代码结构和提供的类型注解。所以上述代码在 VS Code 中会出现提示错误：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Argument of type &#39;number[]&#39; is not assignable to parameter of type string
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;6-语法特性之二-接口-interface&#34;&gt;6.语法特性之二：接口 Interface:&lt;/h2&gt;
+
+&lt;p&gt;TypeScript的核心原则之一是对值所具有的结构进行类型检查。 它有时被称做“鸭式辨型法”或“结构性子类型化”。&lt;/p&gt;
+
+&lt;p&gt;在TypeScript里，接口的作用就是为这些类型命名和为你的代码或第三方代码定义契约。&lt;/p&gt;
+
+&lt;p&gt;简单示例来观察接口是如何工作的：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-typescript&#34;&gt;function print(obj: { a: string }) {
+    console.log(obj.a);
+}
+
+let myObj = { 
+    size: 10, 
+    a: &amp;quot;Size 10 Object&amp;quot; 
+};
+
+print(myObj);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;类型检查器会查看函数 print()的调用。 它有一个对象参数，并且这个对象参数有一个名为a, 类型为 string 的属性。 需要注意的是，我们传入的对象参数实际上会包含很多属性，但是编译器只会检查那些必需的属性是否存在，并且其类型是否匹配。&lt;/p&gt;
+
+&lt;p&gt;关键字&lt;code&gt;interface&lt;/code&gt;用来定义&lt;code&gt;接口&lt;/code&gt;, 接口名&lt;code&gt;首字母大写&lt;/code&gt;。&lt;/p&gt;
+
+&lt;p&gt;下面我们重写上面的例子，这次使用&lt;code&gt;接口&lt;/code&gt;来描述：必须包含一个类型为 string 的属性 a。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-typescript&#34;&gt;interface MyValue {
+    a: string;
+}
+
+function print(obj: MyValue) {
+    console.log(obj.a);
+}
+
+let myObj = {
+    size: 10, 
+    a: &amp;quot;Size 10 Object&amp;quot;
+};
+print(myObj);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;7-语法特性之三-类-class&#34;&gt;7.语法特性之三：类 Class&lt;/h2&gt;
+
+&lt;h3 id=&#34;7-1-类的定义-关键字-class-用来定义一个类-类名-首字母大写&#34;&gt;7.1 类的定义：关键字&lt;code&gt;class&lt;/code&gt;用来定义一个类，类名&lt;code&gt;首字母大写&lt;/code&gt;。&lt;/h3&gt;
+
+&lt;p&gt;传统的 JavaScript 程序没有&lt;code&gt;类(Class)&lt;/code&gt;的概念, 通过基于&lt;code&gt;原型链&lt;/code&gt;的继承来实现面向对象的编程。从ECMAScript 2015(ES6) 开始，JavaScript 引入了类的概念，而 TypeScript 早就实现了类的继承。&lt;/p&gt;
+
+&lt;p&gt;示例代码：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-typescript&#34;&gt;class Greeter {
+    
+    // 定义了 string 类型的属性, 
+    greeting: string;
+
+    // 定义了类的构造函数，它参数为 string 类型
+    constructor(message: string) {
+
+        this.greeting = message;
+    }
+
+    // 定义了一个类的方法 
+    greet() {
+        return &amp;quot;Hello, &amp;quot; + this.greeting;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;上述代码声明了一个 Greeter类。这个类有3个成员：一个叫做 greeting 的属性，一个构造函数和一个 greet 方法。&lt;/p&gt;
+
+&lt;p&gt;我们在引用任何一个类成员的时候都用了&lt;code&gt;this&lt;/code&gt;, 它表示我们访问的是类的成员。&lt;/p&gt;
+
+&lt;h3 id=&#34;7-2-实例化-关键字-new-用来创建类的一个实例对象&#34;&gt;7.2 实例化：关键字&lt;code&gt;new&lt;/code&gt;用来创建类的一个实例对象。&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-typescript&#34;&gt;let greeter = new Greeter(&amp;quot;world&amp;quot;);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;使用&lt;code&gt;new&lt;/code&gt; 创建了Greeter类的一个实例。 它会调用之前定义的构造函数，创建一个 Greeter类型的新对象，并执行构造函数初始化它。&lt;/p&gt;
+
+&lt;h3 id=&#34;7-3-类的继承-关键字-extends-表示类的继承关系&#34;&gt;7.3 类的继承： 关键字&lt;code&gt;extends&lt;/code&gt;表示类的继承关系&lt;/h3&gt;
+
+&lt;p&gt;示例代码：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-typescript&#34;&gt;class Animal {
+    name:string;
+    constructor(theName: string) { 
+        this.name = theName; 
+    }
+    move(distanceInMeters: number = 0) {
+        console.log(`${this.name} moved ${distanceInMeters}m.`);
+    }
+}
+
+class Snake extends Animal {
+    constructor(name: string) {
+        super(name); //必须调用super()方法来执行父类的构造方法
+    }
+    move(distanceInMeters = 5) {
+        console.log(&amp;quot;Slithering...&amp;quot;);
+        super.move(distanceInMeters); 
+    }
+}
+
+class Horse extends Animal {
+    constructor(name: string) { 
+        super(name); 
+    }
+    move(distanceInMeters = 45) {
+        console.log(&amp;quot;Galloping...&amp;quot;);
+        super.move(distanceInMeters);
+    }
+}
+
+let sam = new Snake(&amp;quot;Sammy the Python&amp;quot;);
+let tom: Animal = new Horse(&amp;quot;Tommy the Palomino&amp;quot;);
+
+sam.move();
+tom.move(34);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;与其它语言类似，TypeScript 使用 关键字&lt;code&gt;extends&lt;/code&gt;来创建子类。你可以看到 Horse 和 Snake 都是 Animal 的子类，并且可以访问其属性和方法。&lt;/p&gt;
+
+&lt;p&gt;包含构造函数的派生类必须调用&lt;code&gt;super()&lt;/code&gt;，它会执行父类的构造方法。&lt;/p&gt;
+
+&lt;p&gt;在子类里可以重写父类的方法。上述代码中，Snake 类 和 Horse 类都创建了 move 方法，它们重写了从 Animal 继承来的 move 方法，使得 move 方法根据不同的类而具有不同的功能。&lt;/p&gt;
+
+&lt;h3 id=&#34;7-4-类的修饰符&#34;&gt;7.4 类的修饰符：&lt;/h3&gt;
+
+&lt;p&gt;7.4.1  public：默认修饰符&lt;/p&gt;
+
+&lt;p&gt;如果没有使用&lt;code&gt;修饰符&lt;/code&gt;来修饰类的成员（属性、方法），则默认为&lt;code&gt;public&lt;/code&gt;，表示我们可以自由地访问到类的这个成员。&lt;/p&gt;
+
+&lt;p&gt;7.4.2 private：修饰私有成员用&lt;/p&gt;
+
+&lt;p&gt;当成员被标记成&lt;code&gt;private&lt;/code&gt;时，它就不能在声明它的类的&lt;code&gt;外部&lt;/code&gt;访问。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-typescript&#34;&gt;class Animal {
+    private name: string;
+    constructor(theName: string) { 
+        this.name = theName; 
+    }
+}
+
+new Animal(&amp;quot;Cat&amp;quot;).name; // Error: &#39;name&#39; is private;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;7.4.3 protected：&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;protected&lt;/code&gt;修饰符与&lt;code&gt;private&lt;/code&gt;修饰符的行为很相似，但有一点不同，&lt;code&gt;protected&lt;/code&gt;成员在&lt;code&gt;派生类&lt;/code&gt;中仍然可以访问。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-typescript&#34;&gt;class Person {
+    protected name: string;
+    constructor(name: string) { 
+        this.name = name; 
+    }
+}
+
+class Employee extends Person {
+    private department: string;
+
+    constructor(name: string, department: string) {
+        super(name)
+        this.department = department;
+    }
+
+    public getElevatorPitch() {
+        return `Hello, my name is ${this.name} and I work in ${this.department}.`;
+    }
+}
+
+let howard = new Employee(&amp;quot;Howard&amp;quot;, &amp;quot;Sales&amp;quot;);
+console.log(howard.getElevatorPitch());
+console.log(howard.name); // error
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;我们不能在 Person 类外使用 name ，但是我们仍然可以通过 Employee 类的实例方法访问，因为 Employee 是由 Person 派生而来的。&lt;/p&gt;
+
+&lt;p&gt;7.4.4 readonly：只读修饰符&lt;/p&gt;
+
+&lt;p&gt;你可以使用&lt;code&gt;readonly&lt;/code&gt;关键字将属性设置为&lt;code&gt;只读&lt;/code&gt;的。 只读属性必须在&lt;code&gt;声明&lt;/code&gt;时或&lt;code&gt;构造函数&lt;/code&gt;里被初始化。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-typescript&#34;&gt;class Octopus {
+    readonly name: string;
+    readonly numberOfLegs: number = 8;
+    constructor (theName: string) {
+        this.name = theName;
+    }
+}
+
+let dad = new Octopus(&amp;quot;Man with the 8 strong legs&amp;quot;);
+
+dad.name = &amp;quot;Man with the 3-piece suit&amp;quot;; // error! name is readonly.
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

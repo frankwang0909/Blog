@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Markdown on Frank Wang&#39;s Coding World</title>
+    <link>http://www.wangxingfeng.com/tags/markdown/index.xml</link>
+    <description>Recent content in Markdown on Frank Wang&#39;s Coding World</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <atom:link href="http://www.wangxingfeng.com/tags/markdown/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Markdown 学习笔记</title>
+      <link>http://www.wangxingfeng.com/markdonw-notes.html</link>
+      <pubDate>Sun, 05 Jun 2016 22:05:46 +0800</pubDate>
+      
+      <guid>http://www.wangxingfeng.com/markdonw-notes.html</guid>
+      <description>
+
+&lt;h2 id=&#34;定义&#34;&gt;定义：&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://zh.wikipedia.org/zh-cn/Markdown&#34;&gt;维基百科&lt;/a&gt;上的介绍：&lt;/p&gt;
+
+&lt;p&gt;Markdown 是一种轻量级标记语言，创始人为约翰·格鲁伯（John Gruber）。它允许人们“使用易读易写的纯文本格式编写文档，然后转换成有效的XHTML(或者HTML)文档”。这种语言吸收了很多在电子邮件中已有的纯文本标记的特性。&lt;/p&gt;
+
+&lt;p&gt;Markdown同时还是一个由Gruber编写的Perl脚本：Markdown.pl。它把用markdown语法编写的内容转换成有效的、结构良好的XHTML或HTML内容，并将左尖括号(&amp;rsquo;&amp;lt;&amp;lsquo;)和&amp;amp;号替换成它们各自的字符实体引用。它可以用作单独的脚本，Blosxom和Movable Type的插件又或者BBEdit的文本过滤器.&lt;/p&gt;
+
+&lt;h2 id=&#34;用处&#34;&gt;用处：&lt;/h2&gt;
+
+&lt;p&gt;从维基百科的介绍来看，markdown就是一种标记语言。它简洁的语法代替排版，可以使我们专心于码字，用「标记」语法来代替常见的排版格式。比如我现在这个博客的内容，就是直接用Markdown写的。 不用考虑复杂的排版，只需要记住几个简单常用的语法就行，然后可以轻松地转换成HTML文件，变成可以被浏览器解析的网页。
+如果你有一个自己独立的博客，只是想码码字，不想编写复杂HTML和CSS代码，Markdown无疑是一个很好地选择。&lt;/p&gt;
+
+&lt;h2 id=&#34;最基本的语法&#34;&gt;最基本的语法：&lt;/h2&gt;
+
+&lt;p&gt;1.标题：&lt;/p&gt;
+
+&lt;p&gt;如果一段文字被定义为标题，只要在这段文字前加 &lt;code&gt;#&lt;/code&gt;号即可。1个&lt;code&gt;#&lt;/code&gt;表示 一级标题；&lt;code&gt;##&lt;/code&gt;表示 二级标题；以此类推，总共6级标题， &lt;code&gt;#&lt;/code&gt;号后加一个空格。&lt;/p&gt;
+
+&lt;p&gt;2.引用代码：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;1）引用整段代码，只需要空是个空格或者一个Tab键，完整地保留代码缩进格式。
+2）在一行内引入代码片段。用Tab键上方的反引号(`  `) 包围代码。
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;3.链接：&lt;/p&gt;
+
+&lt;p&gt;用方括号&lt;code&gt;[]&lt;/code&gt;括起来要添加超链接的文字，用圆括号&lt;code&gt;()&lt;/code&gt;把url括起来。写法如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;`[Markdown维基百科英文版](https://en.wikipedia.org/wiki/Markdown)`
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;效果如右边所示：&lt;a href=&#34;https://en.wikipedia.org/wiki/Markdown&#34;&gt;Markdown维基百科英文版&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;4.图片:&lt;/p&gt;
+
+&lt;p&gt;插入链接与插入图片的语法很像，区别在一个 &lt;code&gt;!&lt;/code&gt;号。图片为：&lt;code&gt;![文字描述](url)。&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;5.分割线:&lt;/p&gt;
+
+&lt;p&gt;用三个以上的&lt;code&gt;星号&lt;/code&gt;、&lt;code&gt;减号&lt;/code&gt;、&lt;code&gt;底线&lt;/code&gt;来建立一个分隔线，行内不能有其他东西。可以在星号或是减号中间插入空格&lt;/p&gt;
+
+&lt;p&gt;6.列表：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;1)无序列表无序列表使用`星号`、`加号`或是`减号`作为列表标记；
+2)有序列表则直接在文字前加`1.` `2.` `3.` 符号要和文字之间加上一个字符的空格。
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;7.粗体与斜体:&lt;/p&gt;
+
+&lt;p&gt;用两个 &lt;code&gt;*&lt;/code&gt; 包含一段文本就是粗体的语法，用一个 &lt;code&gt;*&lt;/code&gt;包含一段文本就是斜体的语法。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;这是粗体文字&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;这是斜体文体&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;8.空格与换行：&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;单个回车&lt;/code&gt; 视为空格；&lt;code&gt;连续回车&lt;/code&gt;才能分段。&lt;/p&gt;
+
+&lt;p&gt;9.区块引用 &lt;code&gt;Blockquotes&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Markdown 标记区块引用是使用类似 email 中用 &lt;code&gt;&amp;gt;&lt;/code&gt;的引用方式。如果你还熟悉在 email 信件中的引言部分，你就知道怎么在 Markdown 文件中建立一个区块引用，那会看起来像是你自己先断好行，然后在每行的最前面加上 &lt;code&gt;&amp;gt; ：&lt;/code&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;相关链接&#34;&gt;相关链接：&lt;/h2&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;&lt;a href=&#34;http://wowubuntu.com/markdown/basic.html&#34;&gt;快速入门指南&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;a href=&#34;http://daringfireball.net/projects/markdown/&#34;&gt;Markdown官网&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Clipboard on Frank Wang&#39;s Coding World</title>
+    <link>http://www.wangxingfeng.com/tags/clipboard/index.xml</link>
+    <description>Recent content in Clipboard on Frank Wang&#39;s Coding World</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <atom:link href="http://www.wangxingfeng.com/tags/clipboard/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>JavaScript实现复制内容到剪贴板的功能</title>
+      <link>http://www.wangxingfeng.com/copy2clipboard.html</link>
+      <pubDate>Wed, 05 Apr 2017 20:29:51 +0800</pubDate>
+      
+      <guid>http://www.wangxingfeng.com/copy2clipboard.html</guid>
+      <description>
+
+&lt;h2 id=&#34;1-zeroclipboard-js&#34;&gt;1.ZeroClipboard.js&lt;/h2&gt;
+
+&lt;p&gt;点击按钮实现复制链接或者一段文本到剪贴板，这个小功能想必不少人都见过。GitHub上就有这么一个点击按钮复制仓库地址的功能。如下图所示：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.wangxingfeng.com/images/2017040501.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;Github&lt;/code&gt;用的是&lt;a href=&#34;http://zeroclipboard.org/&#34;&gt;ZeroClipboard&lt;/a&gt;来实现这一功能。这个库是用一个不可见的Flash来完成剪贴操作的。即将 Flash 做成透明的，以便于我们放在诸如链接、按钮等需要放置的任何地方。这样，用户界面看起来没有变化，当点击链接或按钮时，实际上点击是却是 Flash，从而实现复制操作。具体实现方法，可以参考官方文档&lt;a href=&#34;http://zeroclipboard.org。&#34;&gt;http://zeroclipboard.org。&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;我们知道&lt;code&gt;Flash&lt;/code&gt;正走向没落，不少功能被越来越强大的&lt;code&gt;HTML5&lt;/code&gt;所替代。而且，出于安全方面的考虑，不少浏览器都默认禁用了Flash。那么有没有不是Flash的实现方式呢？&lt;/p&gt;
+
+&lt;h2 id=&#34;2-clipboard-js&#34;&gt;2.clipboard.js&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://clipboardjs.com/&#34;&gt;clipboard.js&lt;/a&gt;是个更加轻量的JavaScript库，没有使用Flash，而是依赖于&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/Selection&#34;&gt;Selection&lt;/a&gt;和&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/Document/execCommand&#34;&gt;execCommand&lt;/a&gt;这两个API，并且使用了HTML5的特性，比如自定义数据的&lt;code&gt;data-* 属性&lt;/code&gt;。因此，clipboard.js在兼容性方面比ZeroClipboard.js差，但现代浏览器(IE9+)基本能够兼容。&lt;/p&gt;
+
+&lt;p&gt;使用方法非常简单：&lt;/p&gt;
+
+&lt;p&gt;1)&lt;a href=&#34;https://github.com/zenorocha/clipboard.js/archive/master.zip&#34;&gt;下载代码&lt;/a&gt;，并引入到文件中。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;script src=&amp;quot;dist/clipboard.min.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;2)实例化一个Clipboard对象，参数可以是&lt;code&gt;CSS选择器&lt;/code&gt;、&lt;code&gt;HTML节点&lt;/code&gt;、NodeList对象&lt;/p&gt;
+
+&lt;p&gt;参数为&lt;code&gt;CSS选择器&lt;/code&gt;：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;new Clipboard(&#39;.btn&#39;); // btn为DOM元素的class名, 跟jQuery的用法一样。
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;参数为&lt;code&gt;HTML节点&lt;/code&gt;：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;var btn = document.getElementById(&#39;btn&#39;);
+var clipboard = new Clipboard(btn);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;参数为&lt;code&gt;NodeList对象&lt;/code&gt;：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;var btns = document.querySelectorAll(&#39;button&#39;);
+var clipboard = new Clipboard(btns);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;3)实例化对象的时候，可以同时设置复制的内容：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;var clipboard = new Clipboard(&#39;.btn&#39;, {
+    text: function() {
+        return &#39;to be or not to be&#39;; //剪贴板上的文本
+    }
+});
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;4)也可以通过data-*属性来设置要复制的内容&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;!-- Target --&amp;gt;
+&amp;lt;input id=&amp;quot;foo&amp;quot; value=&amp;quot;https://github.com/zenorocha/clipboard.js.git&amp;quot;&amp;gt;
+
+&amp;lt;!-- Trigger --&amp;gt;
+&amp;lt;button class=&amp;quot;btn&amp;quot; data-clipboard-target=&amp;quot;#foo&amp;quot;&amp;gt;点击复制&amp;lt;/button&amp;gt;
+
+&amp;lt;script&amp;gt;
+    var clipboard = new Clipboard(&#39;.btn&#39;);
+&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;点击一下，看看是否成功复制到剪贴板：&lt;/p&gt;
+
+&lt;p&gt;&lt;input id=&#34;foo&#34; value=&#34;https://github.com/zenorocha/clipboard.js.git&#34; style=&#34;width:300px;&#34;&gt;
+&lt;button class=&#34;btn&#34; data-clipboard-target=&#34;#foo&#34;&gt;点击复制&lt;/button&gt;
+&lt;script src=&#34;https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.6.0/clipboard.min.js&#34;&gt;&lt;/script&gt;&lt;/p&gt;
+
+&lt;script type=&#34;text/javascript&#34; &gt;
+    var clipboard = new Clipboard(&#39;.btn&#39;);
+&lt;/script&gt;
+
+&lt;p&gt;&lt;code&gt;data-clipboard-target&lt;/code&gt;属性的值&lt;code&gt;#foo&lt;/code&gt;对应的是目标节点的CSS选择器。&lt;/p&gt;
+
+&lt;p&gt;5）更多的配置信息和使用方法，请查阅&lt;a href=&#34;https://clipboardjs.com/&#34;&gt;clipboard.js官网&lt;/a&gt;，有兴趣的朋友，应该看看它的源码。&lt;/p&gt;
+
+&lt;p&gt;注意我说的看源码，指的是&lt;code&gt;src目录&lt;/code&gt;的代码。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.wangxingfeng.com/images/2017040502.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.wangxingfeng.com/images/2017040505.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;代码是长这样的。没错，这是ES6的写法。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.wangxingfeng.com/images/2017040504.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;千万不要去看&lt;code&gt;dist&lt;/code&gt;下的&lt;code&gt;clipboard.js&lt;/code&gt; ，那个是编译之后的代码。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.wangxingfeng.com/images/2017040503.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>撸了Google Cloud，自建了个梯子 - Frank Wang&#39;s Coding World</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="Frank Wang" /><meta name="description" content="为了更方便地科学上网，使用 Google Cloud Platform 免费试用服务，搭建一个 Shadowsocks 梯子" />
+<meta name="keywords" content="Google Cloud Platform, Shadowsocks, 科学上网" />
+
+
+
+<meta name="baidu-site-verification" content="WSqfBuzd3t" />
+
+
+
+<meta name="generator" content="Hugo 0.19" />
+
+
+<link rel="canonical" href="http://www.wangxingfeng.com/ss.html" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="icon" href="/favicon.ico" />
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+<link href="/dist/even.min.css?v=2.6.1" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+<meta property="og:title" content="撸了Google Cloud，自建了个梯子" />
+<meta property="og:description" content="为了更方便地科学上网，使用 Google Cloud Platform 免费试用服务，搭建一个 Shadowsocks 梯子" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.wangxingfeng.com/ss.html" />
+
+
+
+<meta property="article:published_time" content="2017-07-09T11:37:11&#43;08:00"/>
+<meta property="article:modified_time" content="2017-07-09T11:37:11&#43;08:00"/>
+
+
+
+
+
+
+
+
+
+
+
+<meta itemprop="name" content="撸了Google Cloud，自建了个梯子">
+<meta itemprop="description" content="为了更方便地科学上网，使用 Google Cloud Platform 免费试用服务，搭建一个 Shadowsocks 梯子">
+
+
+<meta itemprop="dateModified" content="2017-07-09T11:37:11&#43;08:00" />
+<meta itemprop="wordCount" content="1399">
+
+
+
+<meta itemprop="keywords" content="database,english,frontend,node,python,tools,angular2,bug,cdn,clipboard,css,css3,git,github,gitment,hugo,javascript,markdown,mysql,node,nvm,python,regexp,seo,shadowsocks,sublime-text,tab切换,typescript,useragent,wordpress,下拉菜单,块级作用域,攒词汇,数组,服务器,返回顶部," />
+
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:text:title" content="撸了Google Cloud，自建了个梯子"/>
+<meta name="twitter:title" content="撸了Google Cloud，自建了个梯子"/>
+<meta name="twitter:description" content="为了更方便地科学上网，使用 Google Cloud Platform 免费试用服务，搭建一个 Shadowsocks 梯子"/>
+
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+<script>
+  var _hmt = _hmt || [];
+  (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?7d0fc5a9b2d70433d9b1dd477606dc3c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+  }
+  )();
+</script>
+<script>
+  (function() {
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+          bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+      } else {
+          bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+  }
+  )();
+</script>
+<script>
+  (function(i, s, o, g, r, a, m) {
+      i['GoogleAnalyticsObject'] = r;
+      i[r] = i[r] || function() {
+          (i[r].q = i[r].q || []).push(arguments)
+      }
+      ,
+      i[r].l = 1 * new Date();
+      a = s.createElement(o),
+      m = s.getElementsByTagName(o)[0];
+      a.async = 1;
+      a.src = g;
+      m.parentNode.insertBefore(a, m)
+  }
+  )(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+  ga('create', 'UA-101812896-1', 'auto');
+  ga('send', 'pageview');
+</script>
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Frank Wang’s Coding World</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Frank Wang’s Coding World</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">撸了Google Cloud，自建了个梯子</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2017-07-09 </span>
+        <div class="post-category">
+            <a href="/categories/tools/">tools</a>
+          </div>
+        <span class="more-meta"> 约 1399 字 </span>
+        <span class="more-meta"> 预计阅读 3 分钟 </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content">
+      <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#1-注册登录">1.注册登录：</a></li>
+<li><a href="#2-创建项目">2.创建项目：</a></li>
+<li><a href="#3-创建vm实例-计算引擎-vm实例">3.创建VM实例： 计算引擎 &ndash;&gt; VM实例。</a></li>
+<li><a href="#4-绑定外部ip地址">4.绑定外部IP地址：</a></li>
+<li><a href="#5-防火墙设置">5.防火墙设置：</a></li>
+<li><a href="#6-在服务器上安装-配置ss">6.在服务器上安装、配置SS:</a></li>
+<li><a href="#6-win7在配置客户端ss">6.Win7在配置客户端SS:</a></li>
+<li><a href="#7-安卓手机ss客户端配置">7.安卓手机SS客户端配置：</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+    <iframe src="https://rcm-cn.amazon-adsystem.com/e/cm?o=28&p=12&l=ur1&category=books&banner=0CQKPCZXE9QEVSSXN002&f=ifr&linkID=adf25941500ff7304f5193004b357dff&t=frankwang09-23&tracking_id=frankwang09-23" width="300" height="250" scrolling="no" border="0" marginwidth="0" style="border:none;" frameborder="0"></iframe>
+    <iframe src="https://rcm-cn.amazon-adsystem.com/e/cm?o=28&p=12&l=ur1&category=books&banner=1N4AHFJRK48P743G2QR2&f=ifr&linkID=7551f551ae22dc5bee3805c6bfb79010&t=frankwang09-23&tracking_id=frankwang09-23" width="300" height="250" scrolling="no" border="0" marginwidth="0" style="border:none;" frameborder="0"></iframe>
+    
+    <div class="post-content">
+      
+
+<p>鉴于最近科学上网变得越来越不方便了，不少之前坚挺的 VPN 都被迫停止服务了，只好自己动手，搭个梯子。网上找找资料，意外发现了<a href="https://cloud.google.com/">谷歌的云服务 (Google Cloud Platform)</a>有免费试用服务（其实亚马逊云也有一年的免费试用）。 新用户注册赠送300刀，一年有效期，完全可以用来搭建个梯子玩玩。</p>
+
+<p>目前撸这个的人应该不多，因为至少有两个门槛。第一，谷歌的服务在国内基本被墙了，所以必须得先能翻墙，注册了 Google 账号，才能登录 Google Cloud。第二，国内用户必须得有双币或者多币种的信用卡才能通过验证。</p>
+
+<p>以下是我搭建梯子的流程：</p>
+
+<h3 id="1-注册登录">1.注册登录：</h3>
+
+<p>先用免费的蓝灯翻墙上<a href="https://cloud.google.com/">谷歌云</a>，点击那个蓝色的 &ldquo;TRY IT FREE&rdquo;  按钮，需要用谷歌账号登录，然后填写一些个人信息，过程中需要绑定真实的信用卡。还有可能会发邮件给你，让你上传证件以及信用卡的照片用于身份认证。验证成功后会预扣费1美元用于验证卡的有效性，稍后它会自动返回。</p>
+
+<h3 id="2-创建项目">2.创建项目：</h3>
+
+<p>项目名称什么的可以随便填。</p>
+
+<h3 id="3-创建vm实例-计算引擎-vm实例">3.创建VM实例： 计算引擎 &ndash;&gt; VM实例。</h3>
+
+<p>1）地区：可以选择亚洲的节点；</p>
+
+<p>2）机器类型：选择了最低配的，微型。</p>
+
+<p>3）启动磁盘：我选了CentOS7的操作系统</p>
+
+<p>4）网络：记得要新建静态IP地址，后面需要绑定到实例。</p>
+
+<h3 id="4-绑定外部ip地址">4.绑定外部IP地址：</h3>
+
+<p>网络 &ndash;&gt; 绑定外部IP地址 &ndash;&gt; 保留静态地址 （未附加到实例或负载平衡器的静态 IP 地址将按小时计费!!!）</p>
+
+<h3 id="5-防火墙设置">5.防火墙设置：</h3>
+
+<p>由于默认的防火墙限制太多，SS等可能用不了，所以我们把防火墙相应端口开一下。</p>
+
+<p>网络 &ndash;&gt; 防火墙规则&ndash;&gt; 新建防火墙规则 &ndash;&gt; 来源过滤选择 “允许任意来源的流量” &ndash;&gt;设置协议和端口：“tcp:你的端口号”</p>
+
+<h3 id="6-在服务器上安装-配置ss">6.在服务器上安装、配置SS:</h3>
+
+<p>1)用 Google Cloud 有自带的SSH工具, 链接上服务器。</p>
+
+<p>2)输入命令：<code>sudo -i</code> 获取<code>root</code>权限;</p>
+
+<p>3)然后输入 <code>yum install -y emacs python python-pip</code> 安装 Emacs 编辑器和 Python (编辑器用于编辑SS的配置文件，Python用于运行SS)。</p>
+
+<p>4)等待一会儿后安装完毕，这时输入命令<code>pip install shadowsocks</code> 安装SS;</p>
+
+<p>5)输入命令<code>emacs /etc/ss.json</code> 打开编辑器，并打开一个名为<code>ss.json</code>的配置文件保存在<code>/etc/</code>目录下。以下是SS官方的默认配置：</p>
+
+<pre><code class="language-json">    {
+        &quot;server&quot;:&quot;你的服务器静态IP地址&quot;,
+        &quot;server_port&quot;:端口号, //端口号需要与步骤5设置的一致
+        &quot;password&quot;:&quot;你的密码&quot;,
+        &quot;timeout&quot;:600,
+        &quot;method&quot;:&quot;rc4-md5&quot;, 
+        &quot;auth&quot;: true
+    }
+</code></pre>
+
+<p>6)配置完成后, 按<code>ctrl + x</code> 然后 <code>ctrl + s</code> 保存文件，再按 <code>ctrl + x</code>然后 <code>ctrl + c</code>退出编辑器。</p>
+
+<p>7)最后输入命令<code>ssserver -c /etc/ss.json -d start</code>即可启动 Shadowsocks 服务器。</p>
+
+<p>要停止SS服务器（例如需要更改配置文件），输入<code>ssserver -d stop</code>即可。</p>
+
+<p>要让SS服务能在后台运行，输入<code>ssserver -p 你的端口号 -k 你的密码 -m rc4-md5 --user nobody -d start</code>。到此为止，服务器端的配置已经搞定。</p>
+
+<h3 id="6-win7在配置客户端ss">6.Win7在配置客户端SS:</h3>
+
+<p>1)下载并解压<a href="https://github.com/shadowsocks/shadowsocks-windows/releases">ss客户端</a>;</p>
+
+<p>2)运行<code>Shadowsocks.exe</code>，图标会出现在桌面右下方。</p>
+
+<p>3)右击图标&ndash;&gt; 点击“系统代理” &ndash;&gt;“系统代理模式”选择“PAC模式” &ndash;&gt;选择“服务器” &ndash;&gt; “编辑服务器”&ndash;&gt; 填写服务器地址、端口号、密码、加密方式等信息&ndash;&gt;确定。</p>
+
+<p>到此为止，你就可以畅游真正的互联网了。</p>
+
+<h3 id="7-安卓手机ss客户端配置">7.安卓手机SS客户端配置：</h3>
+
+<p>1）下载 “影梭”</p>
+
+<p>2）填写相应的服务器地址、端口号、密码、加密方式等信息。</p>
+
+    </div>
+    
+    
+    
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Frank Wang</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">2017-07-09</span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      <div class="post-tags">
+          
+          <a href="/tags/shadowsocks/">Shadowsocks</a>
+          
+        </div>
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/js-number.html">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">JavaScript 的 Number 需要注意的一些特性</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        
+          <a class="next" href="/mysql_notes_3.html">
+            <span class="next-text nav-default">MySQL学习笔记：修改数据表的常用命令</span>
+            <span class="prev-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+      </div>  
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:frankwang0909@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://www.twitter.com/frankwang0909" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="https://www.github.com/frankwang0909" class="iconfont icon-github" title="github"></a>
+  <a href="http://www.wangxingfeng.com/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    &copy; 
+    
+      2016 - 
+    2017
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Frank Wang</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js"></script>
+<script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+<script type="text/javascript" src="/dist/even.min.js?v=2.6.1"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script async src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML'></script>
+
+
+
+
+</body>
+</html>

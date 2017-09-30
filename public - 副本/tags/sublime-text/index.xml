@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Sublime Text on Frank Wang&#39;s Coding World</title>
+    <link>http://www.wangxingfeng.com/tags/sublime-text/index.xml</link>
+    <description>Recent content in Sublime Text on Frank Wang&#39;s Coding World</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <atom:link href="http://www.wangxingfeng.com/tags/sublime-text/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Sublime Text 学习笔记</title>
+      <link>http://www.wangxingfeng.com/sublimetext-notes.html</link>
+      <pubDate>Fri, 13 May 2016 00:14:00 +0800</pubDate>
+      
+      <guid>http://www.wangxingfeng.com/sublimetext-notes.html</guid>
+      <description>
+
+&lt;p&gt;自从把主力代码编辑器改为&lt;a href=&#34;https://www.sublimetext.com/&#34;&gt;Sublime Text&lt;/a&gt;之后，写代码的效率明显高了许多。最近，我开始尝试着给身边的朋友推荐这款编辑器。&lt;/p&gt;
+
+&lt;h2 id=&#34;一-sublime-text-的优点&#34;&gt;一、Sublime Text 的优点&lt;/h2&gt;
+
+&lt;p&gt;1.跨平台；&lt;/p&gt;
+
+&lt;p&gt;2.轻量级，可拓展：有大量插件可由用户自行选择安装(首推&lt;code&gt;Emmet&lt;/code&gt;插件)。&lt;/p&gt;
+
+&lt;p&gt;3.支持几乎所有的主流编程语言的语法高亮显示；&lt;/p&gt;
+
+&lt;p&gt;4.代码自动补全，支持代码段（Code Snippet）；&lt;/p&gt;
+
+&lt;p&gt;5.右上角的&lt;code&gt;minimap&lt;/code&gt;: 用来查看标注、快速拖动、迅速定位；&lt;/p&gt;
+
+&lt;p&gt;6.快速跳转到不同的文件/方法/函数：支持模糊匹配；&lt;/p&gt;
+
+&lt;p&gt;7.快速切换&lt;code&gt;Tab&lt;/code&gt;与&lt;code&gt;Space&lt;/code&gt;；&lt;/p&gt;
+
+&lt;p&gt;8.格式化代码；&lt;/p&gt;
+
+&lt;h2 id=&#34;二-安装sublime-text&#34;&gt;二、安装Sublime Text&lt;/h2&gt;
+
+&lt;p&gt;1.下载安装包：&lt;/p&gt;
+
+&lt;p&gt;Sublime Text官网地址：&lt;a href=&#34;https://www.sublimetext.com/&#34;&gt;https://www.sublimetext.com/&lt;/a&gt; 根据自己的系统选择对应的安装包下载并安装。目前稳定版本为&lt;code&gt;Sublime Text 3&lt;/code&gt;;&lt;/p&gt;
+
+&lt;p&gt;2.安装Package Control:&lt;/p&gt;
+
+&lt;p&gt;下载插件之前需要先安装&lt;code&gt;Package Control&lt;/code&gt;，它是用来管理和下载插件的控制组件。 &lt;code&gt;Package Control&lt;/code&gt;官网安装地址：&lt;a href=&#34;https://packagecontrol.io/installation&#34;&gt;https://packagecontrol.io/installation&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.wangxingfeng.com/images/2016051301.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;1）使用快键键 &lt;code&gt;ctrl+&lt;/code&gt; &lt;code&gt;或者&lt;/code&gt;View&lt;code&gt;&amp;gt;&lt;/code&gt;Show Console` 菜单打开控制台，然后，然后回车让它安装。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.wangxingfeng.com/images/2016051302.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;2）根据Sublime Text的版本选择复制对应的版本代码；&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.wangxingfeng.com/images/2016051303.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;3）黏贴到控制台输入框里，按&lt;code&gt;Enter键&lt;/code&gt;，插件管理包就进入正在下载安装的状态（可能需要一点时间）；&lt;/p&gt;
+
+&lt;p&gt;3.自定义安装各种插件：&lt;/p&gt;
+
+&lt;p&gt;在 Package Control官网地址：&lt;a href=&#34;https://packagecontrol.io/&#34;&gt;https://packagecontrol.io/&lt;/a&gt;可以看到各种插件以及它的下载量排名，找到自己感兴趣的，下载下来试用。&lt;/p&gt;
+
+&lt;p&gt;下载安装方法如下： (windows平台)&lt;/p&gt;
+
+&lt;p&gt;1）按下 &lt;code&gt;Ctrl+Shift+P&lt;/code&gt; 调出命令面板，输入&lt;code&gt;install&lt;/code&gt;， 调出 &lt;code&gt;Install Package&lt;/code&gt; 选项并回车，出来这样的画面，&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.wangxingfeng.com/images/2016051305.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;2）然后输入自己想要下载的插件名称，比如: &lt;code&gt;HTML Extended&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.wangxingfeng.com/images/2016051306.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;3）下载安装完成后会弹出类似这样的文件，说明已经成功安装该插件。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.wangxingfeng.com/images/2016051307.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;或者在左下角提示成功安装：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.wangxingfeng.com/images/2016051308.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;三-推荐几个好用的插件&#34;&gt;三、推荐几个好用的插件：&lt;/h2&gt;
+
+&lt;p&gt;1.Emmet：通过简单的命令直接生成一大段代码。&lt;/p&gt;
+
+&lt;p&gt;2.ConvertToUTF8(转换成utf-8格式): 默认情况下，gbk编码格式的中文会变成乱码，这个插件可以实现自动转换。&lt;/p&gt;
+
+&lt;p&gt;3.JsFormat：格式化js代码。可以还原别人网站被压缩过难以阅读的js代码。&lt;/p&gt;
+
+&lt;p&gt;4.HTMLBeautify：格式化HTML。&lt;/p&gt;
+
+&lt;p&gt;5.Hasher:符号转义。&lt;/p&gt;
+
+&lt;p&gt;6.TrailingSpaces：多余空格标记。&lt;/p&gt;
+
+&lt;p&gt;7.SideBarEnhancementS: 侧边栏增强功能。&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;ChineseLocalization：汉化插件。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&#34;四-常用的快捷键-windows平台下&#34;&gt;四、常用的快捷键（windows平台下）：&lt;/h2&gt;
+
+&lt;p&gt;1.&lt;code&gt;Ctrl + Shift + N&lt;/code&gt;新建窗口；&lt;code&gt;Ctrl + W&lt;/code&gt;关闭该窗口。&lt;/p&gt;
+
+&lt;p&gt;2.&lt;code&gt;Ctrl + N&lt;/code&gt;新建标签；&lt;code&gt;Ctrl + W&lt;/code&gt; 关闭当前标签；&lt;code&gt;Ctrl + Shift + T&lt;/code&gt; 恢复刚刚关闭的标签。&lt;/p&gt;
+
+&lt;p&gt;3.&lt;code&gt;Alt + Shift + 2&lt;/code&gt;左右分屏； &lt;code&gt;Alt + Shift + 8&lt;/code&gt;  上下分屏；&lt;code&gt;Alt + Shift + 5&lt;/code&gt;  上下左右分为四屏。&lt;code&gt;Ctrl + 数字键&lt;/code&gt; 跳转到指定屏；&lt;code&gt;Ctrl + Shift + 数字键&lt;/code&gt; 将当前屏移动到指定。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;ctrl+ 1&lt;/code&gt; 变回一屏显示。&lt;/p&gt;
+
+&lt;p&gt;4.&lt;code&gt;F11&lt;/code&gt; 切换普通全屏; &lt;code&gt;Shift + F11&lt;/code&gt;切换无干扰全屏。&lt;/p&gt;
+
+&lt;p&gt;5.&lt;code&gt;Ctrl + P&lt;/code&gt; 会列出当前打开的所有文件，点击某个文件可以快速跳转；&lt;/p&gt;
+
+&lt;p&gt;6.&lt;code&gt;Ctrl + R&lt;/code&gt; 对于md文件，会列出大纲。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.wangxingfeng.com/images/2016051309.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;7.&lt;code&gt;Ctrl + F&lt;/code&gt; 调出搜索框进行搜索；&lt;code&gt;Ctrl + H&lt;/code&gt; 替换&lt;/p&gt;
+
+&lt;p&gt;8.&lt;code&gt;Ctrl + J&lt;/code&gt; 把选中区域合并为一行；&lt;code&gt;Ctrl + Shift + L&lt;/code&gt; 可以将当前选中区域打散，然后进行同时编辑：&lt;/p&gt;
+
+&lt;p&gt;9.多行游标（可同时编辑多行代码）：&lt;code&gt;Ctrl + D&lt;/code&gt; 选择当前光标所在的词并高亮该词所有出现的位置，再次&lt;code&gt;Ctrl + D&lt;/code&gt;选择该词出现的下一个位置，在多重选词的过程中，使用&lt;code&gt;Ctrl + K&lt;/code&gt; 进行跳过，使用&lt;code&gt;Ctrl + U&lt;/code&gt;进行回退，使用&lt;code&gt;Esc&lt;/code&gt;退出多重编辑。&lt;/p&gt;
+
+&lt;p&gt;10.&lt;code&gt;Ctrl + Enter&lt;/code&gt; 在当前行下面新增一行然后跳至该行；&lt;code&gt;Ctrl + Shift + Enter&lt;/code&gt; 在当前行上面增加一行并跳至该行。&lt;/p&gt;
+
+&lt;p&gt;11.&lt;code&gt;Ctrl + E&lt;/code&gt; 自动生成代码片段（安装Emmet插件之后）。&lt;/p&gt;
+
+&lt;p&gt;12.&lt;code&gt;Ctrl + shift + D&lt;/code&gt;在下一行复制当前行内容，并跳至该行。&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>通过 userAgent 识别移动设备，自动跳转移动端站点 - Frank Wang&#39;s Coding World</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="Frank Wang" /><meta name="description" content="通过navigator.userAgent识别移动设备，跳转移动端站点，userAgent的妙用，userAgent的用途：识别手机、平板设备；userAgent返回字符串的具体含义" />
+<meta name="keywords" content="userAgent, 移动设备, userAgent的用途" />
+
+
+
+<meta name="baidu-site-verification" content="WSqfBuzd3t" />
+
+
+
+<meta name="generator" content="Hugo 0.19" />
+
+
+<link rel="canonical" href="http://www.wangxingfeng.com/useragent.html" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="icon" href="/favicon.ico" />
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+<link href="/dist/even.min.css?v=2.6.1" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+<meta property="og:title" content="通过 userAgent 识别移动设备，自动跳转移动端站点" />
+<meta property="og:description" content="通过navigator.userAgent识别移动设备，跳转移动端站点，userAgent的妙用，userAgent的用途：识别手机、平板设备；userAgent返回字符串的具体含义" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.wangxingfeng.com/useragent.html" />
+
+
+
+<meta property="article:published_time" content="2017-04-04T21:02:50&#43;08:00"/>
+<meta property="article:modified_time" content="2017-04-04T21:02:50&#43;08:00"/>
+
+
+
+
+
+
+
+
+
+
+
+<meta itemprop="name" content="通过 userAgent 识别移动设备，自动跳转移动端站点">
+<meta itemprop="description" content="通过navigator.userAgent识别移动设备，跳转移动端站点，userAgent的妙用，userAgent的用途：识别手机、平板设备；userAgent返回字符串的具体含义">
+
+
+<meta itemprop="dateModified" content="2017-04-04T21:02:50&#43;08:00" />
+<meta itemprop="wordCount" content="1275">
+
+
+
+<meta itemprop="keywords" content="database,english,frontend,node,python,tools,angular2,bug,cdn,clipboard,css,css3,git,github,gitment,hugo,javascript,markdown,mysql,node,nvm,python,regexp,seo,shadowsocks,sublime-text,tab切换,typescript,useragent,wordpress,下拉菜单,块级作用域,攒词汇,数组,服务器,返回顶部," />
+
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:text:title" content="通过 userAgent 识别移动设备，自动跳转移动端站点"/>
+<meta name="twitter:title" content="通过 userAgent 识别移动设备，自动跳转移动端站点"/>
+<meta name="twitter:description" content="通过navigator.userAgent识别移动设备，跳转移动端站点，userAgent的妙用，userAgent的用途：识别手机、平板设备；userAgent返回字符串的具体含义"/>
+
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+<script>
+  var _hmt = _hmt || [];
+  (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?7d0fc5a9b2d70433d9b1dd477606dc3c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+  }
+  )();
+</script>
+<script>
+  (function() {
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+          bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+      } else {
+          bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+  }
+  )();
+</script>
+<script>
+  (function(i, s, o, g, r, a, m) {
+      i['GoogleAnalyticsObject'] = r;
+      i[r] = i[r] || function() {
+          (i[r].q = i[r].q || []).push(arguments)
+      }
+      ,
+      i[r].l = 1 * new Date();
+      a = s.createElement(o),
+      m = s.getElementsByTagName(o)[0];
+      a.async = 1;
+      a.src = g;
+      m.parentNode.insertBefore(a, m)
+  }
+  )(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+  ga('create', 'UA-101812896-1', 'auto');
+  ga('send', 'pageview');
+</script>
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Frank Wang’s Coding World</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Frank Wang’s Coding World</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">通过 userAgent 识别移动设备，自动跳转移动端站点</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2017-04-04 </span>
+        <div class="post-category">
+            <a href="/categories/frontend/">frontend</a>
+          </div>
+        <span class="more-meta"> 约 1275 字 </span>
+        <span class="more-meta"> 预计阅读 3 分钟 </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content">
+      <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#navigator-useragent">navigator.userAgent</a></li>
+<li><a href="#useragent的用途-识别手机-平板设备">userAgent的用途：识别手机、平板设备</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+    <iframe src="https://rcm-cn.amazon-adsystem.com/e/cm?o=28&p=12&l=ur1&category=books&banner=0CQKPCZXE9QEVSSXN002&f=ifr&linkID=adf25941500ff7304f5193004b357dff&t=frankwang09-23&tracking_id=frankwang09-23" width="300" height="250" scrolling="no" border="0" marginwidth="0" style="border:none;" frameborder="0"></iframe>
+    <iframe src="https://rcm-cn.amazon-adsystem.com/e/cm?o=28&p=12&l=ur1&category=books&banner=1N4AHFJRK48P743G2QR2&f=ifr&linkID=7551f551ae22dc5bee3805c6bfb79010&t=frankwang09-23&tracking_id=frankwang09-23" width="300" height="250" scrolling="no" border="0" marginwidth="0" style="border:none;" frameborder="0"></iframe>
+    
+    <div class="post-content">
+      
+
+<p>不少互联网公司的网站都分为PC端和手机端。如果用户用手机访问PC站点，受限于手机网络，很可能会出现加载网页缓慢的情况。
+因此，如何识别用户访问网站的设备，并且自动跳转到对应的站点呢？</p>
+
+<h2 id="navigator-useragent">navigator.userAgent</h2>
+
+<p>navigator是JavaScript中的一个独立的对象，用于提供用户所使用的浏览器以及操作系统等信息，以navigator对象属性的形式来提供。所有浏览器都支持该对象。</p>
+
+<p>navigator对象有一个userAgent属性，会返回用户的设备操作系统和浏览器的信息。</p>
+
+<p>1.用<code>谷歌浏览器</code>，随便打开一个网页，<code>F12</code>打开Chrome调试工具，输入<code>navigator.userAgent</code>, 会返回如下的字符串：</p>
+
+<pre><code>&quot;Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.98 Safari/537.36&quot;
+</code></pre>
+
+<p>这个字符串可以分成四个主要的部分，我来解释一下各个部分的含义：</p>
+
+<pre><code>1）Mozilla/5.0 ：表示兼容Mozilla, 几乎所有的浏览器都有这个字符;
+2) (Windows NT 6.1; Win64; x64): 表示设备的操作系统版本，以及CPU信息；
+3）AppleWebKit/537.36 (KHTML, like Gecko)：表示浏览器的内核；
+4) Chrome/57.0.2987.98 Safari/537.36: 表示浏览器的版本号。
+</code></pre>
+
+<p>2.用<code>火狐浏览器</code>，随便打开一个网页，<code>F12</code>打开调试工具，同样地在控制台输入<code>navigator.userAgent</code>, 返回如下的字符串：</p>
+
+<pre><code>&quot;Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:52.0) Gecko/20100101 Firefox/52.0&quot;
+</code></pre>
+
+<p>与之前的结果区别：</p>
+
+<pre><code>1)浏览器内核是Gecko内核，
+2)浏览器版本是火狐的Firefox/52.0。从这里我们可以看出火狐浏览器是基于Gecko内核。
+</code></pre>
+
+<p>3.用<code>谷歌浏览器</code>模拟<code>手机</code>访问，选择<code>iPhone6s</code>，同样在调试工具控制台输入<code>navigator.userAgent</code>, 会返回如下的字符串：</p>
+
+<pre><code>&quot;Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1&quot;
+</code></pre>
+
+<p>注意看出现了<code>iPhone</code>。</p>
+
+<p>4.用<code>谷歌浏览器</code>模拟<code>平板设备</code>访问，选择<code>iPad</code>，同样在调试工具控制台输入<code>navigator.userAgent</code>, 会返回如下的字符串：</p>
+
+<pre><code>&quot;Mozilla/5.0 (iPad; CPU OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1&quot;
+</code></pre>
+
+<p>注意看出现了<code>iPad</code>。</p>
+
+<p>5.用<code>谷歌浏览器</code>模拟<code>安卓设备</code>，比如选择<code>Galaxy S5</code>，同样在调试工具控制台输入<code>navigator.userAgent</code>, 会返回如下的字符串：</p>
+
+<pre><code>&quot;Mozilla/5.0 (Linux; Android 5.0; SM-G900P Build/LRX21T) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.98 Mobile Safari/537.36&quot;
+</code></pre>
+
+<p>注意看出现了<code>Android</code>。</p>
+
+<p>6.用<code>谷歌浏览器</code>模拟<code>winPhone设备</code>，比如选择<code>Microsoft Lumia 950</code>，同样在调试工具控制台输入<code>navigator.userAgent</code>, 会返回如下的字符串：</p>
+
+<pre><code>&quot;Mozilla/5.0 (Windows Phone 10.0; Android 4.2.1; Microsoft; Lumia 950) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2486.0 Mobile Safari/537.36 Edge/14.14263&quot;
+</code></pre>
+
+<p>注意看出现了<code>Windows Phone</code>。</p>
+
+<p>通过以上的小测试，我们还可以能够发现一个规律：手机和平板设备访问时，<code>navigator.userAgent</code>返回的字符串都会包含<code>Mobile</code>。</p>
+
+<h2 id="useragent的用途-识别手机-平板设备">userAgent的用途：识别手机、平板设备</h2>
+
+<p>刚才我们已经看到了手机和平板设备访问时，<code>navigator.userAgent</code>返回的字符串都会包含<code>Mobile</code>，可以利用这一点，来实现文章开头提出的需求，自动识别用户访问设备从而跳转对应的站点。</p>
+
+<p>PC端站点可以加上如下代码，自动跳转到移动端站点</p>
+
+<pre><code class="language-javascript">    var ua = navigator.userAgent.toLowerCase();
+    if (/mobile|android|iphone|ipad|phone/i.test(ua)) {
+       window.location.href = &quot;http://m.example.com&quot;;
+    }
+</code></pre>
+
+<p>如果在<code>微信</code>中打开和在<code>手机浏览器</code>打开网页执行的是不同的脚本的话，还可以通过<code>userAgent</code>来判断是否是在<code>微信</code>中打开的。</p>
+
+<pre><code class="language-javascript">    var ua = navigator.userAgent.toLowerCase();
+    if(/micromessenger/i.test(ua){
+        //to do
+    }
+</code></pre>
+
+    </div>
+    
+    
+    
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Frank Wang</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">2017-04-04</span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      <div class="post-tags">
+          
+          <a href="/tags/useragent/">userAgent</a>
+          
+        </div>
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/copy2clipboard.html">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">JavaScript实现复制内容到剪贴板的功能</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        
+          <a class="next" href="/anywhere-npm.html">
+            <span class="next-text nav-default">快速启动Node服务器，调试本地静态文件代码</span>
+            <span class="prev-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+      </div>  
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:frankwang0909@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://www.twitter.com/frankwang0909" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="https://www.github.com/frankwang0909" class="iconfont icon-github" title="github"></a>
+  <a href="http://www.wangxingfeng.com/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    &copy; 
+    
+      2016 - 
+    2017
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Frank Wang</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js"></script>
+<script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+<script type="text/javascript" src="/dist/even.min.js?v=2.6.1"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script async src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML'></script>
+
+
+
+
+</body>
+</html>

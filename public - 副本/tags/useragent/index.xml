@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Useragent on Frank Wang&#39;s Coding World</title>
+    <link>http://www.wangxingfeng.com/tags/useragent/index.xml</link>
+    <description>Recent content in Useragent on Frank Wang&#39;s Coding World</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <atom:link href="http://www.wangxingfeng.com/tags/useragent/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>通过 userAgent 识别移动设备，自动跳转移动端站点</title>
+      <link>http://www.wangxingfeng.com/useragent.html</link>
+      <pubDate>Tue, 04 Apr 2017 21:02:50 +0800</pubDate>
+      
+      <guid>http://www.wangxingfeng.com/useragent.html</guid>
+      <description>
+
+&lt;p&gt;不少互联网公司的网站都分为PC端和手机端。如果用户用手机访问PC站点，受限于手机网络，很可能会出现加载网页缓慢的情况。
+因此，如何识别用户访问网站的设备，并且自动跳转到对应的站点呢？&lt;/p&gt;
+
+&lt;h2 id=&#34;navigator-useragent&#34;&gt;navigator.userAgent&lt;/h2&gt;
+
+&lt;p&gt;navigator是JavaScript中的一个独立的对象，用于提供用户所使用的浏览器以及操作系统等信息，以navigator对象属性的形式来提供。所有浏览器都支持该对象。&lt;/p&gt;
+
+&lt;p&gt;navigator对象有一个userAgent属性，会返回用户的设备操作系统和浏览器的信息。&lt;/p&gt;
+
+&lt;p&gt;1.用&lt;code&gt;谷歌浏览器&lt;/code&gt;，随便打开一个网页，&lt;code&gt;F12&lt;/code&gt;打开Chrome调试工具，输入&lt;code&gt;navigator.userAgent&lt;/code&gt;, 会返回如下的字符串：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;quot;Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.98 Safari/537.36&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这个字符串可以分成四个主要的部分，我来解释一下各个部分的含义：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;1）Mozilla/5.0 ：表示兼容Mozilla, 几乎所有的浏览器都有这个字符;
+2) (Windows NT 6.1; Win64; x64): 表示设备的操作系统版本，以及CPU信息；
+3）AppleWebKit/537.36 (KHTML, like Gecko)：表示浏览器的内核；
+4) Chrome/57.0.2987.98 Safari/537.36: 表示浏览器的版本号。
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;2.用&lt;code&gt;火狐浏览器&lt;/code&gt;，随便打开一个网页，&lt;code&gt;F12&lt;/code&gt;打开调试工具，同样地在控制台输入&lt;code&gt;navigator.userAgent&lt;/code&gt;, 返回如下的字符串：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;quot;Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:52.0) Gecko/20100101 Firefox/52.0&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;与之前的结果区别：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;1)浏览器内核是Gecko内核，
+2)浏览器版本是火狐的Firefox/52.0。从这里我们可以看出火狐浏览器是基于Gecko内核。
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;3.用&lt;code&gt;谷歌浏览器&lt;/code&gt;模拟&lt;code&gt;手机&lt;/code&gt;访问，选择&lt;code&gt;iPhone6s&lt;/code&gt;，同样在调试工具控制台输入&lt;code&gt;navigator.userAgent&lt;/code&gt;, 会返回如下的字符串：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;quot;Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;注意看出现了&lt;code&gt;iPhone&lt;/code&gt;。&lt;/p&gt;
+
+&lt;p&gt;4.用&lt;code&gt;谷歌浏览器&lt;/code&gt;模拟&lt;code&gt;平板设备&lt;/code&gt;访问，选择&lt;code&gt;iPad&lt;/code&gt;，同样在调试工具控制台输入&lt;code&gt;navigator.userAgent&lt;/code&gt;, 会返回如下的字符串：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;quot;Mozilla/5.0 (iPad; CPU OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;注意看出现了&lt;code&gt;iPad&lt;/code&gt;。&lt;/p&gt;
+
+&lt;p&gt;5.用&lt;code&gt;谷歌浏览器&lt;/code&gt;模拟&lt;code&gt;安卓设备&lt;/code&gt;，比如选择&lt;code&gt;Galaxy S5&lt;/code&gt;，同样在调试工具控制台输入&lt;code&gt;navigator.userAgent&lt;/code&gt;, 会返回如下的字符串：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;quot;Mozilla/5.0 (Linux; Android 5.0; SM-G900P Build/LRX21T) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.98 Mobile Safari/537.36&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;注意看出现了&lt;code&gt;Android&lt;/code&gt;。&lt;/p&gt;
+
+&lt;p&gt;6.用&lt;code&gt;谷歌浏览器&lt;/code&gt;模拟&lt;code&gt;winPhone设备&lt;/code&gt;，比如选择&lt;code&gt;Microsoft Lumia 950&lt;/code&gt;，同样在调试工具控制台输入&lt;code&gt;navigator.userAgent&lt;/code&gt;, 会返回如下的字符串：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;quot;Mozilla/5.0 (Windows Phone 10.0; Android 4.2.1; Microsoft; Lumia 950) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2486.0 Mobile Safari/537.36 Edge/14.14263&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;注意看出现了&lt;code&gt;Windows Phone&lt;/code&gt;。&lt;/p&gt;
+
+&lt;p&gt;通过以上的小测试，我们还可以能够发现一个规律：手机和平板设备访问时，&lt;code&gt;navigator.userAgent&lt;/code&gt;返回的字符串都会包含&lt;code&gt;Mobile&lt;/code&gt;。&lt;/p&gt;
+
+&lt;h2 id=&#34;useragent的用途-识别手机-平板设备&#34;&gt;userAgent的用途：识别手机、平板设备&lt;/h2&gt;
+
+&lt;p&gt;刚才我们已经看到了手机和平板设备访问时，&lt;code&gt;navigator.userAgent&lt;/code&gt;返回的字符串都会包含&lt;code&gt;Mobile&lt;/code&gt;，可以利用这一点，来实现文章开头提出的需求，自动识别用户访问设备从而跳转对应的站点。&lt;/p&gt;
+
+&lt;p&gt;PC端站点可以加上如下代码，自动跳转到移动端站点&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;    var ua = navigator.userAgent.toLowerCase();
+    if (/mobile|android|iphone|ipad|phone/i.test(ua)) {
+       window.location.href = &amp;quot;http://m.example.com&amp;quot;;
+    }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果在&lt;code&gt;微信&lt;/code&gt;中打开和在&lt;code&gt;手机浏览器&lt;/code&gt;打开网页执行的是不同的脚本的话，还可以通过&lt;code&gt;userAgent&lt;/code&gt;来判断是否是在&lt;code&gt;微信&lt;/code&gt;中打开的。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;    var ua = navigator.userAgent.toLowerCase();
+    if(/micromessenger/i.test(ua){
+        //to do
+    }
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

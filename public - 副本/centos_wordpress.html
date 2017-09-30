@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>在 CentOS 上搭建 WordPress 博客 - Frank Wang&#39;s Coding World</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="Frank Wang" /><meta name="description" content="CentOS 系统上搭建 WordPress 博客。首先需要准备 WordPress 博客系统依赖的基础运行环境。 " />
+<meta name="keywords" content="CentOS, WordPress, 建站, LNMP" />
+
+
+
+<meta name="baidu-site-verification" content="WSqfBuzd3t" />
+
+
+
+<meta name="generator" content="Hugo 0.19" />
+
+
+<link rel="canonical" href="http://www.wangxingfeng.com/centos_wordpress.html" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="icon" href="/favicon.ico" />
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+<link href="/dist/even.min.css?v=2.6.1" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+<meta property="og:title" content="在 CentOS 上搭建 WordPress 博客" />
+<meta property="og:description" content="CentOS 系统上搭建 WordPress 博客。首先需要准备 WordPress 博客系统依赖的基础运行环境。 " />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.wangxingfeng.com/centos_wordpress.html" />
+
+
+
+<meta property="article:published_time" content="2017-08-02T21:23:27&#43;08:00"/>
+<meta property="article:modified_time" content="2017-08-02T21:23:27&#43;08:00"/>
+
+
+
+
+
+
+
+
+
+
+
+<meta itemprop="name" content="在 CentOS 上搭建 WordPress 博客">
+<meta itemprop="description" content="CentOS 系统上搭建 WordPress 博客。首先需要准备 WordPress 博客系统依赖的基础运行环境。 ">
+
+
+<meta itemprop="dateModified" content="2017-08-02T21:23:27&#43;08:00" />
+<meta itemprop="wordCount" content="1467">
+
+
+
+<meta itemprop="keywords" content="database,english,frontend,node,python,tools,angular2,bug,cdn,clipboard,css,css3,git,github,gitment,hugo,javascript,markdown,mysql,node,nvm,python,regexp,seo,shadowsocks,sublime-text,tab切换,typescript,useragent,wordpress,下拉菜单,块级作用域,攒词汇,数组,服务器,返回顶部," />
+
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:text:title" content="在 CentOS 上搭建 WordPress 博客"/>
+<meta name="twitter:title" content="在 CentOS 上搭建 WordPress 博客"/>
+<meta name="twitter:description" content="CentOS 系统上搭建 WordPress 博客。首先需要准备 WordPress 博客系统依赖的基础运行环境。 "/>
+
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+<script>
+  var _hmt = _hmt || [];
+  (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?7d0fc5a9b2d70433d9b1dd477606dc3c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+  }
+  )();
+</script>
+<script>
+  (function() {
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+          bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+      } else {
+          bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+  }
+  )();
+</script>
+<script>
+  (function(i, s, o, g, r, a, m) {
+      i['GoogleAnalyticsObject'] = r;
+      i[r] = i[r] || function() {
+          (i[r].q = i[r].q || []).push(arguments)
+      }
+      ,
+      i[r].l = 1 * new Date();
+      a = s.createElement(o),
+      m = s.getElementsByTagName(o)[0];
+      a.async = 1;
+      a.src = g;
+      m.parentNode.insertBefore(a, m)
+  }
+  )(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+  ga('create', 'UA-101812896-1', 'auto');
+  ga('send', 'pageview');
+</script>
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Frank Wang’s Coding World</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Frank Wang’s Coding World</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">在 CentOS 上搭建 WordPress 博客</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2017-08-02 </span>
+        <div class="post-category">
+            <a href="/categories/tools/">tools</a>
+          </div>
+        <span class="more-meta"> 约 1467 字 </span>
+        <span class="more-meta"> 预计阅读 3 分钟 </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content">
+      <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#1-准备-lnmp-环境">1. 准备 LNMP 环境</a>
+<ul>
+<li><a href="#1-1-安装-nginx">1.1 安装 Nginx</a></li>
+<li><a href="#1-2-安装-mysql">1.2 安装 MySQL</a></li>
+<li><a href="#1-3-安装-php">1.3 安装 PHP</a></li>
+</ul></li>
+<li><a href="#2-安装并配置-wordpress">2. 安装并配置  WordPress</a>
+<ul>
+<li><a href="#2-1-安装-wordpress">2.1 安装 WordPress</a></li>
+<li><a href="#2-2-配置-数据库">2.2 配置 数据库</a></li>
+<li><a href="#2-3-配置-nginx">2.3 配置 Nginx</a></li>
+</ul></li>
+<li><a href="#3-准备域名和解析">3. 准备域名和解析</a>
+<ul>
+<li><a href="#3-1域名注册">3.1域名注册</a></li>
+<li><a href="#3-2域名解析">3.2域名解析</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+    <iframe src="https://rcm-cn.amazon-adsystem.com/e/cm?o=28&p=12&l=ur1&category=books&banner=0CQKPCZXE9QEVSSXN002&f=ifr&linkID=adf25941500ff7304f5193004b357dff&t=frankwang09-23&tracking_id=frankwang09-23" width="300" height="250" scrolling="no" border="0" marginwidth="0" style="border:none;" frameborder="0"></iframe>
+    <iframe src="https://rcm-cn.amazon-adsystem.com/e/cm?o=28&p=12&l=ur1&category=books&banner=1N4AHFJRK48P743G2QR2&f=ifr&linkID=7551f551ae22dc5bee3805c6bfb79010&t=frankwang09-23&tracking_id=frankwang09-23" width="300" height="250" scrolling="no" border="0" marginwidth="0" style="border:none;" frameborder="0"></iframe>
+    
+    <div class="post-content">
+      
+
+<p>在资金预算或人力资源有限的情况下， <code>WordPress</code> 仍然是快速地搭建博客或者企业网站的不二选择。</p>
+
+<p>最近，边学边干地使用 <code>WordPres</code>s 给兄弟公司搭建一个简单的官网。代码在本地调试好了。今天学习了如何学在服务器上发布这个程序。</p>
+
+<p>备注：服务器是腾讯上的云主机， 操作系统是 <code>CentOS</code> 6.8 64 位的。</p>
+
+<h2 id="1-准备-lnmp-环境">1. 准备 LNMP 环境</h2>
+
+<p><code>LNMP</code> 是 <code>Linux、Nginx、MySQL 和 PHP</code> 的缩写，是 <code>WordPress</code>博客系统依赖的基础运行环境。我们先来准备 LNMP 环境。</p>
+
+<h3 id="1-1-安装-nginx">1.1 安装 Nginx</h3>
+
+<p>使用 <code>yum</code> 安装 <code>Nginx</code>：</p>
+
+<pre><code>yum install nginx -y
+</code></pre>
+
+<p>修改 <code>/etc/nginx/conf.d/default.conf</code>，去除对 <code>IPv6</code> 地址的监听（<code>CentOS 6</code> 不支持 IPv6，需要取消对 IPv6 地址的监听，否则 <code>Nginx</code> 不能成功启动），可参考下面的示例：</p>
+
+<pre><code>server {
+    listen       80 default_server;
+    # listen       [::]:80 default_server;
+    server_name  _;
+    root         /usr/share/nginx/html;
+
+    # Load configuration files for the default server block.
+    include /etc/nginx/default.d/*.conf;
+
+    location / {
+    }
+
+    error_page 404 /404.html;
+        location = /40x.html {
+    }
+
+    error_page 500 502 503 504 /50x.html;
+        location = /50x.html {
+    }
+
+}
+</code></pre>
+
+<p>修改完成后，启动 <code>Nginx</code>：</p>
+
+<pre><code>nginx
+</code></pre>
+
+<p>此时，可访问云主机的外网 HTTP 服务来确认是否已经安装成功。</p>
+
+<p>将 <code>Nginx</code> 设置为<code>开机自动启动</code>：</p>
+
+<pre><code>chkconfig nginx on
+</code></pre>
+
+<h3 id="1-2-安装-mysql">1.2 安装 MySQL</h3>
+
+<p>使用 <code>yum</code> 安装 <code>MySQL</code>：</p>
+
+<pre><code>yum install mysql-server -y
+</code></pre>
+
+<p>安装完成后，启动 <code>MySQL</code> 服务：</p>
+
+<pre><code>service mysqld restart
+</code></pre>
+
+<p>设置 <code>MySQL</code> 账户 <code>root</code> 密码：</p>
+
+<pre><code> /usr/bin/mysqladmin -u root password 'yourPassword4WordPress'
+</code></pre>
+
+<p>将 <code>MySQ</code>L 设置为<code>开机自动启动</code>：</p>
+
+<pre><code>chkconfig mysqld on
+</code></pre>
+
+<h3 id="1-3-安装-php">1.3 安装 PHP</h3>
+
+<p>使用 <code>yum</code> 安装 <code>PHP</code>：</p>
+
+<pre><code>yum install php-fpm php-mysql -y
+</code></pre>
+
+<p>（CentOs 6 默认已经安装了 PHP-FPM 及 PHP-MYSQL，上述命令执行的可能会提示已经安装。）</p>
+
+<p>安装之后，启动 <code>PHP-FPM</code> 进程：</p>
+
+<pre><code>service php-fpm start
+</code></pre>
+
+<p>启动之后，可以使用下面的命令查看 <code>PHP-FPM</code> 进程监听哪个端口 （PHP-FPM 默认监听 9000 端口）</p>
+
+<pre><code>netstat -nlpt | grep php-fpm
+</code></pre>
+
+<p>把 <code>PHP-FPM</code> 也设置成<code>开机自动启动</code>：</p>
+
+<pre><code>chkconfig php-fpm on
+</code></pre>
+
+<h2 id="2-安装并配置-wordpress">2. 安装并配置  WordPress</h2>
+
+<h3 id="2-1-安装-wordpress">2.1 安装 WordPress</h3>
+
+<p>配置好 <code>LNMP</code> 环境后，继续使用 <code>yum</code> 来安装 <code>WordPress</code>：</p>
+
+<pre><code>yum install wordpress -y
+</code></pre>
+
+<p>安装完成后，就可以在 <code>/usr/share/wordpress</code> 看到 <code>WordPress</code> 的源代码了。</p>
+
+<h3 id="2-2-配置-数据库">2.2 配置 数据库</h3>
+
+<p>配进入 <code>MySQL</code>：</p>
+
+<pre><code>mysql -uroot --password='yourPassword4WordPress'
+</code></pre>
+
+<p>为 <code>WordPress</code> 创建一个数据库：</p>
+
+<pre><code>CREATE DATABASE wordpress;
+</code></pre>
+
+<p><code>MySQL</code> 部分设置完了，我们退出 <code>MySQL</code> 环境：</p>
+
+<pre><code>exit
+</code></pre>
+
+<p>把上述的 <code>DB</code> 配置同步到 <code>WordPress</code> 的<code>配置文件</code>中，可参考下面的配置：</p>
+
+<pre><code>&lt;?php
+/**
+ * The base configuration for WordPress
+ *
+ * The wp-config.php creation script uses this file during the
+ * installation. You don't have to use the web site, you can
+ * copy this file to &quot;wp-config.php&quot; and fill in the values.
+ *
+ * This file contains the following configurations:
+ *
+ * * MySQL settings
+ * * Secret keys
+ * * Database table prefix
+ * * ABSPATH
+ *
+ * @link https://codex.wordpress.org/Editing_wp-config.php
+ *
+ * @package WordPress
+ */
+
+// ** MySQL settings - You can get this info from your web host ** //
+/** The name of the database for WordPress */
+define('DB_NAME', 'wordpress');
+
+/** MySQL database username */
+define('DB_USER', 'root');
+
+/** MySQL database password */
+define('DB_PASSWORD', 'yourPassword4WordPress');
+
+/** MySQL hostname */
+define('DB_HOST', 'localhost');
+
+/** Database Charset to use in creating database tables. */
+define('DB_CHARSET', 'utf8');
+
+/** The Database Collate type. Don't change this if in doubt. */
+define('DB_COLLATE', '');
+
+/**#@+
+ * Authentication Unique Keys and Salts.
+ *
+ * Change these to different unique phrases!
+ * You can generate these using the {@link https://api.wordpress.org/secret-key/1.1/salt/ WordPress.org secret-key service}
+ * You can change these at any point in time to invalidate all existing cookies. This will force all users to have to log in again.
+ *
+ * @since 2.6.0
+ */
+define('AUTH_KEY',         'put your unique phrase here');
+define('SECURE_AUTH_KEY',  'put your unique phrase here');
+define('LOGGED_IN_KEY',    'put your unique phrase here');
+define('NONCE_KEY',        'put your unique phrase here');
+define('AUTH_SALT',        'put your unique phrase here');
+define('SECURE_AUTH_SALT', 'put your unique phrase here');
+define('LOGGED_IN_SALT',   'put your unique phrase here');
+define('NONCE_SALT',       'put your unique phrase here');
+
+/**#@-*/
+
+/**
+ * WordPress Database Table prefix.
+ *
+ * You can have multiple installations in one database if you give each
+ * a unique prefix. Only numbers, letters, and underscores please!
+ */
+$table_prefix  = 'wp_';
+
+/**
+ * See http://make.wordpress.org/core/2013/10/25/the-definitive-guide-to-disabling-auto-updates-in-wordpress-3-7
+ */
+
+/* Disable all file change, as RPM base installation are read-only */
+define('DISALLOW_FILE_MODS', true);
+
+/* Disable automatic updater, in case you want to allow
+   above FILE_MODS for plugins, themes, ... */
+define('AUTOMATIC_UPDATER_DISABLED', true);
+
+/* Core update is always disabled, WP_AUTO_UPDATE_CORE value is ignore */
+
+/**
+ * For developers: WordPress debugging mode.
+ *
+ * Change this to true to enable the display of notices during development.
+ * It is strongly recommended that plugin and theme developers use WP_DEBUG
+ * in their development environments.
+ *
+ * For information on other constants that can be used for debugging,
+ * visit the Codex.
+ *
+ * @link https://codex.wordpress.org/Debugging_in_WordPress
+ */
+define('WP_DEBUG', false);
+
+/* That's all, stop editing! Happy blogging. */
+
+/** Absolute path to the WordPress directory. */
+if ( !defined('ABSPATH') )
+    define('ABSPATH', '/usr/share/wordpress');
+
+/** Sets up WordPress vars and included files. */
+require_once(ABSPATH . 'wp-settings.php');
+</code></pre>
+
+<h3 id="2-3-配置-nginx">2.3 配置 Nginx</h3>
+
+<p><code>WordPress</code> 已经安装完毕，我们配置<code>Nginx</code> 把请求转发给 <code>PHP-FPM</code> 来处理。</p>
+
+<p>首先，重命名默认的配置文件（因为默认的 Server 监听 80 端口，与 WordPress 的服务端口冲突，将其重命名为 .bak 后缀以禁用默认配置）</p>
+
+<pre><code>cd /etc/nginx/conf.d/
+
+mv default.conf defaut.conf.bak
+</code></pre>
+
+<p>在 /etc/nginx/conf.d 创建 wordpress.conf 配置，参考下面的内容：</p>
+
+<pre><code>server {
+    listen 80;
+    root /usr/share/wordpress;
+    location / {
+        index index.php index.html index.htm;
+        try_files $uri $uri/ /index.php index.php;
+    }
+    # pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000
+    location ~ .php$ {
+        fastcgi_pass   127.0.0.1:9000;
+        fastcgi_index  index.php;
+        fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
+        include        fastcgi_params;
+    }
+}
+</code></pre>
+
+<p>配置后，通知 <code>Nginx</code> 进程重新加载：</p>
+
+<pre><code>nginx -s reload
+</code></pre>
+
+<h2 id="3-准备域名和解析">3. 准备域名和解析</h2>
+
+<h3 id="3-1域名注册">3.1域名注册</h3>
+
+<h3 id="3-2域名解析">3.2域名解析</h3>
+
+<p>WordPress 博客已经部署完成。可以通过浏览器访问博客查看效果。</p>
+
+<p>通过IP地址查看：</p>
+
+<p>博客访问地址：<code>http://你的服务器公网ip地址/wp-admin/install.php</code>。</p>
+
+<p>通过域名查看：</p>
+
+<p>博客访问地址：<code>http://你的域名/wp-admin/install.php</code>。</p>
+
+    </div>
+    
+    
+    
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Frank Wang</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">2017-08-02</span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      <div class="post-tags">
+          
+          <a href="/tags/wordpress/">WordPress</a>
+          
+        </div>
+
+      
+      <nav class="post-nav">
+        
+        
+          <a class="next" href="/nvm_for_window.html">
+            <span class="next-text nav-default"> window 系统的 Node 版本管理工具 nvm-windows</span>
+            <span class="prev-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+      </div>  
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:frankwang0909@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://www.twitter.com/frankwang0909" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="https://www.github.com/frankwang0909" class="iconfont icon-github" title="github"></a>
+  <a href="http://www.wangxingfeng.com/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    &copy; 
+    
+      2016 - 
+    2017
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Frank Wang</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js"></script>
+<script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+<script type="text/javascript" src="/dist/even.min.js?v=2.6.1"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script async src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML'></script>
+
+
+
+
+</body>
+</html>

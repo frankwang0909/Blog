@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Gitment on Frank Wang&#39;s Coding World</title>
+    <link>http://www.wangxingfeng.com/tags/gitment/index.xml</link>
+    <description>Recent content in Gitment on Frank Wang&#39;s Coding World</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <atom:link href="http://www.wangxingfeng.com/tags/gitment/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>一个Geek的评论系统Gitment</title>
+      <link>http://www.wangxingfeng.com/use_gitment_as_comment_system_for_your_blog.html</link>
+      <pubDate>Sat, 24 Jun 2017 17:04:42 +0800</pubDate>
+      
+      <guid>http://www.wangxingfeng.com/use_gitment_as_comment_system_for_your_blog.html</guid>
+      <description>
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/imsun/gitment&#34;&gt;Gitment&lt;/a&gt;是一个使用GitHub Issues 搭建的评论系统。本文教你如何使用Gitment作为自己博客的评论系统。&lt;/p&gt;
+
+&lt;h2 id=&#34;先简单介绍下优缺点&#34;&gt;先简单介绍下优缺点：&lt;/h2&gt;
+
+&lt;h3 id=&#34;1-优点&#34;&gt;1.优点：&lt;/h3&gt;
+
+&lt;p&gt;Gitment支持在前端直接引入，不需要任何后端代码，可以在页面进行登录、查看、评论、点赞等操作，同时有完整的 Markdown / GFM 和代码高亮支持，尤为适合各种基于 GitHub Pages 的静态博客或项目页面。&lt;/p&gt;
+
+&lt;h3 id=&#34;2-缺点&#34;&gt;2.缺点：&lt;/h3&gt;
+
+&lt;p&gt;只能使用 GitHub 账号进行评论。每篇文章需要自己手动用GitHub账号登录并初始化，其他用户才能评论。&lt;/p&gt;
+
+&lt;h2 id=&#34;使用方法&#34;&gt;使用方法：&lt;/h2&gt;
+
+&lt;h3 id=&#34;第一步-注册-oauth-application&#34;&gt;第一步: 注册 OAuth Application&lt;/h3&gt;
+
+&lt;p&gt;在 GitHub 上注册一个新的 &lt;a href=&#34;https://github.com/settings/applications/new&#34;&gt;OAuth Application&lt;/a&gt;。前面3项内容都可以随意填写，但要确保最后一个 &lt;code&gt;Authorization callback URL&lt;/code&gt; 是你的网站域名(比如&lt;a href=&#34;http://www.wangxingfeng.com)。&#34;&gt;http://www.wangxingfeng.com)。&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;成功注册之后，你将会得到一个 client ID 和一个 client secret，这个将被用于之后的实例化 Gitment。&lt;/p&gt;
+
+&lt;h3 id=&#34;第二步-页面引入-gitment-的静态资源文件&#34;&gt;第二步: 页面引入 Gitment 的静态资源文件&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-html&#34;&gt;&amp;lt;link rel=&amp;quot;stylesheet&amp;quot; href=&amp;quot;https://imsun.github.io/gitment/style/default.css&amp;quot;&amp;gt;
+&amp;lt;script src=&amp;quot;https://imsun.github.io/gitment/dist/gitment.browser.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;当然你也可以选择把这两个静态资源文件下载到本地，然后放到你的站点对应静态资源目录下。&lt;/p&gt;
+
+&lt;h3 id=&#34;第三步-实例化-gitment&#34;&gt;第三步: 实例化 Gitment&lt;/h3&gt;
+
+&lt;p&gt;1.在需要使用评论系统的页面（一般情况下，找到你的文章的模板页）新增一个DOM节点用于放置评论框区域的内容。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-html&#34;&gt;&amp;lt;div id=&amp;quot;comment&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;2.在该页面加入如下的配置脚本：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;
+var gitment = new Gitment({
+  id: &#39;页面 ID&#39;, 
+  owner: &#39;你的 GitHub ID&#39;,
+  repo: &#39;存储评论的 repo&#39;,
+  oauth: {
+    client_id: &#39;你的 client ID&#39;,
+    client_secret: &#39;你的 client secret&#39;,
+  },
+})
+gitment.render(&#39;comment&#39;)
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;注意：&lt;/p&gt;
+
+&lt;p&gt;1.&lt;code&gt;gitment.render()&lt;/code&gt;这个方法的参数就是你的评论区域 div 的 id 名;&lt;/p&gt;
+
+&lt;p&gt;2.页面 ID 如果不写，默认为 location.href。&lt;/p&gt;
+
+&lt;h3 id=&#34;第四步-初始化评论功能&#34;&gt;第四步：初始化评论功能&lt;/h3&gt;
+
+&lt;p&gt;第三步之后，你需要把你的网站部署到线上。如果前面三步没出错的话，应该能够看到评论框了。这个时候是不能够评论的。&lt;/p&gt;
+
+&lt;p&gt;点击在评论框的右侧&lt;code&gt;Login with GitHub&lt;/code&gt;, 用你的 GitHub 登录， 然后点击中间那个蓝色的 &lt;code&gt;Initialize Comments&lt;/code&gt;按钮，对该页面的评论功能进行初始化。&lt;/p&gt;
+
+&lt;p&gt;现在，你的这个页面的访客就可以使用 GitHub 账号登录进行评论了。唯一不足的是，每个页面的评论框都需要手动地初始化。&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Python on Frank Wang&#39;s Coding World</title>
+    <link>http://www.wangxingfeng.com/categories/python/index.xml</link>
+    <description>Recent content in Python on Frank Wang&#39;s Coding World</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <atom:link href="http://www.wangxingfeng.com/categories/python/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Python操作MySQL学习笔记</title>
+      <link>http://www.wangxingfeng.com/python_mysqldb.html</link>
+      <pubDate>Tue, 20 Jun 2017 07:44:01 +0800</pubDate>
+      
+      <guid>http://www.wangxingfeng.com/python_mysqldb.html</guid>
+      <description>
+
+&lt;h2 id=&#34;一-应用架构&#34;&gt;一、应用架构&lt;/h2&gt;
+
+&lt;p&gt;客户端 &amp;ndash;&amp;gt; 业务逻辑层 &amp;ndash;&amp;gt; 数据访问层 &amp;ndash;&amp;gt; 数据库&lt;/p&gt;
+
+&lt;h2 id=&#34;二-python-db-api&#34;&gt;二、 Python DB API&lt;/h2&gt;
+
+&lt;p&gt;Python应用程序（包含SQL) &amp;ndash;&amp;gt; Python DB API（访问数据库的统一规范接口MySQLdb） &amp;ndash;&amp;gt; MySQL / Oracle / SQLServer等数据库&lt;/p&gt;
+
+&lt;p&gt;1.数据库连接对象：connection&lt;/p&gt;
+
+&lt;p&gt;2.数据库交互对象：cursor&lt;/p&gt;
+
+&lt;p&gt;3.数据库异常类: exceptions&lt;/p&gt;
+
+&lt;h2 id=&#34;三-访问数据库流程&#34;&gt;三、访问数据库流程：&lt;/h2&gt;
+
+&lt;p&gt;创建连接对象connection &amp;ndash;&amp;gt; 获取交互对象cursor &amp;ndash;&amp;gt; 执行查询/执行命令/获取数据/处理数据等 &amp;ndash;&amp;gt; 关闭cursor &amp;ndash;&amp;gt; 关闭connection&lt;/p&gt;
+
+&lt;h2 id=&#34;四-数据库连接对象-connection&#34;&gt;四、数据库连接对象：connection&lt;/h2&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;建立Python客户端与数据库的网络连接&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;创建方法： MySQLdb.Connect()&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;参数：&lt;/p&gt;
+
+&lt;p&gt;host 数据库服务器地址&lt;/p&gt;
+
+&lt;p&gt;port 端口号， 数字类型&lt;/p&gt;
+
+&lt;p&gt;user 用户名&lt;/p&gt;
+
+&lt;p&gt;passwd 密码&lt;/p&gt;
+
+&lt;p&gt;db 数据库名称&lt;/p&gt;
+
+&lt;p&gt;charset 编码格式, utf8&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;4.方法：&lt;/p&gt;
+
+&lt;p&gt;cursor() 获取交互对象（游标）&lt;/p&gt;
+
+&lt;p&gt;commit() 提交当前事务&lt;/p&gt;
+
+&lt;p&gt;rollback() 回滚当前事务&lt;/p&gt;
+
+&lt;p&gt;close() 关闭连接&lt;/p&gt;
+
+&lt;h2 id=&#34;五-数据库交互对象-游标-cursor-用于执行查询和获取结果&#34;&gt;五、数据库交互对象（游标）cursor: 用于执行查询和获取结果&lt;/h2&gt;
+
+&lt;p&gt;1.方法：&lt;/p&gt;
+
+&lt;p&gt;1）execute(op [, args] )    执行SQL,将结果从数据库获取到客户端，存在本地缓冲区。&lt;/p&gt;
+
+&lt;p&gt;2）fetch*() 方法：移动指针rownumber， 返回数据。&lt;/p&gt;
+
+&lt;p&gt;fetchone() 获取结果集的下一行&lt;/p&gt;
+
+&lt;p&gt;fetchmany(size) 获取结果集的下几行&lt;/p&gt;
+
+&lt;p&gt;fetchall() 获取结果集中剩下的所有行&lt;/p&gt;
+
+&lt;p&gt;3）close() 关闭游标对象&lt;/p&gt;
+
+&lt;p&gt;2.属性：rowcount 最近一次execute返回数据的行数或影响的行数。&lt;/p&gt;
+
+&lt;h2 id=&#34;六-事务&#34;&gt;六、事务&lt;/h2&gt;
+
+&lt;p&gt;1.访问和更新数据库的一个程序执行单元，可以包含多个SQL语句或命令的操作。&lt;/p&gt;
+
+&lt;p&gt;2.必须设置引擎为INNODB。&lt;/p&gt;
+
+&lt;p&gt;3.特性：&lt;/p&gt;
+
+&lt;p&gt;1）原子性：事务包含的所有操作，要么不做，要么都做。&lt;/p&gt;
+
+&lt;p&gt;2）一致性：事务必须使数据库从一致性状态变到另一个一致性状态。&lt;/p&gt;
+
+&lt;p&gt;3）隔离性：一个事务的执行不能被其他事务所干扰。&lt;/p&gt;
+
+&lt;p&gt;4）持久性：事务一旦提交，它对数据库的改变就是永久性的。&lt;/p&gt;
+
+&lt;p&gt;4.使用事务：&lt;/p&gt;
+
+&lt;p&gt;1）关闭自动commit：设置conn.autocommit(False);&lt;/p&gt;
+
+&lt;p&gt;2）正常结束事务：conn.commit();&lt;/p&gt;
+
+&lt;p&gt;3）异常结束事务：conn.rollback().&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

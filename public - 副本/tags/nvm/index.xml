@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Nvm on Frank Wang&#39;s Coding World</title>
+    <link>http://www.wangxingfeng.com/tags/nvm/index.xml</link>
+    <description>Recent content in Nvm on Frank Wang&#39;s Coding World</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <atom:link href="http://www.wangxingfeng.com/tags/nvm/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title> window 系统的 Node 版本管理工具 nvm-windows</title>
+      <link>http://www.wangxingfeng.com/nvm_for_window.html</link>
+      <pubDate>Thu, 20 Jul 2017 07:54:41 +0800</pubDate>
+      
+      <guid>http://www.wangxingfeng.com/nvm_for_window.html</guid>
+      <description>
+
+&lt;h2 id=&#34;简介&#34;&gt;简介:&lt;/h2&gt;
+
+&lt;p&gt;nvm-windows 是一款用 Go 语言写的 用于 window 操作系统的 Node 版本管理工具。&lt;a href=&#34;https://github.com/coreybutler/nvm-windows&#34;&gt;GitHub 主页&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;下载安装&#34;&gt;下载安装：&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/coreybutler/nvm-windows/releases&#34;&gt;下载地址：https://github.com/coreybutler/nvm-windows/releases&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;常用命令&#34;&gt;常用命令：&lt;/h2&gt;
+
+&lt;p&gt;1.安装指定版本的 Node：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;nvm install &amp;lt;version&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;示例：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;nvm install 6.2.0
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;命令行出现如下内容，表示正在下载安装 6.2.0 版本的 Node.js， 安装好之后，下载并安装对应的包管理工具 npm。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Downloading node.js version 6.2.0 (64-bit)...
+Complete                                                         
+Creating C:\Users\Administrator\AppData\Roaming\nvm\temp                                                          
+
+Downloading npm version 3.8.9... 
+Complete                        
+Installing npm v3.8.9...                                                                                          
+Installation complete. 
+If you want to use this version, type nvm use 6.2.0                                
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;2.使用指定版本的 Node：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;nvm use &amp;lt;version&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;示例：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;nvm use 6.2.0
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;指定后，会显示如下内容：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Now using node v6.2.0 (64-bit)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;可以查看当前使用的 Node 版本号和 npm 版本号：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;node -v
+
+npm -v
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;3.查看安装的所有 Node 版本&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;nvm list 
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;结果如下所示，前面带有 * 号的表示当前使用的 Node 版本：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt; 8.1.4
+*6.2.0 (Currently using 64-bit executable)
+ 6.1.0
+ 4.6.0
+ 4.4.7
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果加一个参数 available， 列出所有可下载的 node.js 版本：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;nvm list available
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;结果如下所示：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;|   CURRENT    |     LTS      |  OLD STABLE  | OLD UNSTABLE |
+|--------------|--------------|--------------|--------------|
+|    8.1.4     |    6.11.1    |   0.12.18    |   0.11.16    |
+|    8.1.3     |    6.11.0    |   0.12.17    |   0.11.15    |
+|    8.1.2     |    6.10.3    |   0.12.16    |   0.11.14    |
+|    8.1.1     |    6.10.2    |   0.12.15    |   0.11.13    |
+|    8.1.0     |    6.10.1    |   0.12.14    |   0.11.12    |
+|    8.0.0     |    6.10.0    |   0.12.13    |   0.11.11    |
+|    7.10.1    |    6.9.5     |   0.12.12    |   0.11.10    |
+|    7.10.0    |    6.9.4     |   0.12.11    |    0.11.9    |
+|    7.9.0     |    6.9.3     |   0.12.10    |    0.11.8    |
+|    7.8.0     |    6.9.2     |    0.12.9    |    0.11.7    |
+|    7.7.4     |    6.9.1     |    0.12.8    |    0.11.6    |
+|    7.7.3     |    6.9.0     |    0.12.7    |    0.11.5    |
+|    7.7.2     |    4.8.4     |    0.12.6    |    0.11.4    |
+|    7.7.1     |    4.8.3     |    0.12.5    |    0.11.3    |
+|    7.7.0     |    4.8.2     |    0.12.4    |    0.11.2    |
+|    7.6.0     |    4.8.1     |    0.12.3    |    0.11.1    |
+|    7.5.0     |    4.8.0     |    0.12.2    |    0.11.0    |
+|    7.4.0     |    4.7.3     |    0.12.1    |    0.9.12    |
+|    7.3.0     |    4.7.2     |    0.12.0    |    0.9.11    |
+|    7.2.1     |    4.7.1     |   0.10.48    |    0.9.10    |
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;4.卸载指定版本的 Node.js：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;nvm uninstall &amp;lt;version&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;示例：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;nvm uninstall 6.1.0
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;结果如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Uninstalling node v6.1.0... done
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;再用 nvm list 查看所有 Node 版本，已经没有 6.1.0 版本了。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt; 8.1.4
+*6.2.0 (Currently using 64-bit executable)
+ 4.6.0
+ 4.4.7
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果现在当前正在使用的版本会怎样呢？&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;nvm uninstall 6.2.0
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;结果如下，报错了，没法删除正在使用的版本。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Uninstalling node v6.2.0...Error removing node v6.2.0
+Manually remove C:\Users\Administrator\AppData\Roaming\nvm\v6.2.0.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;再用 nvm list 查看所有 Node 版本，发现没有 删除掉 6.2.0 版本，但是没有指定的正在使用的版本了。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;8.1.4
+6.2.0
+4.6.0
+4.4.7
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;试试用 node -v 查看，报错：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&#39;node&#39; 不是内部或外部命令，也不是可运行的程序或批处理文件。
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

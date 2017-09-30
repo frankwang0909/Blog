@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>数组 on Frank Wang&#39;s Coding World</title>
+    <link>http://www.wangxingfeng.com/tags/%E6%95%B0%E7%BB%84/index.xml</link>
+    <description>Recent content in 数组 on Frank Wang&#39;s Coding World</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <atom:link href="http://www.wangxingfeng.com/tags/%E6%95%B0%E7%BB%84/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>JavaScript数组的常用方法总结</title>
+      <link>http://www.wangxingfeng.com/js-array.html</link>
+      <pubDate>Thu, 06 Apr 2017 22:31:32 +0800</pubDate>
+      
+      <guid>http://www.wangxingfeng.com/js-array.html</guid>
+      <description>
+
+&lt;h2 id=&#34;不改变原数组的方法&#34;&gt;不改变原数组的方法：&lt;/h2&gt;
+
+&lt;p&gt;1.&lt;code&gt;indexOf()&lt;/code&gt; 和&lt;code&gt;lastIndexOf()&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;1.1 &lt;code&gt;indexOf()&lt;/code&gt; : 返回元素在数组的索引，从&lt;code&gt;0&lt;/code&gt;开始。若数组不存在该元素，则返回&lt;code&gt;-1&lt;/code&gt;。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;    var arr = [1, 2];
+    arr.indexOf(1); //0
+    arr.indexOf(10); //-1
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;1.2 &lt;code&gt;lastIndexOf()&lt;/code&gt;:
+返回元素在数组中最后一次出现的索引，如果没有出现则返回-1.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;    var arr = [1, 2, 3, 4, 2];
+    arr.lastIndexOf(2); // 4
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;2.&lt;code&gt;slice()&lt;/code&gt;: 与&lt;code&gt;字符串&lt;/code&gt;的&lt;code&gt;substring()&lt;/code&gt;方法一样，截取数组的一部分，返回一个新的数组。&lt;/p&gt;
+
+&lt;p&gt;2.1 通常，接受2个参数作为一个左闭右开区间，即包括开始索引位置的元素，但不包括结束索引位置的元素。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;    var arr = [1, 2, 3,4,5,6];
+    arr.slice(0,2)    //[1, 2] 只返回索引0,1位置的元素
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;2.2 可以省略第二个参数，即截取到原数组的最后一个元素。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;    arr.slice(2,);    //[3, 4, 5, 6] 
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;2.3 如果没有传参数，则返回一个从头到尾截取所有元素的新数组。可以用来复制一个数组。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;    var copyArr = arr.slice();
+    copyArr;   //[1, 2, 3, 4, 5, 6]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;3.&lt;code&gt;concat()&lt;/code&gt;: 合并数组。把当前的数组和另一个数组连接起来，并返回一个新的数组。&lt;/p&gt;
+
+&lt;p&gt;3.1 &lt;code&gt;concat()&lt;/code&gt;方法的参数可以有多个，也可以任意任意类型，&lt;code&gt;数值&lt;/code&gt;、&lt;code&gt;字符串&lt;/code&gt;、&lt;code&gt;布尔值&lt;/code&gt;、&lt;code&gt;数组&lt;/code&gt;、&lt;code&gt;对象&lt;/code&gt; 都可以，参数会被被添加到新的数组中。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;    var arr1 =  [1, 2, 3,4,5,6];
+    var arr2 = [&#39;a&#39;,&#39;b&#39;,&#39;c&#39;];
+    var arr3 = arr1.concat(arr2);
+    arr3;   //[1, 2, 3, 4, 5, 6, &amp;quot;a&amp;quot;, &amp;quot;b&amp;quot;, &amp;quot;c&amp;quot;]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;3.2 注意，如果参数是&lt;code&gt;数组&lt;/code&gt;, 会被拉平一次，即数组会被拆开来，加入到新的数组中。具体看示例：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;    var arr1 = [1, 2, 3];
+    var arr2 = arr1.concat(66,&#39;abc&#39;,true,[10,20],[30,[31,32]],{x:100});
+    arr2;  //[1, 2, 3, 66, &amp;quot;abc&amp;quot;, true, 10, 20, 30, [31,32], {x:100}]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;4.&lt;code&gt;join()&lt;/code&gt;: 转成字符串。它会把当前Array的每个元素都用指定的字符串连接起来，然后返回连接后的字符串。&lt;/p&gt;
+
+&lt;p&gt;4.1 参数是用来指定连接的字符串。见示例代码：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;    var arr = [1, 2, 3];
+    arr.join(&#39;*&#39;)   //&amp;quot;1*2*3&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;4.2 如果没有指定参数，默认是用&lt;code&gt;,&lt;/code&gt;连接。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;    var arr = [1, 2, 3];
+    arr.join()   //&amp;quot;1,2,3&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;5.&lt;code&gt;toString()&lt;/code&gt;: 返回数组的字符串形式&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;    var arr = [1, 2, 3];
+    arr.toString() // &amp;quot;1,2,3&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;6.&lt;code&gt;valueOf()&lt;/code&gt;:返回数组本身&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;    var arr = [1, 2, 3];
+    arr.valueOf() // [1, 2, 3]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;7.&lt;code&gt;map()&lt;/code&gt;:&lt;/p&gt;
+
+&lt;p&gt;7.1 对数组的所有成员&lt;code&gt;依次调用一个函数&lt;/code&gt;，返回值是一个新数组。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;    var arr = [1, 2, 3];
+    arr.map(function(elem){
+        return elem*2;
+    });
+    //[2, 4, 6, 8]
+    arr; //[1, 2, 3]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;7.2 &lt;code&gt;map&lt;/code&gt;方法接受一个函数作为参数,该函数调用时，map方法会将其传入3个参数，分别是当前成员、当前位置和数组本身(后2个参数可选)。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;    arr.map(function(elem, index, arr) {
+        return elem * index;
+    }); 
+    //[0, 2, 6]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;7.3 &lt;code&gt;map&lt;/code&gt;方法还可以接受第2个参数，表示回调函数执行时&lt;code&gt;this&lt;/code&gt;所指向的对象。&lt;/p&gt;
+
+&lt;p&gt;8.&lt;code&gt;forEach()&lt;/code&gt;: 与map方法很相似，也是遍历数组的所有成员，执行某种操作。&lt;strong&gt;注意&lt;/strong&gt;：&lt;code&gt;forEach&lt;/code&gt;方法一般没有返回值&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;    var arr = [1, 2, 3];
+    function log(element, index, array) {
+        console.log(&#39;[&#39; + index + &#39;] = &#39; + element);
+    }
+    arr.forEach(log);
+    // [0] = 1
+    // [1] = 2
+    // [2] = 3
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;注意&lt;/strong&gt;: &lt;code&gt;forEach&lt;/code&gt;方法无法中断执行，总是会将所有成员遍历完。如果希望符合某种条件时，就中断遍历，要使用&lt;code&gt;for循环&lt;/code&gt;。&lt;/p&gt;
+
+&lt;p&gt;9.&lt;code&gt;filter()&lt;/code&gt;:&lt;/p&gt;
+
+&lt;p&gt;9.1 筛选数组的元素，返回值是符合筛选条件元素组成的一个新数组。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;    var arr = [1, 2, 3, 4, 5];
+    arr.filter(function (elem) {
+      return (elem &amp;gt; 3);
+    });
+    //[4, 5]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;9.2 &lt;code&gt;filter&lt;/code&gt;方法接受一个函数作为参数,该函数调用时，&lt;code&gt;fitler&lt;/code&gt;方法会将其传入3个参数，分别是当前成员、当前位置和数组本身(后2个参数可选)。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;    var arr = [1, 2, 3, 4, 5];
+    arr.filter(function (elem, index, arr) {
+      return index % 2 === 1;
+    });
+    //[2, 4]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;9.3 &lt;code&gt;filter&lt;/code&gt;方法还可以接受第2个参数，指定测试函数所在的&lt;code&gt;上下文对象&lt;/code&gt;（即&lt;code&gt;this对象&lt;/code&gt;）。&lt;/p&gt;
+
+&lt;p&gt;10.&lt;code&gt;some()&lt;/code&gt;和&lt;code&gt;every()&lt;/code&gt;: 类似“断言”（assert），用来判断数组成员是否符合某种条件。&lt;/p&gt;
+
+&lt;p&gt;10.1 接受一个函数作为参数，所有数组成员依次执行该函数，返回一个&lt;code&gt;布尔值&lt;/code&gt;。该函数接受三个参数，依次是当前位置的成员、当前位置的序号和整个数组。&lt;/p&gt;
+
+&lt;p&gt;10.2 &lt;code&gt;some&lt;/code&gt;方法是只要有一个数组成员的返回值是true，则整个some方法的返回值就是true，否则false。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;    var arr = [1, 2, 3, 4];
+    arr.some(function (elem, index, arr) {
+      return elem &amp;gt;= 3;
+    });
+    // true
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;10.3 &lt;code&gt;every&lt;/code&gt;方法则是所有数组成员的返回值都是true，才返回true，否则false。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;    var arr = [1, 2, 3, 4];
+    arr.every(function (elem, index, arr) {
+      return elem &amp;gt;= 3;
+    });
+    // false
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;10.4 注意，对于&lt;code&gt;空数组&lt;/code&gt;，&lt;code&gt;some&lt;/code&gt;方法返回false，&lt;code&gt;every&lt;/code&gt;方法返回true&lt;/p&gt;
+
+&lt;p&gt;10.5 &lt;code&gt;some&lt;/code&gt;和&lt;code&gt;every&lt;/code&gt;方法还可以接受第2个参数，用来绑定函数中的&lt;code&gt;this关键字&lt;/code&gt;。&lt;/p&gt;
+
+&lt;p&gt;11.&lt;code&gt;reduce()&lt;/code&gt;和&lt;code&gt;reduceRight()&lt;/code&gt;: 依次处理数组的每个成员，最终累计为一个值。&lt;/p&gt;
+
+&lt;p&gt;11.1&lt;code&gt;reduce&lt;/code&gt;是&lt;code&gt;从左到右&lt;/code&gt;处理（从第一个成员到最后一个成员）&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;    arr.reduce(function(x, y){
+      console.log(x, y)
+      return x + y;
+    });
+    // 1 2
+    // 3 3
+    // 6
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;11.2&lt;code&gt;reduceRight&lt;/code&gt;则是&lt;code&gt;从右到左&lt;/code&gt;处理（从最后一个成员到第一个成员）&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;    arr.reduceRight(function(x, y){
+      console.log(x, y)
+      return x + y;
+    });
+    // 3 2
+    // 5 1
+    // 6
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;改变原数组的方法&#34;&gt;改变原数组的方法：&lt;/h2&gt;
+
+&lt;p&gt;1.&lt;code&gt;push()&lt;/code&gt;: 向数组的末尾添加若干元素。返回值是改变后的数组长度。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;    var arr = [1, 2];
+    arr.push(3) ;// 3
+    arr; //  [1, 2, 3]
+    arr.push(&#39;b&#39;,&#39;c&#39;); //5
+    arr; //[1, 2, 3, &amp;quot;b&amp;quot;, &amp;quot;c&amp;quot;]
+    arr.push([10,20]); //6
+    arr; //[1, 2, 3, &amp;quot;b&amp;quot;, &amp;quot;c&amp;quot;, [10,20]]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;2.&lt;code&gt;pop()&lt;/code&gt;: 删除数组最后一个元素。返回值是删除的元素。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;    var arr =[1, 2, 3, &amp;quot;b&amp;quot;, &amp;quot;c&amp;quot;, [10,20]];
+    arr.pop(); //[10, 20]
+    arr;  // [1, 2, 3, &amp;quot;b&amp;quot;, &amp;quot;c&amp;quot;]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;3.&lt;code&gt;unshift()&lt;/code&gt;: 向数组头部添加若干元素。返回值是改变后的数组长度。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;    var arr = [1, 2];
+    arr.unshift(3,4 );  //4
+    arr;  // [3, 4, 1, 2]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;4.&lt;code&gt;shift()&lt;/code&gt;: 删除数组最后一个元素。返回值是删除的元素。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;    var arr = [&#39;a&#39;, &#39;b&#39;, 1, 2];
+    arr.shift(); //&#39;a&#39;
+    arr;  //[&#39;b&#39;, 1, 2]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;5.&lt;code&gt;sort()&lt;/code&gt;: 数组排序。&lt;/p&gt;
+
+&lt;p&gt;5.1 &lt;strong&gt;注意&lt;/strong&gt;：默认是将所有元素转换成&lt;code&gt;字符串&lt;/code&gt;，再按&lt;code&gt;字符串Unicode码点&lt;/code&gt;排序。返回值是新的数组。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;    var arr = [1, 2, 12, &#39;a&#39;, &#39;b&#39;, &#39;ab&#39;, &#39;A&#39;, &#39;B&#39;]
+    arr.sort();  //[1, 12, 2, &amp;quot;A&amp;quot;, &amp;quot;B&amp;quot;, &amp;quot;a&amp;quot;, &amp;quot;ab&amp;quot;, &amp;quot;b&amp;quot;] 注意：12排在了2的前面
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;5.2 如果元素都是&lt;code&gt;数字&lt;/code&gt;，要按&lt;code&gt;从小到大&lt;/code&gt;排序，可以传入一个回调函数作为参数。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;    var arr = [1, 2, 12, 100]
+
+    arr.sort(function(a,b){
+        return a-b;
+    });
+    // [1, 2, 12, 100]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;5.3 如果想要&lt;code&gt;从大到小&lt;/code&gt;排序：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;    arr.sort(function(a,b){
+        return b-a;
+    });
+    //[100, 12, 2, 1]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;6.&lt;code&gt;reverse()&lt;/code&gt;: 颠倒数组中元素的位置&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;    var arr = [1, 2, 12, &#39;a&#39;, &#39;b&#39;, &#39;ab&#39;, &#39;A&#39;, &#39;B&#39;];
+    arr.reverse();
+    //[&amp;quot;B&amp;quot;, &amp;quot;A&amp;quot;, &amp;quot;ab&amp;quot;, &amp;quot;b&amp;quot;, &amp;quot;a&amp;quot;, 12, 2, 1]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;7.&lt;code&gt;splice()&lt;/code&gt;: 修改数组元素（新增、删减、替换）。从&lt;code&gt;指定的索引&lt;/code&gt;开始删除&lt;code&gt;若干个&lt;/code&gt;元素，然后再从该位置添加&lt;code&gt;若干个元素&lt;/code&gt;。返回值是删除的元素组成的数组。参数1是删除元素的起始索引，参数2是删除的元素个数，之后的参数为待添加的元素。&lt;/p&gt;
+
+&lt;p&gt;7.1 只删除,不添加。可以传入2个参数：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;    var arr = [&#39;Alibaba&#39;, &#39;Tencent&#39;, &#39;Baidu&#39;, &#39;XiaoMi&#39;, &#39;360&#39;];
+
+    // 从索引2开始删除3个元素
+    arr.splice(2, 3); // 返回删除的元素 [&#39;Baidu&#39;, &#39;XiaoMi&#39;, &#39;360&#39;]
+    arr; // [&#39;Alibaba&#39;, &#39;Tencent&#39;]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;7.2 只添加,不删除。第2个参数设为&lt;code&gt;0&lt;/code&gt;，即不删除元素。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;    arr.splice(2, 0, &#39;Toutiao&#39;, &#39;Meituan&#39;, &#39;Didi&#39;); // 返回[],因为没有删除任何元素
+    arr; //[&amp;quot;Alibaba&amp;quot;, &amp;quot;Tencent&amp;quot;, &amp;quot;Toutiao&amp;quot;, &amp;quot;Meituan&amp;quot;, &amp;quot;Didi&amp;quot;]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;7.3 先删除若干元素，然后在删除的位置上在添加若干个元素。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;    var  arr =[&amp;quot;Alibaba&amp;quot;, &amp;quot;Tencent&amp;quot;, &amp;quot;Toutiao&amp;quot;, &amp;quot;Meituan&amp;quot;, &amp;quot;Didi&amp;quot;]
+    arr.splice(2,2,&#39;Apple&#39;,&#39;Google&#39;);  //[&amp;quot;Toutiao&amp;quot;, &amp;quot;Meituan&amp;quot;]
+    arr; //[&amp;quot;Alibaba&amp;quot;, &amp;quot;Tencent&amp;quot;, &amp;quot;Apple&amp;quot;, &amp;quot;Google&amp;quot;, &amp;quot;Didi&amp;quot;]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;array-isarray&#34;&gt;Array.isArray()&lt;/h2&gt;
+
+&lt;p&gt;用来判断一个值是否为数组, 如果参数为数组，返回true，否则，返回false.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;    var arr = [1,2]
+    Array.isArray(arr);  //true;
+
+    Array.isArray(&#39;a&#39;); //false
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

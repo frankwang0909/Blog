@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Bug on Frank Wang&#39;s Coding World</title>
+    <link>http://www.wangxingfeng.com/tags/bug/index.xml</link>
+    <description>Recent content in Bug on Frank Wang&#39;s Coding World</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <atom:link href="http://www.wangxingfeng.com/tags/bug/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>代码换行导致的inline元素间距bug</title>
+      <link>http://www.wangxingfeng.com/fix-inline-bug.html</link>
+      <pubDate>Wed, 11 Jan 2017 21:48:19 +0800</pubDate>
+      
+      <guid>http://www.wangxingfeng.com/fix-inline-bug.html</guid>
+      <description>
+
+&lt;h2 id=&#34;1-inline-元素&#34;&gt;1. inline 元素：&lt;/h2&gt;
+
+&lt;p&gt;如果inline元素(span, strong, b, em, i等)代码换行，它们之间会产生我们不希望的间隔。通过设置&lt;code&gt;margin:0&lt;/code&gt;或者&lt;code&gt;padding:0&lt;/code&gt; , 这个都间隔仍然存在，说明这个间隔并不是margin或者padding。&lt;/p&gt;
+
+&lt;style type=&#34;text/css&#34;&gt;
+    .inline p span:first-child {
+        background-color: #66d9ef;
+    }
+    .inline p span:nth-child(2) {
+        background-color: #c191c1;
+    }
+    .inline p span:nth-child(3) {
+        background-color: #9fe89f;
+    }
+    .inline p span:nth-child(4) {
+        background-color: #8787f1;
+    }
+    .inline p span:last-child{
+        background-color: #464141;
+    }
+    .inline p span{
+        font-size:16px;
+        color:#fff;
+        line-height:30px;
+    }
+    .inline-block span{
+        display: inline-block;
+        width:20%;
+    }
+    .fs0{
+        font-size: 0!important;
+    }
+&lt;/style&gt;
+
+&lt;div class=&#34;inline &#34;&gt;
+    &lt;p&gt;
+        &lt;span&gt;inline元素 1&lt;/span&gt;
+        &lt;span&gt;inline元素 2&lt;/span&gt;
+        &lt;span&gt;inline元素 3&lt;/span&gt;
+    &lt;/p&gt;
+&lt;/div&gt;
+
+&lt;p&gt;是否为了不消除这个间隔，就必须把inline元素的html代码写在一行内呢？答案是否定的。
+开发的时候，为了方便阅读和调试，我们习惯于把代码写成这样：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-html&#34;&gt;    &amp;lt;p&amp;gt;
+        &amp;lt;span&amp;gt;inline元素 1&amp;lt;/span&amp;gt;
+        &amp;lt;span&amp;gt;inline元素 2&amp;lt;/span&amp;gt;
+        &amp;lt;span&amp;gt;inline元素 3&amp;lt;/span&amp;gt;
+        &amp;lt;span&amp;gt;inline元素 4&amp;lt;/span&amp;gt;
+        &amp;lt;span&amp;gt;inline元素 5&amp;lt;/span&amp;gt;
+    &amp;lt;/p&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;解决方法：设置父元素&lt;code&gt;font-size:0&lt;/code&gt;，再给子元素单独设置&lt;code&gt;font-size&lt;/code&gt;，修复bug。
+&lt;div class=&#34;inline &#34;&gt;
+    &lt;p class=&#34;fs0&#34;&gt;
+        &lt;span&gt;inline元素 1&lt;/span&gt;
+        &lt;span&gt;inline元素 2&lt;/span&gt;
+        &lt;span&gt;inline元素 3&lt;/span&gt;
+    &lt;/p&gt;
+&lt;/div&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;2-inline-block-元素&#34;&gt;2. inline-block 元素：&lt;/h2&gt;
+
+&lt;p&gt;要在一行展示多个并列的元素，除了通过设置浮动&lt;code&gt;float:left;float:right&lt;/code&gt;，我们还可以通过设置&lt;code&gt;display:inline-block&lt;/code&gt; 把 inline 元素或 block 元素，转换成一个可以设置高度和宽度的 inline-block 元素。&lt;/p&gt;
+
+&lt;p&gt;如果有5个&lt;code&gt;inline-block&lt;/code&gt;元素，设置它们的宽度为&lt;code&gt;20%&lt;/code&gt;。我们期望它们是在一行展示的。但是因为 html 代码换行产生了间距，导致无法在一行内显示。&lt;/p&gt;
+
+&lt;div class=&#34;inline &#34;&gt;
+    &lt;p class=&#34;inline-block&#34;&gt;
+        &lt;span&gt;inline-block元素 1&lt;/span&gt;
+        &lt;span&gt;inline-block元素 2&lt;/span&gt;
+        &lt;span&gt;inline-block元素 3&lt;/span&gt;
+        &lt;span&gt;inline-block元素 4&lt;/span&gt;
+        &lt;span&gt;inline-block元素 5&lt;/span&gt;
+    &lt;/p&gt;
+&lt;/div&gt;
+
+&lt;p&gt;解决方法: 设置父元素&lt;code&gt;font-size:0&lt;/code&gt;，再给子元素单独设置&lt;code&gt;font-size&lt;/code&gt;。&lt;/p&gt;
+
+&lt;div class=&#34;inline &#34;&gt;
+    &lt;p class=&#34;inline-block fs0&#34;&gt;
+        &lt;span&gt;inline-block元素 1&lt;/span&gt;
+        &lt;span&gt;inline-block元素 2&lt;/span&gt;
+        &lt;span&gt;inline-block元素 3&lt;/span&gt;
+        &lt;span&gt;inline-block元素 4&lt;/span&gt;
+        &lt;span&gt;inline-block元素 5&lt;/span&gt;
+    &lt;/p&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

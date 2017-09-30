@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Git on Frank Wang&#39;s Coding World</title>
+    <link>http://www.wangxingfeng.com/tags/git/index.xml</link>
+    <description>Recent content in Git on Frank Wang&#39;s Coding World</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <atom:link href="http://www.wangxingfeng.com/tags/git/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Git学习笔记</title>
+      <link>http://www.wangxingfeng.com/git-intro.html</link>
+      <pubDate>Sun, 03 Apr 2016 22:43:39 +0800</pubDate>
+      
+      <guid>http://www.wangxingfeng.com/git-intro.html</guid>
+      <description>
+
+&lt;p&gt;&lt;code&gt;Git&lt;/code&gt;是一款分布式的代码管理工具，方便多人协作时的代码管理。在&lt;code&gt;win7&lt;/code&gt;系统中使用Git管理代码有2种主要的方式。&lt;/p&gt;
+
+&lt;h2 id=&#34;方式一-msysgit&#34;&gt;方式一： msysgit&lt;/h2&gt;
+
+&lt;h3 id=&#34;step-1-下载并安装-msysgit&#34;&gt;Step 1: 下载并安装  msysgit&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://git-for-windows.github.io&#34;&gt;msysgit&lt;/a&gt; 是Windows版的Git。下载，然后按默认选项安装即可。安装完成后，在开始菜单里找到“ Git ”-&amp;gt;“ Git Bash ”，点击会弹出一个命令行窗口，说明Git安装成功。&lt;/p&gt;
+
+&lt;h3 id=&#34;step-2-设置用户名&#34;&gt;Step 2: 设置用户名&lt;/h3&gt;
+
+&lt;p&gt;在命令行输入以下命令&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;    $ git config --global user.name &amp;quot;Your Name&amp;quot;
+    $ git config --global user.email &amp;quot;email@example.com&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;注意&lt;/strong&gt;： &lt;code&gt;git confi&lt;/code&gt;g命令的&lt;code&gt;--global&lt;/code&gt;参数，用了这个参数，表示你这台电脑上所有的Git仓库都会使用这个配置，当然也可以对某个仓库指定不同的用户名和Email地址。&lt;/p&gt;
+
+&lt;h3 id=&#34;step-3-创建版本库&#34;&gt;Step 3: 创建版本库&lt;/h3&gt;
+
+&lt;p&gt;选择一个合适的地方，创建一个空目录：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;    $ mkdir  gitskills  // 创建一个名gitskills的目录
+    $ cd   gitskills    // 切换gitskills目录
+    $ pwd           //pwd 命令用于显示当前目录
+    $ git init      //初始化Git仓库，当前目录中会多了一个.git目录（默认是隐藏的）
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;注意&lt;/strong&gt;：为避免莫名其妙地报错，请确保目录名（包括父目录）不包含 &lt;strong&gt;中文&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;h3 id=&#34;step-4-把文件添加到版本库&#34;&gt;Step 4: 把文件添加到版本库&lt;/h3&gt;
+
+&lt;p&gt;在刚刚创建的目录(比如gitskills)下新建文件，或者从其他地方拷贝文件到该目录下。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;    $ git add readme.md  //新增一个readme.md文件
+    $ git commit -m &amp;quot;提交时的附加信息&amp;quot;  //把文件提交到仓库,并附上相关的说明文字（用引号括起来）
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;注意&lt;/strong&gt;： 每次修改文件，都需要先&lt;code&gt;git add&lt;/code&gt;到暂存区，然后才能&lt;code&gt;git commit&lt;/code&gt;到仓库。可以&lt;code&gt;add&lt;/code&gt;一个文件之后&lt;code&gt;commit&lt;/code&gt;，也可以&lt;code&gt;add&lt;/code&gt;多个文件，然后一起&lt;code&gt;commit&lt;/code&gt;。&lt;/p&gt;
+
+&lt;h3 id=&#34;常用的git命令&#34;&gt;常用的Git命令：&lt;/h3&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;查看状态 : &lt;code&gt;git status&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;推送到远程库： &lt;code&gt;git remote add origin git@github.com: 具体远程库的名称&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;查看difference: &lt;code&gt;git diff readme.md&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;查看历史记录： &lt;code&gt;git log&lt;/code&gt; 或者 &lt;code&gt;git log --pretty=oneline&lt;/code&gt;。&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;你会看到一大串类似&lt;code&gt;commit: 8a56b4...ba53c1e50&lt;/code&gt;十六进制字符串，它是版本号&lt;code&gt;commit id&lt;/code&gt;， 回退时会用到。&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;版本回退： 仅退到上一个版本可使用命令 &lt;code&gt;git reset --hard HEAD^&lt;/code&gt;； 如果版本比较多，可以先 &lt;code&gt;git log&lt;/code&gt; 找到对应的版本号commit_id， 然后使用命令 &lt;code&gt;git reset --hard commit_id&lt;/code&gt;（版本号可以不用写全，git会自动查找匹配的）&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;查看命令历史： &lt;code&gt;git reflog&lt;/code&gt;， 如果回退之后又后悔了，而且已经关了Git，那就使用 &lt;code&gt;git reflog&lt;/code&gt;，找到对应的commit，以便回到未来的哪个版本。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;更新本地库：推送前先  &lt;code&gt;git pull&lt;/code&gt; 更新本地库，以免远程库已经改变导致推送失败报错。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;常见错误及处理：&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;常见报错1:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;    fatal: remote origin already exists. 
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;解决方法：先删除远程 git 仓库，再添加&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;    git remote rm origin
+
+    git remote add origin git@github.com:项目的远程git仓库
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;方式二-使用-gihub-提供的-github-for-windows&#34;&gt;方式二： 使用 GiHub 提供的 GitHub for Windows&lt;/h2&gt;
+
+&lt;p&gt;在 window 平台下使用 Git 的最简单的方式是使用 GitHub 网站提供的&lt;a href=&#34;https://desktop.github.com/&#34;&gt;GitHub for Windows&lt;/a&gt;。优点是直接图形化的操作界面，完全不用记命令。&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

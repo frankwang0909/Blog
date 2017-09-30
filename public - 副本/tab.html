@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>实现Tab切换的几种方式 - Frank Wang&#39;s Coding World</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="Frank Wang" /><meta name="description" content="实现Tab切换的几种方式" />
+<meta name="keywords" content="Tab切换" />
+
+
+
+<meta name="baidu-site-verification" content="WSqfBuzd3t" />
+
+
+
+<meta name="generator" content="Hugo 0.19" />
+
+
+<link rel="canonical" href="http://www.wangxingfeng.com/tab.html" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="icon" href="/favicon.ico" />
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+<link href="/dist/even.min.css?v=2.6.1" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+<meta property="og:title" content="实现Tab切换的几种方式" />
+<meta property="og:description" content="实现Tab切换的几种方式" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.wangxingfeng.com/tab.html" />
+
+
+
+<meta property="article:published_time" content="2016-05-08T23:36:44&#43;08:00"/>
+<meta property="article:modified_time" content="2016-05-08T23:36:44&#43;08:00"/>
+
+
+
+
+
+
+
+
+
+
+
+<meta itemprop="name" content="实现Tab切换的几种方式">
+<meta itemprop="description" content="实现Tab切换的几种方式">
+
+
+<meta itemprop="dateModified" content="2016-05-08T23:36:44&#43;08:00" />
+<meta itemprop="wordCount" content="877">
+
+
+
+<meta itemprop="keywords" content="database,english,frontend,node,python,tools,angular2,bug,cdn,clipboard,css,css3,git,github,gitment,hugo,javascript,markdown,mysql,node,nvm,python,regexp,seo,shadowsocks,sublime-text,tab切换,typescript,useragent,wordpress,下拉菜单,块级作用域,攒词汇,数组,服务器,返回顶部," />
+
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:text:title" content="实现Tab切换的几种方式"/>
+<meta name="twitter:title" content="实现Tab切换的几种方式"/>
+<meta name="twitter:description" content="实现Tab切换的几种方式"/>
+
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+<script>
+  var _hmt = _hmt || [];
+  (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?7d0fc5a9b2d70433d9b1dd477606dc3c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+  }
+  )();
+</script>
+<script>
+  (function() {
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+          bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+      } else {
+          bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+  }
+  )();
+</script>
+<script>
+  (function(i, s, o, g, r, a, m) {
+      i['GoogleAnalyticsObject'] = r;
+      i[r] = i[r] || function() {
+          (i[r].q = i[r].q || []).push(arguments)
+      }
+      ,
+      i[r].l = 1 * new Date();
+      a = s.createElement(o),
+      m = s.getElementsByTagName(o)[0];
+      a.async = 1;
+      a.src = g;
+      m.parentNode.insertBefore(a, m)
+  }
+  )(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+  ga('create', 'UA-101812896-1', 'auto');
+  ga('send', 'pageview');
+</script>
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Frank Wang’s Coding World</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Frank Wang’s Coding World</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">实现Tab切换的几种方式</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2016-05-08 </span>
+        <div class="post-category">
+            <a href="/categories/frontend/">frontend</a>
+          </div>
+        <span class="more-meta"> 约 877 字 </span>
+        <span class="more-meta"> 预计阅读 2 分钟 </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content">
+      <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#方式一-用原生js实现各种tab切换效果">方式一：用原生js实现各种Tab切换效果。</a>
+<ul>
+<li><a href="#1-鼠标滑动切换">1.鼠标滑动切换 :</a></li>
+<li><a href="#2-鼠标点击切换">2.鼠标点击切换</a></li>
+<li><a href="#3-鼠标滑动延迟切换">3.鼠标滑动延迟切换</a></li>
+<li><a href="#4-自动切换">4.自动切换</a></li>
+</ul></li>
+<li><a href="#方式二-用jquery实现各种tab切换效果-实现思路与原生的javascript是一样的-只是jquery封装了一些方法可以更方便操作dom元素">方式二：用jQuery实现各种Tab切换效果: 实现思路与原生的JavaScript是一样的,只是jQuery封装了一些方法可以更方便操作DOM元素。</a>
+<ul>
+<li><a href="#1-鼠标滑动切换-1">1.鼠标滑动切换</a></li>
+<li><a href="#2-鼠标点击切换-1">2.鼠标点击切换</a></li>
+<li><a href="#3-鼠标滑动延迟切换-1">3.鼠标滑动延迟切换</a></li>
+<li><a href="#4-自动切换-1">4.自动切换</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+    <iframe src="https://rcm-cn.amazon-adsystem.com/e/cm?o=28&p=12&l=ur1&category=books&banner=0CQKPCZXE9QEVSSXN002&f=ifr&linkID=adf25941500ff7304f5193004b357dff&t=frankwang09-23&tracking_id=frankwang09-23" width="300" height="250" scrolling="no" border="0" marginwidth="0" style="border:none;" frameborder="0"></iframe>
+    <iframe src="https://rcm-cn.amazon-adsystem.com/e/cm?o=28&p=12&l=ur1&category=books&banner=1N4AHFJRK48P743G2QR2&f=ifr&linkID=7551f551ae22dc5bee3805c6bfb79010&t=frankwang09-23&tracking_id=frankwang09-23" width="300" height="250" scrolling="no" border="0" marginwidth="0" style="border:none;" frameborder="0"></iframe>
+    
+    <div class="post-content">
+      
+
+<p>Tab 切换是网页中常见的组件。适当地使用，可以节省页面空间，在同一个大小的页面中展现更多的内容。Tab 切换的效果千差万别，只需要学会基本的思路，便可变换出各种各样的效果。下面我分别使用了原生js和jQuery来实现四种不同的Tab切换效果。</p>
+
+<h2 id="方式一-用原生js实现各种tab切换效果">方式一：用原生js实现各种Tab切换效果。</h2>
+
+<h3 id="1-鼠标滑动切换">1.鼠标滑动切换 :</h3>
+
+<p>这是最简单的Tab切换。鼠标滑过时，切换Tab.</p>
+
+<p>首先，通过getElementById、 getElementsByTagNameL等方法来获取相应的元素。</p>
+
+<p>然后，对相应的元素绑定mouseover事件即可。</p>
+
+<p>具体代码见  <a href="https://github.com/frankwang0909/Tab/blob/master/js-mouseover-tab.html">js-mouseover-tab.html</a></p>
+
+<p><a href="http://www.wangxingfeng.com/posts/demo/js-mouseover-tab.html">DEMO</a></p>
+
+<h3 id="2-鼠标点击切换">2.鼠标点击切换</h3>
+
+<p>与第一种的区别在于绑定的事件不同。获取元素的方法是一样的，只需把绑定mouseovers事件改为click事件即可。</p>
+
+<p>具体代码见  <a href="https://github.com/frankwang0909/Tab/blob/master/js-click-tab.html">js-click-tab.html</a></p>
+
+<p><a href="http://www.wangxingfeng.com/posts/demo/js-click-tab.html">DEMO</a></p>
+
+<h3 id="3-鼠标滑动延迟切换">3.鼠标滑动延迟切换</h3>
+
+<p>延迟切换涉及到了一个时间问题，可以通过设置定时器来实现延迟的效果。定时器有setTimeout()和setInterval()两种方式来设置。</p>
+
+<p>setTimeout() 方法用于在指定的毫秒数后调用函数或计算表达式。setTimeout() 只执行 code 一次。如果要多次调用，需要使用 setInterval()。</p>
+
+<p>setInterval() 方法可按照指定的周期（以毫秒计）来调用函数或计算表达式。setInterval() 方法会不停地调用函数，直到 clearInterval() 被调用或窗口被关闭。由 setInterval() 返回的 ID 值可用作 clearInterval() 方法的参数。</p>
+
+<p>因为这里的延迟切换是在指定的延迟时间之后才实现切换效果，所以使用setTimeout() 。</p>
+
+<p>具体代码见  <a href="https://github.com/frankwang0909/Tab/blob/master/js-delay-tab.html">js-delay-tab.html</a></p>
+
+<p><a href="http://www.wangxingfeng.com/posts/demo/js-delay-tab.html">DEMO</a></p>
+
+<h3 id="4-自动切换">4.自动切换</h3>
+
+<p>自动切换，即按指定的周期自动切换到下一个Tab。这里也需要一个定时器，而且是按周期调用函数，因此使用setInterval() 方法来实现。
+当鼠标滑动到某个Tab时，高亮显示当前页，同时停止自动切换，此时需要用到 clearInterval()方法来清除定时器。</p>
+
+<p>具体代码见  <a href="https://github.com/frankwang0909/Tab/blob/master/js-auto-tab-01.html">js-auto-tab-01.html</a></p>
+
+<p>优化后的代码见 <a href="https://github.com/frankwang0909/Tab/blob/master/js-auto-tab-02.html">js-auto-tab-02.html</a></p>
+
+<p><a href="http://www.wangxingfeng.com/posts/demo/js-auto-tab-02.html">DEMO</a></p>
+
+<h2 id="方式二-用jquery实现各种tab切换效果-实现思路与原生的javascript是一样的-只是jquery封装了一些方法可以更方便操作dom元素">方式二：用jQuery实现各种Tab切换效果: 实现思路与原生的JavaScript是一样的,只是jQuery封装了一些方法可以更方便操作DOM元素。</h2>
+
+<h3 id="1-鼠标滑动切换-1">1.鼠标滑动切换</h3>
+
+<p>具体代码见  <a href="https://github.com/frankwang0909/Tab/blob/master/jQ-mouseover-tab.html">jQ-mouseover-tab.html</a></p>
+
+<p><a href="http://www.wangxingfeng.com/posts/demo/jQ-mouseover-tab.html">DEMO</a></p>
+
+<h3 id="2-鼠标点击切换-1">2.鼠标点击切换</h3>
+
+<p>具体代码见  <a href="https://github.com/frankwang0909/Tab/blob/master/jQ-click-tab.html">jQ-click-tab.html</a></p>
+
+<p><a href="http://www.wangxingfeng.com/posts/demo/jQ-click-tab.html">DEMO</a></p>
+
+<h3 id="3-鼠标滑动延迟切换-1">3.鼠标滑动延迟切换</h3>
+
+<p>具体代码见  <a href="https://github.com/frankwang0909/Tab/blob/master/jQ-delay-tab.html">jQ-delay-tab.html</a></p>
+
+<p><a href="http://www.wangxingfeng.com/posts/demo/jQ-delay-tab.html">DEMO</a></p>
+
+<h3 id="4-自动切换-1">4.自动切换</h3>
+
+<p>具体代码见  <a href="https://github.com/frankwang0909/Tab/blob/master/jQ-auto-tab-01.html">jQ-auto-tab-01.html</a></p>
+
+<p>优化后的代码 见<a href="https://github.com/frankwang0909/Tab/blob/master/jQ-auto-tab-02.html">jQ-auto-tab-02.html</a></p>
+
+<p><a href="http://www.wangxingfeng.com/posts/demo/jQ-auto-tab-02.html">DEMO</a></p>
+
+    </div>
+    
+    
+    
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Frank Wang</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">2016-05-08</span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      <div class="post-tags">
+          
+          <a href="/tags/tab%E5%88%87%E6%8D%A2/">tab切换</a>
+          
+        </div>
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/sublimetext-notes.html">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Sublime Text 学习笔记</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        
+          <a class="next" href="/back-to-top.html">
+            <span class="next-text nav-default">实现返回顶部效果的3种方式</span>
+            <span class="prev-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+      </div>  
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:frankwang0909@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://www.twitter.com/frankwang0909" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="https://www.github.com/frankwang0909" class="iconfont icon-github" title="github"></a>
+  <a href="http://www.wangxingfeng.com/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    &copy; 
+    
+      2016 - 
+    2017
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Frank Wang</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js"></script>
+<script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+<script type="text/javascript" src="/dist/even.min.js?v=2.6.1"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script async src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML'></script>
+
+
+
+
+</body>
+</html>

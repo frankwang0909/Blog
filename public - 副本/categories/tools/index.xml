@@ -1,0 +1,1120 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tools on Frank Wang&#39;s Coding World</title>
+    <link>http://www.wangxingfeng.com/categories/tools/index.xml</link>
+    <description>Recent content in Tools on Frank Wang&#39;s Coding World</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <atom:link href="http://www.wangxingfeng.com/categories/tools/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>在 CentOS 上搭建 WordPress 博客</title>
+      <link>http://www.wangxingfeng.com/centos_wordpress.html</link>
+      <pubDate>Wed, 02 Aug 2017 21:23:27 +0800</pubDate>
+      
+      <guid>http://www.wangxingfeng.com/centos_wordpress.html</guid>
+      <description>
+
+&lt;p&gt;在资金预算或人力资源有限的情况下， &lt;code&gt;WordPress&lt;/code&gt; 仍然是快速地搭建博客或者企业网站的不二选择。&lt;/p&gt;
+
+&lt;p&gt;最近，边学边干地使用 &lt;code&gt;WordPres&lt;/code&gt;s 给兄弟公司搭建一个简单的官网。代码在本地调试好了。今天学习了如何学在服务器上发布这个程序。&lt;/p&gt;
+
+&lt;p&gt;备注：服务器是腾讯上的云主机， 操作系统是 &lt;code&gt;CentOS&lt;/code&gt; 6.8 64 位的。&lt;/p&gt;
+
+&lt;h2 id=&#34;1-准备-lnmp-环境&#34;&gt;1. 准备 LNMP 环境&lt;/h2&gt;
+
+&lt;p&gt;&lt;code&gt;LNMP&lt;/code&gt; 是 &lt;code&gt;Linux、Nginx、MySQL 和 PHP&lt;/code&gt; 的缩写，是 &lt;code&gt;WordPress&lt;/code&gt;博客系统依赖的基础运行环境。我们先来准备 LNMP 环境。&lt;/p&gt;
+
+&lt;h3 id=&#34;1-1-安装-nginx&#34;&gt;1.1 安装 Nginx&lt;/h3&gt;
+
+&lt;p&gt;使用 &lt;code&gt;yum&lt;/code&gt; 安装 &lt;code&gt;Nginx&lt;/code&gt;：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;yum install nginx -y
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;修改 &lt;code&gt;/etc/nginx/conf.d/default.conf&lt;/code&gt;，去除对 &lt;code&gt;IPv6&lt;/code&gt; 地址的监听（&lt;code&gt;CentOS 6&lt;/code&gt; 不支持 IPv6，需要取消对 IPv6 地址的监听，否则 &lt;code&gt;Nginx&lt;/code&gt; 不能成功启动），可参考下面的示例：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;server {
+    listen       80 default_server;
+    # listen       [::]:80 default_server;
+    server_name  _;
+    root         /usr/share/nginx/html;
+
+    # Load configuration files for the default server block.
+    include /etc/nginx/default.d/*.conf;
+
+    location / {
+    }
+
+    error_page 404 /404.html;
+        location = /40x.html {
+    }
+
+    error_page 500 502 503 504 /50x.html;
+        location = /50x.html {
+    }
+
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;修改完成后，启动 &lt;code&gt;Nginx&lt;/code&gt;：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;nginx
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;此时，可访问云主机的外网 HTTP 服务来确认是否已经安装成功。&lt;/p&gt;
+
+&lt;p&gt;将 &lt;code&gt;Nginx&lt;/code&gt; 设置为&lt;code&gt;开机自动启动&lt;/code&gt;：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;chkconfig nginx on
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;1-2-安装-mysql&#34;&gt;1.2 安装 MySQL&lt;/h3&gt;
+
+&lt;p&gt;使用 &lt;code&gt;yum&lt;/code&gt; 安装 &lt;code&gt;MySQL&lt;/code&gt;：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;yum install mysql-server -y
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;安装完成后，启动 &lt;code&gt;MySQL&lt;/code&gt; 服务：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;service mysqld restart
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;设置 &lt;code&gt;MySQL&lt;/code&gt; 账户 &lt;code&gt;root&lt;/code&gt; 密码：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt; /usr/bin/mysqladmin -u root password &#39;yourPassword4WordPress&#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;将 &lt;code&gt;MySQ&lt;/code&gt;L 设置为&lt;code&gt;开机自动启动&lt;/code&gt;：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;chkconfig mysqld on
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;1-3-安装-php&#34;&gt;1.3 安装 PHP&lt;/h3&gt;
+
+&lt;p&gt;使用 &lt;code&gt;yum&lt;/code&gt; 安装 &lt;code&gt;PHP&lt;/code&gt;：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;yum install php-fpm php-mysql -y
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;（CentOs 6 默认已经安装了 PHP-FPM 及 PHP-MYSQL，上述命令执行的可能会提示已经安装。）&lt;/p&gt;
+
+&lt;p&gt;安装之后，启动 &lt;code&gt;PHP-FPM&lt;/code&gt; 进程：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;service php-fpm start
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;启动之后，可以使用下面的命令查看 &lt;code&gt;PHP-FPM&lt;/code&gt; 进程监听哪个端口 （PHP-FPM 默认监听 9000 端口）&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;netstat -nlpt | grep php-fpm
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;把 &lt;code&gt;PHP-FPM&lt;/code&gt; 也设置成&lt;code&gt;开机自动启动&lt;/code&gt;：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;chkconfig php-fpm on
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;2-安装并配置-wordpress&#34;&gt;2. 安装并配置  WordPress&lt;/h2&gt;
+
+&lt;h3 id=&#34;2-1-安装-wordpress&#34;&gt;2.1 安装 WordPress&lt;/h3&gt;
+
+&lt;p&gt;配置好 &lt;code&gt;LNMP&lt;/code&gt; 环境后，继续使用 &lt;code&gt;yum&lt;/code&gt; 来安装 &lt;code&gt;WordPress&lt;/code&gt;：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;yum install wordpress -y
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;安装完成后，就可以在 &lt;code&gt;/usr/share/wordpress&lt;/code&gt; 看到 &lt;code&gt;WordPress&lt;/code&gt; 的源代码了。&lt;/p&gt;
+
+&lt;h3 id=&#34;2-2-配置-数据库&#34;&gt;2.2 配置 数据库&lt;/h3&gt;
+
+&lt;p&gt;配进入 &lt;code&gt;MySQL&lt;/code&gt;：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;mysql -uroot --password=&#39;yourPassword4WordPress&#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;为 &lt;code&gt;WordPress&lt;/code&gt; 创建一个数据库：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;CREATE DATABASE wordpress;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;MySQL&lt;/code&gt; 部分设置完了，我们退出 &lt;code&gt;MySQL&lt;/code&gt; 环境：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;exit
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;把上述的 &lt;code&gt;DB&lt;/code&gt; 配置同步到 &lt;code&gt;WordPress&lt;/code&gt; 的&lt;code&gt;配置文件&lt;/code&gt;中，可参考下面的配置：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;?php
+/**
+ * The base configuration for WordPress
+ *
+ * The wp-config.php creation script uses this file during the
+ * installation. You don&#39;t have to use the web site, you can
+ * copy this file to &amp;quot;wp-config.php&amp;quot; and fill in the values.
+ *
+ * This file contains the following configurations:
+ *
+ * * MySQL settings
+ * * Secret keys
+ * * Database table prefix
+ * * ABSPATH
+ *
+ * @link https://codex.wordpress.org/Editing_wp-config.php
+ *
+ * @package WordPress
+ */
+
+// ** MySQL settings - You can get this info from your web host ** //
+/** The name of the database for WordPress */
+define(&#39;DB_NAME&#39;, &#39;wordpress&#39;);
+
+/** MySQL database username */
+define(&#39;DB_USER&#39;, &#39;root&#39;);
+
+/** MySQL database password */
+define(&#39;DB_PASSWORD&#39;, &#39;yourPassword4WordPress&#39;);
+
+/** MySQL hostname */
+define(&#39;DB_HOST&#39;, &#39;localhost&#39;);
+
+/** Database Charset to use in creating database tables. */
+define(&#39;DB_CHARSET&#39;, &#39;utf8&#39;);
+
+/** The Database Collate type. Don&#39;t change this if in doubt. */
+define(&#39;DB_COLLATE&#39;, &#39;&#39;);
+
+/**#@+
+ * Authentication Unique Keys and Salts.
+ *
+ * Change these to different unique phrases!
+ * You can generate these using the {@link https://api.wordpress.org/secret-key/1.1/salt/ WordPress.org secret-key service}
+ * You can change these at any point in time to invalidate all existing cookies. This will force all users to have to log in again.
+ *
+ * @since 2.6.0
+ */
+define(&#39;AUTH_KEY&#39;,         &#39;put your unique phrase here&#39;);
+define(&#39;SECURE_AUTH_KEY&#39;,  &#39;put your unique phrase here&#39;);
+define(&#39;LOGGED_IN_KEY&#39;,    &#39;put your unique phrase here&#39;);
+define(&#39;NONCE_KEY&#39;,        &#39;put your unique phrase here&#39;);
+define(&#39;AUTH_SALT&#39;,        &#39;put your unique phrase here&#39;);
+define(&#39;SECURE_AUTH_SALT&#39;, &#39;put your unique phrase here&#39;);
+define(&#39;LOGGED_IN_SALT&#39;,   &#39;put your unique phrase here&#39;);
+define(&#39;NONCE_SALT&#39;,       &#39;put your unique phrase here&#39;);
+
+/**#@-*/
+
+/**
+ * WordPress Database Table prefix.
+ *
+ * You can have multiple installations in one database if you give each
+ * a unique prefix. Only numbers, letters, and underscores please!
+ */
+$table_prefix  = &#39;wp_&#39;;
+
+/**
+ * See http://make.wordpress.org/core/2013/10/25/the-definitive-guide-to-disabling-auto-updates-in-wordpress-3-7
+ */
+
+/* Disable all file change, as RPM base installation are read-only */
+define(&#39;DISALLOW_FILE_MODS&#39;, true);
+
+/* Disable automatic updater, in case you want to allow
+   above FILE_MODS for plugins, themes, ... */
+define(&#39;AUTOMATIC_UPDATER_DISABLED&#39;, true);
+
+/* Core update is always disabled, WP_AUTO_UPDATE_CORE value is ignore */
+
+/**
+ * For developers: WordPress debugging mode.
+ *
+ * Change this to true to enable the display of notices during development.
+ * It is strongly recommended that plugin and theme developers use WP_DEBUG
+ * in their development environments.
+ *
+ * For information on other constants that can be used for debugging,
+ * visit the Codex.
+ *
+ * @link https://codex.wordpress.org/Debugging_in_WordPress
+ */
+define(&#39;WP_DEBUG&#39;, false);
+
+/* That&#39;s all, stop editing! Happy blogging. */
+
+/** Absolute path to the WordPress directory. */
+if ( !defined(&#39;ABSPATH&#39;) )
+    define(&#39;ABSPATH&#39;, &#39;/usr/share/wordpress&#39;);
+
+/** Sets up WordPress vars and included files. */
+require_once(ABSPATH . &#39;wp-settings.php&#39;);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;2-3-配置-nginx&#34;&gt;2.3 配置 Nginx&lt;/h3&gt;
+
+&lt;p&gt;&lt;code&gt;WordPress&lt;/code&gt; 已经安装完毕，我们配置&lt;code&gt;Nginx&lt;/code&gt; 把请求转发给 &lt;code&gt;PHP-FPM&lt;/code&gt; 来处理。&lt;/p&gt;
+
+&lt;p&gt;首先，重命名默认的配置文件（因为默认的 Server 监听 80 端口，与 WordPress 的服务端口冲突，将其重命名为 .bak 后缀以禁用默认配置）&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;cd /etc/nginx/conf.d/
+
+mv default.conf defaut.conf.bak
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;在 /etc/nginx/conf.d 创建 wordpress.conf 配置，参考下面的内容：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;server {
+    listen 80;
+    root /usr/share/wordpress;
+    location / {
+        index index.php index.html index.htm;
+        try_files $uri $uri/ /index.php index.php;
+    }
+    # pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000
+    location ~ .php$ {
+        fastcgi_pass   127.0.0.1:9000;
+        fastcgi_index  index.php;
+        fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
+        include        fastcgi_params;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;配置后，通知 &lt;code&gt;Nginx&lt;/code&gt; 进程重新加载：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;nginx -s reload
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;3-准备域名和解析&#34;&gt;3. 准备域名和解析&lt;/h2&gt;
+
+&lt;h3 id=&#34;3-1域名注册&#34;&gt;3.1域名注册&lt;/h3&gt;
+
+&lt;h3 id=&#34;3-2域名解析&#34;&gt;3.2域名解析&lt;/h3&gt;
+
+&lt;p&gt;WordPress 博客已经部署完成。可以通过浏览器访问博客查看效果。&lt;/p&gt;
+
+&lt;p&gt;通过IP地址查看：&lt;/p&gt;
+
+&lt;p&gt;博客访问地址：&lt;code&gt;http://你的服务器公网ip地址/wp-admin/install.php&lt;/code&gt;。&lt;/p&gt;
+
+&lt;p&gt;通过域名查看：&lt;/p&gt;
+
+&lt;p&gt;博客访问地址：&lt;code&gt;http://你的域名/wp-admin/install.php&lt;/code&gt;。&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title> window 系统的 Node 版本管理工具 nvm-windows</title>
+      <link>http://www.wangxingfeng.com/nvm_for_window.html</link>
+      <pubDate>Thu, 20 Jul 2017 07:54:41 +0800</pubDate>
+      
+      <guid>http://www.wangxingfeng.com/nvm_for_window.html</guid>
+      <description>
+
+&lt;h2 id=&#34;简介&#34;&gt;简介:&lt;/h2&gt;
+
+&lt;p&gt;nvm-windows 是一款用 Go 语言写的 用于 window 操作系统的 Node 版本管理工具。&lt;a href=&#34;https://github.com/coreybutler/nvm-windows&#34;&gt;GitHub 主页&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;下载安装&#34;&gt;下载安装：&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/coreybutler/nvm-windows/releases&#34;&gt;下载地址：https://github.com/coreybutler/nvm-windows/releases&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;常用命令&#34;&gt;常用命令：&lt;/h2&gt;
+
+&lt;p&gt;1.安装指定版本的 Node：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;nvm install &amp;lt;version&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;示例：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;nvm install 6.2.0
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;命令行出现如下内容，表示正在下载安装 6.2.0 版本的 Node.js， 安装好之后，下载并安装对应的包管理工具 npm。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Downloading node.js version 6.2.0 (64-bit)...
+Complete                                                         
+Creating C:\Users\Administrator\AppData\Roaming\nvm\temp                                                          
+
+Downloading npm version 3.8.9... 
+Complete                        
+Installing npm v3.8.9...                                                                                          
+Installation complete. 
+If you want to use this version, type nvm use 6.2.0                                
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;2.使用指定版本的 Node：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;nvm use &amp;lt;version&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;示例：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;nvm use 6.2.0
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;指定后，会显示如下内容：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Now using node v6.2.0 (64-bit)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;可以查看当前使用的 Node 版本号和 npm 版本号：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;node -v
+
+npm -v
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;3.查看安装的所有 Node 版本&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;nvm list 
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;结果如下所示，前面带有 * 号的表示当前使用的 Node 版本：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt; 8.1.4
+*6.2.0 (Currently using 64-bit executable)
+ 6.1.0
+ 4.6.0
+ 4.4.7
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果加一个参数 available， 列出所有可下载的 node.js 版本：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;nvm list available
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;结果如下所示：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;|   CURRENT    |     LTS      |  OLD STABLE  | OLD UNSTABLE |
+|--------------|--------------|--------------|--------------|
+|    8.1.4     |    6.11.1    |   0.12.18    |   0.11.16    |
+|    8.1.3     |    6.11.0    |   0.12.17    |   0.11.15    |
+|    8.1.2     |    6.10.3    |   0.12.16    |   0.11.14    |
+|    8.1.1     |    6.10.2    |   0.12.15    |   0.11.13    |
+|    8.1.0     |    6.10.1    |   0.12.14    |   0.11.12    |
+|    8.0.0     |    6.10.0    |   0.12.13    |   0.11.11    |
+|    7.10.1    |    6.9.5     |   0.12.12    |   0.11.10    |
+|    7.10.0    |    6.9.4     |   0.12.11    |    0.11.9    |
+|    7.9.0     |    6.9.3     |   0.12.10    |    0.11.8    |
+|    7.8.0     |    6.9.2     |    0.12.9    |    0.11.7    |
+|    7.7.4     |    6.9.1     |    0.12.8    |    0.11.6    |
+|    7.7.3     |    6.9.0     |    0.12.7    |    0.11.5    |
+|    7.7.2     |    4.8.4     |    0.12.6    |    0.11.4    |
+|    7.7.1     |    4.8.3     |    0.12.5    |    0.11.3    |
+|    7.7.0     |    4.8.2     |    0.12.4    |    0.11.2    |
+|    7.6.0     |    4.8.1     |    0.12.3    |    0.11.1    |
+|    7.5.0     |    4.8.0     |    0.12.2    |    0.11.0    |
+|    7.4.0     |    4.7.3     |    0.12.1    |    0.9.12    |
+|    7.3.0     |    4.7.2     |    0.12.0    |    0.9.11    |
+|    7.2.1     |    4.7.1     |   0.10.48    |    0.9.10    |
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;4.卸载指定版本的 Node.js：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;nvm uninstall &amp;lt;version&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;示例：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;nvm uninstall 6.1.0
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;结果如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Uninstalling node v6.1.0... done
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;再用 nvm list 查看所有 Node 版本，已经没有 6.1.0 版本了。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt; 8.1.4
+*6.2.0 (Currently using 64-bit executable)
+ 4.6.0
+ 4.4.7
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果现在当前正在使用的版本会怎样呢？&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;nvm uninstall 6.2.0
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;结果如下，报错了，没法删除正在使用的版本。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Uninstalling node v6.2.0...Error removing node v6.2.0
+Manually remove C:\Users\Administrator\AppData\Roaming\nvm\v6.2.0.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;再用 nvm list 查看所有 Node 版本，发现没有 删除掉 6.2.0 版本，但是没有指定的正在使用的版本了。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;8.1.4
+6.2.0
+4.6.0
+4.4.7
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;试试用 node -v 查看，报错：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&#39;node&#39; 不是内部或外部命令，也不是可运行的程序或批处理文件。
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>撸了Google Cloud，自建了个梯子</title>
+      <link>http://www.wangxingfeng.com/ss.html</link>
+      <pubDate>Sun, 09 Jul 2017 11:37:11 +0800</pubDate>
+      
+      <guid>http://www.wangxingfeng.com/ss.html</guid>
+      <description>
+
+&lt;p&gt;鉴于最近科学上网变得越来越不方便了，不少之前坚挺的 VPN 都被迫停止服务了，只好自己动手，搭个梯子。网上找找资料，意外发现了&lt;a href=&#34;https://cloud.google.com/&#34;&gt;谷歌的云服务 (Google Cloud Platform)&lt;/a&gt;有免费试用服务（其实亚马逊云也有一年的免费试用）。 新用户注册赠送300刀，一年有效期，完全可以用来搭建个梯子玩玩。&lt;/p&gt;
+
+&lt;p&gt;目前撸这个的人应该不多，因为至少有两个门槛。第一，谷歌的服务在国内基本被墙了，所以必须得先能翻墙，注册了 Google 账号，才能登录 Google Cloud。第二，国内用户必须得有双币或者多币种的信用卡才能通过验证。&lt;/p&gt;
+
+&lt;p&gt;以下是我搭建梯子的流程：&lt;/p&gt;
+
+&lt;h3 id=&#34;1-注册登录&#34;&gt;1.注册登录：&lt;/h3&gt;
+
+&lt;p&gt;先用免费的蓝灯翻墙上&lt;a href=&#34;https://cloud.google.com/&#34;&gt;谷歌云&lt;/a&gt;，点击那个蓝色的 &amp;ldquo;TRY IT FREE&amp;rdquo;  按钮，需要用谷歌账号登录，然后填写一些个人信息，过程中需要绑定真实的信用卡。还有可能会发邮件给你，让你上传证件以及信用卡的照片用于身份认证。验证成功后会预扣费1美元用于验证卡的有效性，稍后它会自动返回。&lt;/p&gt;
+
+&lt;h3 id=&#34;2-创建项目&#34;&gt;2.创建项目：&lt;/h3&gt;
+
+&lt;p&gt;项目名称什么的可以随便填。&lt;/p&gt;
+
+&lt;h3 id=&#34;3-创建vm实例-计算引擎-vm实例&#34;&gt;3.创建VM实例： 计算引擎 &amp;ndash;&amp;gt; VM实例。&lt;/h3&gt;
+
+&lt;p&gt;1）地区：可以选择亚洲的节点；&lt;/p&gt;
+
+&lt;p&gt;2）机器类型：选择了最低配的，微型。&lt;/p&gt;
+
+&lt;p&gt;3）启动磁盘：我选了CentOS7的操作系统&lt;/p&gt;
+
+&lt;p&gt;4）网络：记得要新建静态IP地址，后面需要绑定到实例。&lt;/p&gt;
+
+&lt;h3 id=&#34;4-绑定外部ip地址&#34;&gt;4.绑定外部IP地址：&lt;/h3&gt;
+
+&lt;p&gt;网络 &amp;ndash;&amp;gt; 绑定外部IP地址 &amp;ndash;&amp;gt; 保留静态地址 （未附加到实例或负载平衡器的静态 IP 地址将按小时计费!!!）&lt;/p&gt;
+
+&lt;h3 id=&#34;5-防火墙设置&#34;&gt;5.防火墙设置：&lt;/h3&gt;
+
+&lt;p&gt;由于默认的防火墙限制太多，SS等可能用不了，所以我们把防火墙相应端口开一下。&lt;/p&gt;
+
+&lt;p&gt;网络 &amp;ndash;&amp;gt; 防火墙规则&amp;ndash;&amp;gt; 新建防火墙规则 &amp;ndash;&amp;gt; 来源过滤选择 “允许任意来源的流量” &amp;ndash;&amp;gt;设置协议和端口：“tcp:你的端口号”&lt;/p&gt;
+
+&lt;h3 id=&#34;6-在服务器上安装-配置ss&#34;&gt;6.在服务器上安装、配置SS:&lt;/h3&gt;
+
+&lt;p&gt;1)用 Google Cloud 有自带的SSH工具, 链接上服务器。&lt;/p&gt;
+
+&lt;p&gt;2)输入命令：&lt;code&gt;sudo -i&lt;/code&gt; 获取&lt;code&gt;root&lt;/code&gt;权限;&lt;/p&gt;
+
+&lt;p&gt;3)然后输入 &lt;code&gt;yum install -y emacs python python-pip&lt;/code&gt; 安装 Emacs 编辑器和 Python (编辑器用于编辑SS的配置文件，Python用于运行SS)。&lt;/p&gt;
+
+&lt;p&gt;4)等待一会儿后安装完毕，这时输入命令&lt;code&gt;pip install shadowsocks&lt;/code&gt; 安装SS;&lt;/p&gt;
+
+&lt;p&gt;5)输入命令&lt;code&gt;emacs /etc/ss.json&lt;/code&gt; 打开编辑器，并打开一个名为&lt;code&gt;ss.json&lt;/code&gt;的配置文件保存在&lt;code&gt;/etc/&lt;/code&gt;目录下。以下是SS官方的默认配置：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-json&#34;&gt;    {
+        &amp;quot;server&amp;quot;:&amp;quot;你的服务器静态IP地址&amp;quot;,
+        &amp;quot;server_port&amp;quot;:端口号, //端口号需要与步骤5设置的一致
+        &amp;quot;password&amp;quot;:&amp;quot;你的密码&amp;quot;,
+        &amp;quot;timeout&amp;quot;:600,
+        &amp;quot;method&amp;quot;:&amp;quot;rc4-md5&amp;quot;, 
+        &amp;quot;auth&amp;quot;: true
+    }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;6)配置完成后, 按&lt;code&gt;ctrl + x&lt;/code&gt; 然后 &lt;code&gt;ctrl + s&lt;/code&gt; 保存文件，再按 &lt;code&gt;ctrl + x&lt;/code&gt;然后 &lt;code&gt;ctrl + c&lt;/code&gt;退出编辑器。&lt;/p&gt;
+
+&lt;p&gt;7)最后输入命令&lt;code&gt;ssserver -c /etc/ss.json -d start&lt;/code&gt;即可启动 Shadowsocks 服务器。&lt;/p&gt;
+
+&lt;p&gt;要停止SS服务器（例如需要更改配置文件），输入&lt;code&gt;ssserver -d stop&lt;/code&gt;即可。&lt;/p&gt;
+
+&lt;p&gt;要让SS服务能在后台运行，输入&lt;code&gt;ssserver -p 你的端口号 -k 你的密码 -m rc4-md5 --user nobody -d start&lt;/code&gt;。到此为止，服务器端的配置已经搞定。&lt;/p&gt;
+
+&lt;h3 id=&#34;6-win7在配置客户端ss&#34;&gt;6.Win7在配置客户端SS:&lt;/h3&gt;
+
+&lt;p&gt;1)下载并解压&lt;a href=&#34;https://github.com/shadowsocks/shadowsocks-windows/releases&#34;&gt;ss客户端&lt;/a&gt;;&lt;/p&gt;
+
+&lt;p&gt;2)运行&lt;code&gt;Shadowsocks.exe&lt;/code&gt;，图标会出现在桌面右下方。&lt;/p&gt;
+
+&lt;p&gt;3)右击图标&amp;ndash;&amp;gt; 点击“系统代理” &amp;ndash;&amp;gt;“系统代理模式”选择“PAC模式” &amp;ndash;&amp;gt;选择“服务器” &amp;ndash;&amp;gt; “编辑服务器”&amp;ndash;&amp;gt; 填写服务器地址、端口号、密码、加密方式等信息&amp;ndash;&amp;gt;确定。&lt;/p&gt;
+
+&lt;p&gt;到此为止，你就可以畅游真正的互联网了。&lt;/p&gt;
+
+&lt;h3 id=&#34;7-安卓手机ss客户端配置&#34;&gt;7.安卓手机SS客户端配置：&lt;/h3&gt;
+
+&lt;p&gt;1）下载 “影梭”&lt;/p&gt;
+
+&lt;p&gt;2）填写相应的服务器地址、端口号、密码、加密方式等信息。&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>一个Geek的评论系统Gitment</title>
+      <link>http://www.wangxingfeng.com/use_gitment_as_comment_system_for_your_blog.html</link>
+      <pubDate>Sat, 24 Jun 2017 17:04:42 +0800</pubDate>
+      
+      <guid>http://www.wangxingfeng.com/use_gitment_as_comment_system_for_your_blog.html</guid>
+      <description>
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/imsun/gitment&#34;&gt;Gitment&lt;/a&gt;是一个使用GitHub Issues 搭建的评论系统。本文教你如何使用Gitment作为自己博客的评论系统。&lt;/p&gt;
+
+&lt;h2 id=&#34;先简单介绍下优缺点&#34;&gt;先简单介绍下优缺点：&lt;/h2&gt;
+
+&lt;h3 id=&#34;1-优点&#34;&gt;1.优点：&lt;/h3&gt;
+
+&lt;p&gt;Gitment支持在前端直接引入，不需要任何后端代码，可以在页面进行登录、查看、评论、点赞等操作，同时有完整的 Markdown / GFM 和代码高亮支持，尤为适合各种基于 GitHub Pages 的静态博客或项目页面。&lt;/p&gt;
+
+&lt;h3 id=&#34;2-缺点&#34;&gt;2.缺点：&lt;/h3&gt;
+
+&lt;p&gt;只能使用 GitHub 账号进行评论。每篇文章需要自己手动用GitHub账号登录并初始化，其他用户才能评论。&lt;/p&gt;
+
+&lt;h2 id=&#34;使用方法&#34;&gt;使用方法：&lt;/h2&gt;
+
+&lt;h3 id=&#34;第一步-注册-oauth-application&#34;&gt;第一步: 注册 OAuth Application&lt;/h3&gt;
+
+&lt;p&gt;在 GitHub 上注册一个新的 &lt;a href=&#34;https://github.com/settings/applications/new&#34;&gt;OAuth Application&lt;/a&gt;。前面3项内容都可以随意填写，但要确保最后一个 &lt;code&gt;Authorization callback URL&lt;/code&gt; 是你的网站域名(比如&lt;a href=&#34;http://www.wangxingfeng.com)。&#34;&gt;http://www.wangxingfeng.com)。&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;成功注册之后，你将会得到一个 client ID 和一个 client secret，这个将被用于之后的实例化 Gitment。&lt;/p&gt;
+
+&lt;h3 id=&#34;第二步-页面引入-gitment-的静态资源文件&#34;&gt;第二步: 页面引入 Gitment 的静态资源文件&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-html&#34;&gt;&amp;lt;link rel=&amp;quot;stylesheet&amp;quot; href=&amp;quot;https://imsun.github.io/gitment/style/default.css&amp;quot;&amp;gt;
+&amp;lt;script src=&amp;quot;https://imsun.github.io/gitment/dist/gitment.browser.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;当然你也可以选择把这两个静态资源文件下载到本地，然后放到你的站点对应静态资源目录下。&lt;/p&gt;
+
+&lt;h3 id=&#34;第三步-实例化-gitment&#34;&gt;第三步: 实例化 Gitment&lt;/h3&gt;
+
+&lt;p&gt;1.在需要使用评论系统的页面（一般情况下，找到你的文章的模板页）新增一个DOM节点用于放置评论框区域的内容。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-html&#34;&gt;&amp;lt;div id=&amp;quot;comment&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;2.在该页面加入如下的配置脚本：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;
+var gitment = new Gitment({
+  id: &#39;页面 ID&#39;, 
+  owner: &#39;你的 GitHub ID&#39;,
+  repo: &#39;存储评论的 repo&#39;,
+  oauth: {
+    client_id: &#39;你的 client ID&#39;,
+    client_secret: &#39;你的 client secret&#39;,
+  },
+})
+gitment.render(&#39;comment&#39;)
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;注意：&lt;/p&gt;
+
+&lt;p&gt;1.&lt;code&gt;gitment.render()&lt;/code&gt;这个方法的参数就是你的评论区域 div 的 id 名;&lt;/p&gt;
+
+&lt;p&gt;2.页面 ID 如果不写，默认为 location.href。&lt;/p&gt;
+
+&lt;h3 id=&#34;第四步-初始化评论功能&#34;&gt;第四步：初始化评论功能&lt;/h3&gt;
+
+&lt;p&gt;第三步之后，你需要把你的网站部署到线上。如果前面三步没出错的话，应该能够看到评论框了。这个时候是不能够评论的。&lt;/p&gt;
+
+&lt;p&gt;点击在评论框的右侧&lt;code&gt;Login with GitHub&lt;/code&gt;, 用你的 GitHub 登录， 然后点击中间那个蓝色的 &lt;code&gt;Initialize Comments&lt;/code&gt;按钮，对该页面的评论功能进行初始化。&lt;/p&gt;
+
+&lt;p&gt;现在，你的这个页面的访客就可以使用 GitHub 账号登录进行评论了。唯一不足的是，每个页面的评论框都需要手动地初始化。&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>用Hugo快速搭建个人静态博客</title>
+      <link>http://www.wangxingfeng.com/build-blog-with-hugo.html</link>
+      <pubDate>Mon, 03 Apr 2017 20:49:23 +0800</pubDate>
+      
+      <guid>http://www.wangxingfeng.com/build-blog-with-hugo.html</guid>
+      <description>
+
+&lt;p&gt;最近心血来潮，想要重新折腾一番自己的博客。于是，发现了 Hugo 比之前使用的 Jekyll 更好用。本文是个人参照&lt;a href=&#34;https://gohugo.io/overview/quickstart/&#34;&gt;Hugo官网&lt;/a&gt; 搭建个人博客的记录。&lt;/p&gt;
+
+&lt;h2 id=&#34;step-1-install-hugo-下载-安装-hugo&#34;&gt;Step 1. Install Hugo 下载、安装 Hugo&lt;/h2&gt;
+
+&lt;p&gt;下载地址：&lt;a href=&#34;https://github.com/spf13/hugo/releases&#34;&gt;https://github.com/spf13/hugo/releases&lt;/a&gt;。
+根据自己的操作系统，下载对应的安装包。我的操作系统是&lt;code&gt;Win7 64bit&lt;/code&gt;， 选择了&lt;code&gt;hugo_0.19_Windows-64bit.zip&lt;/code&gt;。&lt;/p&gt;
+
+&lt;p&gt;下载完成之后，解压的文件夹包含以下3个文件：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;hugo_0.19_windows_amd64.exe
+LICENSE.md
+README.md
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;将 &lt;code&gt;hugo_0.19_windows_amd64.exe&lt;/code&gt; 重命名为&lt;code&gt;hugo.exe&lt;/code&gt;。在你的软件安装盘新增名为&lt;code&gt;hugo&lt;/code&gt;的文件目录，在里面在新建一个&lt;code&gt;bin&lt;/code&gt;子目录。然后将&lt;code&gt;hugo.exe&lt;/code&gt;放到&lt;code&gt;hugo\bin&lt;/code&gt;目录下。再将这个&lt;code&gt;bin&lt;/code&gt;目录的路径添加到&lt;code&gt;系统环境变量&lt;/code&gt;中。&lt;/p&gt;
+
+&lt;p&gt;完成以上步骤后，打开命令行输入&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;    hugo help
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果得到如下信息，说明安装成功。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;    hugo is the main command, used to build your Hugo site.
+
+    Hugo is a Fast and Flexible Static Site Generator
+    built with love by spf13 and friends in Go.
+
+    Complete documentation is available at http://gohugo.io/.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;step-2-创建一个名为-blog-的-hugo-站点&#34;&gt;Step 2. 创建一个名为  blog 的 Hugo 站点&lt;/h2&gt;
+
+&lt;p&gt;我希望在E盘下创建站点，所以我先切换目录&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;    cd e:
+    e:
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;然后输入命令：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;    hugo new site blog 
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;得到如下提示创建成功的信息：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Congratulations! Your new Hugo site is created in E:\blog.
+Just a few more steps and you&#39;re ready to go:
+1. Download a theme into the same-named folder.
+Choose a theme from https://themes.gohugo.io/, or
+create your own with the &amp;quot;hugo new theme &amp;lt;THEMENAME&amp;gt;&amp;quot; command.
+2. Perhaps you want to add some content. You can add single files
+with &amp;quot;hugo new &amp;lt;SECTIONNAME&amp;gt;\&amp;lt;FILENAME&amp;gt;.&amp;lt;FORMAT&amp;gt;&amp;quot;.
+3. Start the built-in live server via &amp;quot;hugo server&amp;quot;.
+Visit https://gohugo.io/ for quickstart guide and full documentation.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;进入该目录，可以看到自动生成了5个目录和一个配置文件config.toml&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;|-- archetypes
+|-- content   #存放内容的目录
+|-- data      
+|-- layouts   
+|-- static    #存放静态资源（图片,css,js）
+|-- themes    #存放主题
+|-- config.toml  #配置文件
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;step-3-添加内容&#34;&gt;Step 3. 添加内容&lt;/h2&gt;
+
+&lt;p&gt;切换到该目录下，然后输入如下命令，会在&lt;code&gt;content&lt;/code&gt;的目录下创建&lt;code&gt;post&lt;/code&gt;目录，在&lt;code&gt;post&lt;/code&gt;目录下创建名为&lt;code&gt;test.md&lt;/code&gt;的文件。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;    cd blog
+    hugo new post/test.md
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;提示文件创建成功：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;    E:\blog\content\post\test.md created
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;用文本编辑器打开文件&lt;code&gt;test.md&lt;/code&gt;文件
+可以看到如下内容：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-markdown&#34;&gt;    +++
+    date = &amp;quot;2017-01-02T17:45:06+08:00&amp;quot;  #创建文件的时间
+    title = &amp;quot;test&amp;quot;                      #文件的标题
+    draft = true                        # 是否为草稿
+    +++
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;上述内容为自动创建的与文章有关的内容。自己也可以在两个&lt;code&gt;+++&lt;/code&gt;之间添加如下内容：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-markdown&#34;&gt;    image = &amp;quot;hugo.png&amp;quot;            #指定图片。
+    category = &amp;quot;test&amp;quot;             #文章的类别
+    tags = [&amp;quot;Hugo&amp;quot;, &amp;quot;intro&amp;quot;]      #文章的标签分类。
+    url = &amp;quot;new_start&amp;quot;             #该文章访问时的相对的url地址，默认为文件名。
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;更多的设置，可以参考&lt;a href=&#34;https://gohugo.io/content/front-matter/&#34;&gt;官方文档&lt;/a&gt;。&lt;/p&gt;
+
+&lt;p&gt;以后写博客文章就是这样创建&lt;code&gt;markdown&lt;/code&gt;文件, 之后通过&lt;code&gt;Hugo&lt;/code&gt;编译成静态的html文件。&lt;/p&gt;
+
+&lt;h2 id=&#34;step-4-添加主题&#34;&gt;Step 4. 添加主题&lt;/h2&gt;
+
+&lt;p&gt;官方提供了多种主题可供选择，具体在 &lt;a href=&#34;https://themes.gohugo.io/&#34;&gt;https://themes.gohugo.io/&lt;/a&gt; 可以找到。&lt;/p&gt;
+
+&lt;p&gt;找到想要的主题后，切换到&lt;code&gt;themes&lt;/code&gt;目录（该目录可以存放多个不同的主题）。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;    cd themes
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;由于需要使用到Git下载主题，以及版本管理和代码推送。需要事先下载安装好&lt;a href=&#34;https://git-for-windows.github.io/&#34;&gt;Git&lt;/a&gt;，关于如何安装和使用Git，可以参考我之前的一篇文章：&lt;a href=&#34;http://www.wangxingfeng.com/git-intro/&#34;&gt;Git学习笔记&lt;/a&gt;。&lt;/p&gt;
+
+&lt;p&gt;把选定的主题下载到&lt;code&gt;themes&lt;/code&gt;目录下。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;    git clone https://github.com/dim0627/hugo-icarus-theme.git
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;step-5-启动服务-本地预览&#34;&gt;Step 5. 启动服务，本地预览&lt;/h2&gt;
+
+&lt;p&gt;先从&lt;code&gt;themes&lt;/code&gt;目录下退回到&lt;code&gt;blog&lt;/code&gt;目录, 然后启动服务。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;    cd ..
+    hugo server --theme=hugo-icarus-theme --buildDrafts
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;在浏览器中打开 &lt;a href=&#34;http://localhost:1313/&#34;&gt;http://localhost:1313/&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;step-6-修改配置文件-config-toml&#34;&gt;Step 6. 修改配置文件 config.toml&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-markdown&#34;&gt;    languageCode = &amp;quot;zh-cn&amp;quot;
+    title = &amp;quot;Frank Wang&#39;s Coding World&amp;quot;
+    baseurl = &amp;quot;http://www.wangxingfeng.com/&amp;quot;  
+
+    [Params]
+        Author =&amp;quot;Frank Wang&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;step-7-生成网站&#34;&gt;Step 7.  生成网站&lt;/h2&gt;
+
+&lt;p&gt;7.1 改变文章&lt;code&gt;draft&lt;/code&gt;（草稿）状态：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;hugo undraft content/post/*.md
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;7.2  启动&lt;code&gt;hugo&lt;/code&gt;, 生成发布文件到&lt;code&gt;public&lt;/code&gt;目录下。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;    hugo --theme=even
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;step-8-托管到-github-pages&#34;&gt;Step 8. 托管到 GitHub Pages&lt;/h2&gt;
+
+&lt;p&gt;8.1 使用 &lt;code&gt;Git&lt;/code&gt; 来进行版本管理&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;    git init
+    echo &amp;quot;/public/&amp;quot; &amp;gt;&amp;gt; .gitignore
+    echo &amp;quot;/themes/&amp;quot; &amp;gt;&amp;gt; .gitignore
+    git add --all
+    git commit -m &amp;quot;Initial commit&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;8.2 创建 &lt;code&gt;Git&lt;/code&gt; 远程仓库：&lt;/p&gt;
+
+&lt;p&gt;登录你的 &lt;code&gt;GitHub&lt;/code&gt;. 创建一个新的仓库，仓库名为 &lt;code&gt;Github用户.github.io&lt;/code&gt;, 比如我的是&lt;code&gt;frankwang0909.github.io&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;8.3. 添加 &lt;code&gt;Git&lt;/code&gt; 远程仓库，并提交代码。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;    cd public
+    git init
+    git remote add origin git@github.com:frankwang0909/frankwang0909.github.io.git
+
+    git add --all
+    git commit -m &amp;quot;blog added&amp;quot;
+    git push -u origin master
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;8.4 以后有内容改动，提交代码.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;    (cd ..; hugo --theme=hugo_theme_robust)
+    git add --all
+    git commit -m &amp;quot;&amp;lt;some change message&amp;gt;&amp;quot;
+    git push -u origin master
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Markdown 学习笔记</title>
+      <link>http://www.wangxingfeng.com/markdonw-notes.html</link>
+      <pubDate>Sun, 05 Jun 2016 22:05:46 +0800</pubDate>
+      
+      <guid>http://www.wangxingfeng.com/markdonw-notes.html</guid>
+      <description>
+
+&lt;h2 id=&#34;定义&#34;&gt;定义：&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://zh.wikipedia.org/zh-cn/Markdown&#34;&gt;维基百科&lt;/a&gt;上的介绍：&lt;/p&gt;
+
+&lt;p&gt;Markdown 是一种轻量级标记语言，创始人为约翰·格鲁伯（John Gruber）。它允许人们“使用易读易写的纯文本格式编写文档，然后转换成有效的XHTML(或者HTML)文档”。这种语言吸收了很多在电子邮件中已有的纯文本标记的特性。&lt;/p&gt;
+
+&lt;p&gt;Markdown同时还是一个由Gruber编写的Perl脚本：Markdown.pl。它把用markdown语法编写的内容转换成有效的、结构良好的XHTML或HTML内容，并将左尖括号(&amp;rsquo;&amp;lt;&amp;lsquo;)和&amp;amp;号替换成它们各自的字符实体引用。它可以用作单独的脚本，Blosxom和Movable Type的插件又或者BBEdit的文本过滤器.&lt;/p&gt;
+
+&lt;h2 id=&#34;用处&#34;&gt;用处：&lt;/h2&gt;
+
+&lt;p&gt;从维基百科的介绍来看，markdown就是一种标记语言。它简洁的语法代替排版，可以使我们专心于码字，用「标记」语法来代替常见的排版格式。比如我现在这个博客的内容，就是直接用Markdown写的。 不用考虑复杂的排版，只需要记住几个简单常用的语法就行，然后可以轻松地转换成HTML文件，变成可以被浏览器解析的网页。
+如果你有一个自己独立的博客，只是想码码字，不想编写复杂HTML和CSS代码，Markdown无疑是一个很好地选择。&lt;/p&gt;
+
+&lt;h2 id=&#34;最基本的语法&#34;&gt;最基本的语法：&lt;/h2&gt;
+
+&lt;p&gt;1.标题：&lt;/p&gt;
+
+&lt;p&gt;如果一段文字被定义为标题，只要在这段文字前加 &lt;code&gt;#&lt;/code&gt;号即可。1个&lt;code&gt;#&lt;/code&gt;表示 一级标题；&lt;code&gt;##&lt;/code&gt;表示 二级标题；以此类推，总共6级标题， &lt;code&gt;#&lt;/code&gt;号后加一个空格。&lt;/p&gt;
+
+&lt;p&gt;2.引用代码：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;1）引用整段代码，只需要空是个空格或者一个Tab键，完整地保留代码缩进格式。
+2）在一行内引入代码片段。用Tab键上方的反引号(`  `) 包围代码。
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;3.链接：&lt;/p&gt;
+
+&lt;p&gt;用方括号&lt;code&gt;[]&lt;/code&gt;括起来要添加超链接的文字，用圆括号&lt;code&gt;()&lt;/code&gt;把url括起来。写法如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;`[Markdown维基百科英文版](https://en.wikipedia.org/wiki/Markdown)`
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;效果如右边所示：&lt;a href=&#34;https://en.wikipedia.org/wiki/Markdown&#34;&gt;Markdown维基百科英文版&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;4.图片:&lt;/p&gt;
+
+&lt;p&gt;插入链接与插入图片的语法很像，区别在一个 &lt;code&gt;!&lt;/code&gt;号。图片为：&lt;code&gt;![文字描述](url)。&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;5.分割线:&lt;/p&gt;
+
+&lt;p&gt;用三个以上的&lt;code&gt;星号&lt;/code&gt;、&lt;code&gt;减号&lt;/code&gt;、&lt;code&gt;底线&lt;/code&gt;来建立一个分隔线，行内不能有其他东西。可以在星号或是减号中间插入空格&lt;/p&gt;
+
+&lt;p&gt;6.列表：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;1)无序列表无序列表使用`星号`、`加号`或是`减号`作为列表标记；
+2)有序列表则直接在文字前加`1.` `2.` `3.` 符号要和文字之间加上一个字符的空格。
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;7.粗体与斜体:&lt;/p&gt;
+
+&lt;p&gt;用两个 &lt;code&gt;*&lt;/code&gt; 包含一段文本就是粗体的语法，用一个 &lt;code&gt;*&lt;/code&gt;包含一段文本就是斜体的语法。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;这是粗体文字&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;这是斜体文体&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;8.空格与换行：&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;单个回车&lt;/code&gt; 视为空格；&lt;code&gt;连续回车&lt;/code&gt;才能分段。&lt;/p&gt;
+
+&lt;p&gt;9.区块引用 &lt;code&gt;Blockquotes&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Markdown 标记区块引用是使用类似 email 中用 &lt;code&gt;&amp;gt;&lt;/code&gt;的引用方式。如果你还熟悉在 email 信件中的引言部分，你就知道怎么在 Markdown 文件中建立一个区块引用，那会看起来像是你自己先断好行，然后在每行的最前面加上 &lt;code&gt;&amp;gt; ：&lt;/code&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;相关链接&#34;&gt;相关链接：&lt;/h2&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;&lt;a href=&#34;http://wowubuntu.com/markdown/basic.html&#34;&gt;快速入门指南&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;a href=&#34;http://daringfireball.net/projects/markdown/&#34;&gt;Markdown官网&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Sublime Text 学习笔记</title>
+      <link>http://www.wangxingfeng.com/sublimetext-notes.html</link>
+      <pubDate>Fri, 13 May 2016 00:14:00 +0800</pubDate>
+      
+      <guid>http://www.wangxingfeng.com/sublimetext-notes.html</guid>
+      <description>
+
+&lt;p&gt;自从把主力代码编辑器改为&lt;a href=&#34;https://www.sublimetext.com/&#34;&gt;Sublime Text&lt;/a&gt;之后，写代码的效率明显高了许多。最近，我开始尝试着给身边的朋友推荐这款编辑器。&lt;/p&gt;
+
+&lt;h2 id=&#34;一-sublime-text-的优点&#34;&gt;一、Sublime Text 的优点&lt;/h2&gt;
+
+&lt;p&gt;1.跨平台；&lt;/p&gt;
+
+&lt;p&gt;2.轻量级，可拓展：有大量插件可由用户自行选择安装(首推&lt;code&gt;Emmet&lt;/code&gt;插件)。&lt;/p&gt;
+
+&lt;p&gt;3.支持几乎所有的主流编程语言的语法高亮显示；&lt;/p&gt;
+
+&lt;p&gt;4.代码自动补全，支持代码段（Code Snippet）；&lt;/p&gt;
+
+&lt;p&gt;5.右上角的&lt;code&gt;minimap&lt;/code&gt;: 用来查看标注、快速拖动、迅速定位；&lt;/p&gt;
+
+&lt;p&gt;6.快速跳转到不同的文件/方法/函数：支持模糊匹配；&lt;/p&gt;
+
+&lt;p&gt;7.快速切换&lt;code&gt;Tab&lt;/code&gt;与&lt;code&gt;Space&lt;/code&gt;；&lt;/p&gt;
+
+&lt;p&gt;8.格式化代码；&lt;/p&gt;
+
+&lt;h2 id=&#34;二-安装sublime-text&#34;&gt;二、安装Sublime Text&lt;/h2&gt;
+
+&lt;p&gt;1.下载安装包：&lt;/p&gt;
+
+&lt;p&gt;Sublime Text官网地址：&lt;a href=&#34;https://www.sublimetext.com/&#34;&gt;https://www.sublimetext.com/&lt;/a&gt; 根据自己的系统选择对应的安装包下载并安装。目前稳定版本为&lt;code&gt;Sublime Text 3&lt;/code&gt;;&lt;/p&gt;
+
+&lt;p&gt;2.安装Package Control:&lt;/p&gt;
+
+&lt;p&gt;下载插件之前需要先安装&lt;code&gt;Package Control&lt;/code&gt;，它是用来管理和下载插件的控制组件。 &lt;code&gt;Package Control&lt;/code&gt;官网安装地址：&lt;a href=&#34;https://packagecontrol.io/installation&#34;&gt;https://packagecontrol.io/installation&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.wangxingfeng.com/images/2016051301.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;1）使用快键键 &lt;code&gt;ctrl+&lt;/code&gt; &lt;code&gt;或者&lt;/code&gt;View&lt;code&gt;&amp;gt;&lt;/code&gt;Show Console` 菜单打开控制台，然后，然后回车让它安装。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.wangxingfeng.com/images/2016051302.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;2）根据Sublime Text的版本选择复制对应的版本代码；&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.wangxingfeng.com/images/2016051303.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;3）黏贴到控制台输入框里，按&lt;code&gt;Enter键&lt;/code&gt;，插件管理包就进入正在下载安装的状态（可能需要一点时间）；&lt;/p&gt;
+
+&lt;p&gt;3.自定义安装各种插件：&lt;/p&gt;
+
+&lt;p&gt;在 Package Control官网地址：&lt;a href=&#34;https://packagecontrol.io/&#34;&gt;https://packagecontrol.io/&lt;/a&gt;可以看到各种插件以及它的下载量排名，找到自己感兴趣的，下载下来试用。&lt;/p&gt;
+
+&lt;p&gt;下载安装方法如下： (windows平台)&lt;/p&gt;
+
+&lt;p&gt;1）按下 &lt;code&gt;Ctrl+Shift+P&lt;/code&gt; 调出命令面板，输入&lt;code&gt;install&lt;/code&gt;， 调出 &lt;code&gt;Install Package&lt;/code&gt; 选项并回车，出来这样的画面，&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.wangxingfeng.com/images/2016051305.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;2）然后输入自己想要下载的插件名称，比如: &lt;code&gt;HTML Extended&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.wangxingfeng.com/images/2016051306.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;3）下载安装完成后会弹出类似这样的文件，说明已经成功安装该插件。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.wangxingfeng.com/images/2016051307.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;或者在左下角提示成功安装：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.wangxingfeng.com/images/2016051308.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;三-推荐几个好用的插件&#34;&gt;三、推荐几个好用的插件：&lt;/h2&gt;
+
+&lt;p&gt;1.Emmet：通过简单的命令直接生成一大段代码。&lt;/p&gt;
+
+&lt;p&gt;2.ConvertToUTF8(转换成utf-8格式): 默认情况下，gbk编码格式的中文会变成乱码，这个插件可以实现自动转换。&lt;/p&gt;
+
+&lt;p&gt;3.JsFormat：格式化js代码。可以还原别人网站被压缩过难以阅读的js代码。&lt;/p&gt;
+
+&lt;p&gt;4.HTMLBeautify：格式化HTML。&lt;/p&gt;
+
+&lt;p&gt;5.Hasher:符号转义。&lt;/p&gt;
+
+&lt;p&gt;6.TrailingSpaces：多余空格标记。&lt;/p&gt;
+
+&lt;p&gt;7.SideBarEnhancementS: 侧边栏增强功能。&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;ChineseLocalization：汉化插件。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&#34;四-常用的快捷键-windows平台下&#34;&gt;四、常用的快捷键（windows平台下）：&lt;/h2&gt;
+
+&lt;p&gt;1.&lt;code&gt;Ctrl + Shift + N&lt;/code&gt;新建窗口；&lt;code&gt;Ctrl + W&lt;/code&gt;关闭该窗口。&lt;/p&gt;
+
+&lt;p&gt;2.&lt;code&gt;Ctrl + N&lt;/code&gt;新建标签；&lt;code&gt;Ctrl + W&lt;/code&gt; 关闭当前标签；&lt;code&gt;Ctrl + Shift + T&lt;/code&gt; 恢复刚刚关闭的标签。&lt;/p&gt;
+
+&lt;p&gt;3.&lt;code&gt;Alt + Shift + 2&lt;/code&gt;左右分屏； &lt;code&gt;Alt + Shift + 8&lt;/code&gt;  上下分屏；&lt;code&gt;Alt + Shift + 5&lt;/code&gt;  上下左右分为四屏。&lt;code&gt;Ctrl + 数字键&lt;/code&gt; 跳转到指定屏；&lt;code&gt;Ctrl + Shift + 数字键&lt;/code&gt; 将当前屏移动到指定。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;ctrl+ 1&lt;/code&gt; 变回一屏显示。&lt;/p&gt;
+
+&lt;p&gt;4.&lt;code&gt;F11&lt;/code&gt; 切换普通全屏; &lt;code&gt;Shift + F11&lt;/code&gt;切换无干扰全屏。&lt;/p&gt;
+
+&lt;p&gt;5.&lt;code&gt;Ctrl + P&lt;/code&gt; 会列出当前打开的所有文件，点击某个文件可以快速跳转；&lt;/p&gt;
+
+&lt;p&gt;6.&lt;code&gt;Ctrl + R&lt;/code&gt; 对于md文件，会列出大纲。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.wangxingfeng.com/images/2016051309.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;7.&lt;code&gt;Ctrl + F&lt;/code&gt; 调出搜索框进行搜索；&lt;code&gt;Ctrl + H&lt;/code&gt; 替换&lt;/p&gt;
+
+&lt;p&gt;8.&lt;code&gt;Ctrl + J&lt;/code&gt; 把选中区域合并为一行；&lt;code&gt;Ctrl + Shift + L&lt;/code&gt; 可以将当前选中区域打散，然后进行同时编辑：&lt;/p&gt;
+
+&lt;p&gt;9.多行游标（可同时编辑多行代码）：&lt;code&gt;Ctrl + D&lt;/code&gt; 选择当前光标所在的词并高亮该词所有出现的位置，再次&lt;code&gt;Ctrl + D&lt;/code&gt;选择该词出现的下一个位置，在多重选词的过程中，使用&lt;code&gt;Ctrl + K&lt;/code&gt; 进行跳过，使用&lt;code&gt;Ctrl + U&lt;/code&gt;进行回退，使用&lt;code&gt;Esc&lt;/code&gt;退出多重编辑。&lt;/p&gt;
+
+&lt;p&gt;10.&lt;code&gt;Ctrl + Enter&lt;/code&gt; 在当前行下面新增一行然后跳至该行；&lt;code&gt;Ctrl + Shift + Enter&lt;/code&gt; 在当前行上面增加一行并跳至该行。&lt;/p&gt;
+
+&lt;p&gt;11.&lt;code&gt;Ctrl + E&lt;/code&gt; 自动生成代码片段（安装Emmet插件之后）。&lt;/p&gt;
+
+&lt;p&gt;12.&lt;code&gt;Ctrl + shift + D&lt;/code&gt;在下一行复制当前行内容，并跳至该行。&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Git学习笔记</title>
+      <link>http://www.wangxingfeng.com/git-intro.html</link>
+      <pubDate>Sun, 03 Apr 2016 22:43:39 +0800</pubDate>
+      
+      <guid>http://www.wangxingfeng.com/git-intro.html</guid>
+      <description>
+
+&lt;p&gt;&lt;code&gt;Git&lt;/code&gt;是一款分布式的代码管理工具，方便多人协作时的代码管理。在&lt;code&gt;win7&lt;/code&gt;系统中使用Git管理代码有2种主要的方式。&lt;/p&gt;
+
+&lt;h2 id=&#34;方式一-msysgit&#34;&gt;方式一： msysgit&lt;/h2&gt;
+
+&lt;h3 id=&#34;step-1-下载并安装-msysgit&#34;&gt;Step 1: 下载并安装  msysgit&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://git-for-windows.github.io&#34;&gt;msysgit&lt;/a&gt; 是Windows版的Git。下载，然后按默认选项安装即可。安装完成后，在开始菜单里找到“ Git ”-&amp;gt;“ Git Bash ”，点击会弹出一个命令行窗口，说明Git安装成功。&lt;/p&gt;
+
+&lt;h3 id=&#34;step-2-设置用户名&#34;&gt;Step 2: 设置用户名&lt;/h3&gt;
+
+&lt;p&gt;在命令行输入以下命令&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;    $ git config --global user.name &amp;quot;Your Name&amp;quot;
+    $ git config --global user.email &amp;quot;email@example.com&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;注意&lt;/strong&gt;： &lt;code&gt;git confi&lt;/code&gt;g命令的&lt;code&gt;--global&lt;/code&gt;参数，用了这个参数，表示你这台电脑上所有的Git仓库都会使用这个配置，当然也可以对某个仓库指定不同的用户名和Email地址。&lt;/p&gt;
+
+&lt;h3 id=&#34;step-3-创建版本库&#34;&gt;Step 3: 创建版本库&lt;/h3&gt;
+
+&lt;p&gt;选择一个合适的地方，创建一个空目录：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;    $ mkdir  gitskills  // 创建一个名gitskills的目录
+    $ cd   gitskills    // 切换gitskills目录
+    $ pwd           //pwd 命令用于显示当前目录
+    $ git init      //初始化Git仓库，当前目录中会多了一个.git目录（默认是隐藏的）
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;注意&lt;/strong&gt;：为避免莫名其妙地报错，请确保目录名（包括父目录）不包含 &lt;strong&gt;中文&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;h3 id=&#34;step-4-把文件添加到版本库&#34;&gt;Step 4: 把文件添加到版本库&lt;/h3&gt;
+
+&lt;p&gt;在刚刚创建的目录(比如gitskills)下新建文件，或者从其他地方拷贝文件到该目录下。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;    $ git add readme.md  //新增一个readme.md文件
+    $ git commit -m &amp;quot;提交时的附加信息&amp;quot;  //把文件提交到仓库,并附上相关的说明文字（用引号括起来）
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;注意&lt;/strong&gt;： 每次修改文件，都需要先&lt;code&gt;git add&lt;/code&gt;到暂存区，然后才能&lt;code&gt;git commit&lt;/code&gt;到仓库。可以&lt;code&gt;add&lt;/code&gt;一个文件之后&lt;code&gt;commit&lt;/code&gt;，也可以&lt;code&gt;add&lt;/code&gt;多个文件，然后一起&lt;code&gt;commit&lt;/code&gt;。&lt;/p&gt;
+
+&lt;h3 id=&#34;常用的git命令&#34;&gt;常用的Git命令：&lt;/h3&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;查看状态 : &lt;code&gt;git status&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;推送到远程库： &lt;code&gt;git remote add origin git@github.com: 具体远程库的名称&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;查看difference: &lt;code&gt;git diff readme.md&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;查看历史记录： &lt;code&gt;git log&lt;/code&gt; 或者 &lt;code&gt;git log --pretty=oneline&lt;/code&gt;。&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;你会看到一大串类似&lt;code&gt;commit: 8a56b4...ba53c1e50&lt;/code&gt;十六进制字符串，它是版本号&lt;code&gt;commit id&lt;/code&gt;， 回退时会用到。&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;版本回退： 仅退到上一个版本可使用命令 &lt;code&gt;git reset --hard HEAD^&lt;/code&gt;； 如果版本比较多，可以先 &lt;code&gt;git log&lt;/code&gt; 找到对应的版本号commit_id， 然后使用命令 &lt;code&gt;git reset --hard commit_id&lt;/code&gt;（版本号可以不用写全，git会自动查找匹配的）&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;查看命令历史： &lt;code&gt;git reflog&lt;/code&gt;， 如果回退之后又后悔了，而且已经关了Git，那就使用 &lt;code&gt;git reflog&lt;/code&gt;，找到对应的commit，以便回到未来的哪个版本。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;更新本地库：推送前先  &lt;code&gt;git pull&lt;/code&gt; 更新本地库，以免远程库已经改变导致推送失败报错。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;常见错误及处理：&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;常见报错1:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;    fatal: remote origin already exists. 
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;解决方法：先删除远程 git 仓库，再添加&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;    git remote rm origin
+
+    git remote add origin git@github.com:项目的远程git仓库
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;方式二-使用-gihub-提供的-github-for-windows&#34;&gt;方式二： 使用 GiHub 提供的 GitHub for Windows&lt;/h2&gt;
+
+&lt;p&gt;在 window 平台下使用 Git 的最简单的方式是使用 GitHub 网站提供的&lt;a href=&#34;https://desktop.github.com/&#34;&gt;GitHub for Windows&lt;/a&gt;。优点是直接图形化的操作界面，完全不用记命令。&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

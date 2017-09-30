@@ -1,0 +1,807 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Mysql on Frank Wang&#39;s Coding World</title>
+    <link>http://www.wangxingfeng.com/tags/mysql/index.xml</link>
+    <description>Recent content in Mysql on Frank Wang&#39;s Coding World</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <atom:link href="http://www.wangxingfeng.com/tags/mysql/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>MySQL学习笔记：修改数据表的常用命令</title>
+      <link>http://www.wangxingfeng.com/mysql_notes_3.html</link>
+      <pubDate>Tue, 27 Jun 2017 22:57:29 +0800</pubDate>
+      
+      <guid>http://www.wangxingfeng.com/mysql_notes_3.html</guid>
+      <description>
+
+&lt;h2 id=&#34;1-新增或删除列&#34;&gt;1.新增或删除列&lt;/h2&gt;
+
+&lt;p&gt;1.1 添加单列&lt;/p&gt;
+
+&lt;p&gt;语法：&lt;code&gt;ALTER TABLE tbl_name ADD [COLUMN] col_name col_definition [FIRST | AFTER col_name];&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;指定位置关系的关键字：&lt;/p&gt;
+
+&lt;p&gt;1.FIRST：表示在数据表的第一列&lt;/p&gt;
+
+&lt;p&gt;2.AFTER: 参数col_name为某个数据列的名称，表示指定在该数据列的后面。&lt;/p&gt;
+
+&lt;p&gt;示例代码如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;ALTER TABLE users ADD age TINYINT UNSIGNED NOT NULL DEFAULT 10;
+
+ALTER TABLE users ADD password VARCHAR(20) NOT NULL AFTER username;
+
+ALTER TABLE users ADD truename VARCHAR(20) NOT NULL FIRST;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;1.2 添加多列（不能指定位置关系）&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;ALTER TABLE tbl_name ADD [COLUMN] (col_name1 col_definition, col_name2 col_definition,...);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;1.3 删除列&lt;/p&gt;
+
+&lt;p&gt;语法：`ALTER TABLE tbl_name DROP col_name1 [, DROP col_name2];&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;ALTER TABLE users DROP truename;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;2-添加约束&#34;&gt;2.添加约束&lt;/h2&gt;
+
+&lt;p&gt;2.1 添加主键约束：(数据表只能有一个主键)&lt;/p&gt;
+
+&lt;p&gt;语法：&lt;code&gt;ALTER TABLE tbl_name ADD [CONSTRAINT [symbol]] PRIMARY KEY [index_type] (index_col_name);&lt;/code&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;ALTER TABLE users3 ADD CONSTRAINT PK_users2_id PRIMARY KEY (id);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;2.2 添加唯一约束：唯一约束可以有多个&lt;/p&gt;
+
+&lt;p&gt;语法：&lt;code&gt;ALTER TABLE tbl_name ADD [CONSTRAINT [symbol]] UNIQUE [INDEX | KEY] [index_name] [ index_type] (index_col_name, ...);&lt;/code&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;ALTER TABLE users3 ADD UNIQUE (username);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;2.3 添加外键约束：&lt;/p&gt;
+
+&lt;p&gt;语法：&lt;code&gt;ALTER TABLE tbl_name ADD [CONSTRAINT [symbol]] FOREIGN KEY [index_name] (index_colo_name) reference_definition;&lt;/code&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;ALTER TABLE users3 ADD FOREIGEN KEY (pid) REFERENCE provinces (id);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;2.4 添加默认约束：&lt;/p&gt;
+
+&lt;p&gt;语法：&lt;code&gt;ALTER TABLE tbl_name ALTER [COLUMN] col_name SET DEFAULT literal;&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;给 age 字段添加默认约束，默认值为10：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;ALTER TABLE users3 ALTER age SET DEFAULT 10;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;3-删除约束&#34;&gt;3.删除约束：&lt;/h2&gt;
+
+&lt;p&gt;3.1 删除主键约束：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;ALTER TABLE users DROP PRIMARY KEY;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;3.2 删除唯一约束：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;ALTER TABLE users DROP INDEX username;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;3.3 删除外键约束：需指定外键名称&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;ALTER TABLE tbl_name DROP FOREIGN KEY fk_symbol
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;fk_symbol 是系统赋予外键的名字，通过如下命令可以查看到&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;SHOW CREATE TABLE users;
+
+ALTER TABLE users DROP FOREIGN KEY users_ibfk_1;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;3.4 删除默认约束：需指定字段&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;ALTER TABLE tbl_name ALTER [COLUMN] col_name DROP DEFAULT
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;比如：删除age 字段的默认约束&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;ALTER TABLE users3 ALTER age DROP DEFAULT;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;4-修改列定义&#34;&gt;4.修改列定义：&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;ALTER TABLE tbl_name MODIFY [COLUMN] col_name col_definition [FIRST | AFTER col_name]
+
+ALTER TABLE users MODIFY pid SMALLINT UNSIGNED NOT NULL FIRST;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;5-修改列的名称&#34;&gt;5.修改列的名称：&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;ALTER TABLE tbl_name CHANGE [COLUMN] old_col_name new_col_name column_definition [FIRST | AFTER col_name]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;6-数据表更名&#34;&gt;6.数据表更名：&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;ALTER TABLE tbl_name RENAME [TO|AS] new_tbl_name;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;或者&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;RENAME TABLE tbl_name TO new_tbl_name [, tbl_name2 TO new_tbl_name2 ,...]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;方法2可以同时为多张数据表更名。&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Python操作MySQL学习笔记</title>
+      <link>http://www.wangxingfeng.com/python_mysqldb.html</link>
+      <pubDate>Tue, 20 Jun 2017 07:44:01 +0800</pubDate>
+      
+      <guid>http://www.wangxingfeng.com/python_mysqldb.html</guid>
+      <description>
+
+&lt;h2 id=&#34;一-应用架构&#34;&gt;一、应用架构&lt;/h2&gt;
+
+&lt;p&gt;客户端 &amp;ndash;&amp;gt; 业务逻辑层 &amp;ndash;&amp;gt; 数据访问层 &amp;ndash;&amp;gt; 数据库&lt;/p&gt;
+
+&lt;h2 id=&#34;二-python-db-api&#34;&gt;二、 Python DB API&lt;/h2&gt;
+
+&lt;p&gt;Python应用程序（包含SQL) &amp;ndash;&amp;gt; Python DB API（访问数据库的统一规范接口MySQLdb） &amp;ndash;&amp;gt; MySQL / Oracle / SQLServer等数据库&lt;/p&gt;
+
+&lt;p&gt;1.数据库连接对象：connection&lt;/p&gt;
+
+&lt;p&gt;2.数据库交互对象：cursor&lt;/p&gt;
+
+&lt;p&gt;3.数据库异常类: exceptions&lt;/p&gt;
+
+&lt;h2 id=&#34;三-访问数据库流程&#34;&gt;三、访问数据库流程：&lt;/h2&gt;
+
+&lt;p&gt;创建连接对象connection &amp;ndash;&amp;gt; 获取交互对象cursor &amp;ndash;&amp;gt; 执行查询/执行命令/获取数据/处理数据等 &amp;ndash;&amp;gt; 关闭cursor &amp;ndash;&amp;gt; 关闭connection&lt;/p&gt;
+
+&lt;h2 id=&#34;四-数据库连接对象-connection&#34;&gt;四、数据库连接对象：connection&lt;/h2&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;建立Python客户端与数据库的网络连接&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;创建方法： MySQLdb.Connect()&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;参数：&lt;/p&gt;
+
+&lt;p&gt;host 数据库服务器地址&lt;/p&gt;
+
+&lt;p&gt;port 端口号， 数字类型&lt;/p&gt;
+
+&lt;p&gt;user 用户名&lt;/p&gt;
+
+&lt;p&gt;passwd 密码&lt;/p&gt;
+
+&lt;p&gt;db 数据库名称&lt;/p&gt;
+
+&lt;p&gt;charset 编码格式, utf8&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;4.方法：&lt;/p&gt;
+
+&lt;p&gt;cursor() 获取交互对象（游标）&lt;/p&gt;
+
+&lt;p&gt;commit() 提交当前事务&lt;/p&gt;
+
+&lt;p&gt;rollback() 回滚当前事务&lt;/p&gt;
+
+&lt;p&gt;close() 关闭连接&lt;/p&gt;
+
+&lt;h2 id=&#34;五-数据库交互对象-游标-cursor-用于执行查询和获取结果&#34;&gt;五、数据库交互对象（游标）cursor: 用于执行查询和获取结果&lt;/h2&gt;
+
+&lt;p&gt;1.方法：&lt;/p&gt;
+
+&lt;p&gt;1）execute(op [, args] )    执行SQL,将结果从数据库获取到客户端，存在本地缓冲区。&lt;/p&gt;
+
+&lt;p&gt;2）fetch*() 方法：移动指针rownumber， 返回数据。&lt;/p&gt;
+
+&lt;p&gt;fetchone() 获取结果集的下一行&lt;/p&gt;
+
+&lt;p&gt;fetchmany(size) 获取结果集的下几行&lt;/p&gt;
+
+&lt;p&gt;fetchall() 获取结果集中剩下的所有行&lt;/p&gt;
+
+&lt;p&gt;3）close() 关闭游标对象&lt;/p&gt;
+
+&lt;p&gt;2.属性：rowcount 最近一次execute返回数据的行数或影响的行数。&lt;/p&gt;
+
+&lt;h2 id=&#34;六-事务&#34;&gt;六、事务&lt;/h2&gt;
+
+&lt;p&gt;1.访问和更新数据库的一个程序执行单元，可以包含多个SQL语句或命令的操作。&lt;/p&gt;
+
+&lt;p&gt;2.必须设置引擎为INNODB。&lt;/p&gt;
+
+&lt;p&gt;3.特性：&lt;/p&gt;
+
+&lt;p&gt;1）原子性：事务包含的所有操作，要么不做，要么都做。&lt;/p&gt;
+
+&lt;p&gt;2）一致性：事务必须使数据库从一致性状态变到另一个一致性状态。&lt;/p&gt;
+
+&lt;p&gt;3）隔离性：一个事务的执行不能被其他事务所干扰。&lt;/p&gt;
+
+&lt;p&gt;4）持久性：事务一旦提交，它对数据库的改变就是永久性的。&lt;/p&gt;
+
+&lt;p&gt;4.使用事务：&lt;/p&gt;
+
+&lt;p&gt;1）关闭自动commit：设置conn.autocommit(False);&lt;/p&gt;
+
+&lt;p&gt;2）正常结束事务：conn.commit();&lt;/p&gt;
+
+&lt;p&gt;3）异常结束事务：conn.rollback().&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>MySQL数据库的基本数据类型、表的操作和记录的操作</title>
+      <link>http://www.wangxingfeng.com/mysql-basic-2.html</link>
+      <pubDate>Thu, 08 Jun 2017 07:32:57 +0800</pubDate>
+      
+      <guid>http://www.wangxingfeng.com/mysql-basic-2.html</guid>
+      <description>
+
+&lt;h2 id=&#34;一-mysql的基本数据类型&#34;&gt;一、MySQL的基本数据类型：&lt;/h2&gt;
+
+&lt;h3 id=&#34;1-数值类型&#34;&gt;1. 数值类型：&lt;/h3&gt;
+
+&lt;p&gt;包括严格数值数据类型(INTEGER、SMALLINT、DECIMAL和NUMERIC)，以及近似数值数据类型(FLOAT、REAL和DOUBLE PRECISION)。&lt;/p&gt;
+
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;类型&lt;/th&gt;
+&lt;th align=&#34;center&#34;&gt;大小&lt;/th&gt;
+&lt;th align=&#34;center&#34;&gt;范围（有符号）&lt;/th&gt;
+&lt;th align=&#34;center&#34;&gt;范围（无符号）&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;用途&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;TINYINT&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;1 字节&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;(-128，127)&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;(0，255)&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;小整数值&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;SMALLINT&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;2 字节&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;(-2^15，2^15 -1)&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;(0，2^16 -1)&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;大整数值&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;MEDIUMINT&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;3 字节&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;(-2^23，2^23 -1)&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;(0，2^24 -1)&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;大整数值&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;INT或INTEGER&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;4 字节&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;(-2^31，2^31 -1)&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;(0，2^32 -1)&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;大整数值&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;BIGINT&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;8 字节&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;(-2^63，2^63 -1)&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;(0，2^64 -1)&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;极大整数值&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;FLOAT&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;4 字节&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;(-3.402 823 466 E+38，-1.175 494 351 E-38)，0，(1.175 494 351 E-38，3.402 823 466 351 E+38)&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;0，(1.175 494 351 E-38，3.402 823 466 E+38)&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;单精度浮点数值&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;DOUBLE&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;8 字节&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;(-1.797 693 134 862 315 7 E+308，-2.225 073 858 507 201 4 E-308)，0，(2.225 073 858 507 201 4 E-308，1.797 693 134 862 315 7 E+308)&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;0，(2.225 073 858 507 201 4 E-308，1.797 693 134 862 315 7 E+308)&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;双精度浮点数值&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;DECIMAL&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;DECIMAL(M,D)。如果M&amp;gt;D，为M+2否则为D+2&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;依附于M和D的值&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;依附于M和D的值&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;小数值&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;DECIMAL(M,D)：&lt;/p&gt;
+
+&lt;p&gt;M指定指定小数点左边和右边可以存储的十进制数字的最大个数，最大精度38。&lt;/p&gt;
+
+&lt;p&gt;D指定小数点右边可以存储的十进制数字的最大个数。小数位数必须是从 0 到 a之间的值。默认小数位数是 0。&lt;/p&gt;
+
+&lt;h3 id=&#34;2-字符型&#34;&gt;2. 字符型：&lt;/h3&gt;
+
+&lt;p&gt;字符串类型主要包括CHAR、VARCHAR、TEXT、MEDIUMTEXT、LONGTEXT、EMU等。&lt;/p&gt;
+
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;类型&lt;/th&gt;
+&lt;th align=&#34;center&#34;&gt;大小&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;用途&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;CHAR&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;0~2^8-1 (0~255) 字节&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;定长字符串&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;VARCHAR&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;0~2^16-1 (0~65536) 字节&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;变长字符串&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;TINYTEXT&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;0~2^8-1 (0~255) 字节&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;短文本字符串&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;TEXT&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;0~2^16-1 (0~65536)字节&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;长文本数据&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;MEDIUMTEXT&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;0~2^24-1 (0~16777215)字节&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;中等长度文本数据&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;LONGTEXT&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;0~2^32-1 (0~4294967296)&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;极大文本数据&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;定长字符串：没有达到指定长度，尾部空格补齐。&lt;/p&gt;
+
+&lt;h3 id=&#34;3-日期时间类型&#34;&gt;3. 日期时间类型：&lt;/h3&gt;
+
+&lt;p&gt;表示时间值的日期和时间类型为DATETIME、DATE、TIMESTAMP、TIME和YEAR。&lt;/p&gt;
+
+&lt;p&gt;每个时间类型有一个有效值范围和一个&amp;rdquo;零&amp;rdquo;值，当指定不合法的MySQL不能表示的值时使用&amp;rdquo;零&amp;rdquo;值。&lt;/p&gt;
+
+&lt;p&gt;类型  大小
+(字节)    范围  格式  用途
+DATE    3   1000-01-01/9999-12-31   YYYY-MM-DD  日期值
+TIME    3   &amp;lsquo;-838:59:59&amp;rsquo;/&amp;lsquo;838:59:59&amp;rsquo;    HH:MM:SS    时间值或持续时间
+YEAR    1   &lt;sup&gt;1901&lt;/sup&gt;&amp;frasl;&lt;sub&gt;2155&lt;/sub&gt;   YYYY    年份值
+DATETIME    8   1000-01-01 00:00:00/9999-12-31 23:59:59 YYYY-MM-DD HH:MM:SS 混合日期和时间值
+TIMESTAMP   4   1970-01-01 00:00:00/2037 年某时    YYYYMMDD HHMMSS 混合日期和时间值，时间戳&lt;/p&gt;
+
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;类型&lt;/th&gt;
+&lt;th align=&#34;center&#34;&gt;大小&lt;/th&gt;
+&lt;th align=&#34;center&#34;&gt;范围&lt;/th&gt;
+&lt;th align=&#34;center&#34;&gt;格式&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;用途&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;YEAR&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;1 字节&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;1901~2155&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;YYYY&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;年份值&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;DATE&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;3 字节&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;1000-01-01 ~ 9999-12-31&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;YYYY-MM-DD&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;日期值&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;TIME&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;3 字节&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;-838:59:59 ~ 838:59:59&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;HH:MM:SS&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;时间值或持续时间&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;DATETIME&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;8 字节&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;1000-01-01 00:00:00 ~ 9999-12-31 23:59:59&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;YYYY-MM-DD HH:MM:SS&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;混合日期和时间值&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;TIMESTAMP&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;4 字节&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;1970-01-01 00:00:00 ~ 2037&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;YYYYMMDD HHMMSS&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;时间戳&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h2 id=&#34;二-数据表的操作&#34;&gt;二、数据表的操作：&lt;/h2&gt;
+
+&lt;h3 id=&#34;1-查看当前数据库&#34;&gt;1.查看当前数据库&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;SELECT DATABASE();
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;2-创建数据表&#34;&gt;2.创建数据表&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;CREATE TABLE [IF NOT EXISTS] table_name ( column_name data_type,...);
+
+
+CREATE TABLE IF NOT EXISTS user(
+    username VARCHAR(20),
+    age TINYINT UNSIGNED,
+    salary FLOAT(8,2) UNSIGNED
+);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;3-查看数据表&#34;&gt;3.查看数据表&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;SHOW TABLES;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;查看其它数据库的数据表&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;SHOW TABLES FROM mysql;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;4-查看数据表结构&#34;&gt;4.查看数据表结构&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;SHOW COLUMNS FROM tbl_name;
+
+SHOW COLUMNS FROM user;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;三-记录的操作&#34;&gt;三、记录的操作：&lt;/h2&gt;
+
+&lt;p&gt;数据表里的行，被称为数据库的记录&lt;/p&gt;
+
+&lt;h3 id=&#34;1-插入记录&#34;&gt;1.插入记录&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;INSERT [INFO] tbl_name [(col_name,..)] VALUES(val,..);
+
+INSERT user VALUES(&#39;Frank&#39;, 22, 3500.18);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果省略了字段名（即列名），则值必须与字段的数量一致，否则会报错。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Column count doesn&#39;t match value count at row 1
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果对某部分字段赋值，则需要写明字段名。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;INSERT user(username,salary)  VALUES(&#39;Jack&#39;, 4500.18);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;2-查找记录&#34;&gt;2.查找记录&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;SELECT expr,... FROM tbl_name;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;查看全部记录&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;SELECT * FROM tbl_name; 
+
+SELECT * FROM user;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;3-空值&#34;&gt;3.空值&lt;/h3&gt;
+
+&lt;p&gt;NULL, 字段值可以为空；
+NOT NULL, 字段值不能为空。&lt;/p&gt;
+
+&lt;p&gt;CREATE TABLE tb2(
+    username VARCHAR(20) NOT NULL,
+    age TINYINT UNSIGNED NULL
+);&lt;/p&gt;
+
+&lt;h3 id=&#34;4-自动编号-auto-increment&#34;&gt;4.自动编号：AUTO_INCREMENT&lt;/h3&gt;
+
+&lt;p&gt;必须与主键组合使用。默认情况下，其实值为1，每次的增量为1.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;CREATE TABLE tb3(
+    id SMALLINT UNSIGNED AUTO_INCREMENT,
+    username VARCHAR(20) NOT NULL,
+    age TINYINT UNSIGNED NULL
+);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;报错：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;ERROR 1075(42000): Incorrect table definition; there can be only one auto column and it must be defined as a key.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;5-主键-primary-key&#34;&gt;5.主键：PRIMARY KEY&lt;/h3&gt;
+
+&lt;p&gt;1）每张数据表只能存在一个主键；&lt;/p&gt;
+
+&lt;p&gt;2）主键保证记录的唯一性；&lt;/p&gt;
+
+&lt;p&gt;3）主键自动为NOT NULL.&lt;/p&gt;
+
+&lt;p&gt;创建数据表tb4:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;CREATE TABLE tb4(
+    id SMALLINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(20) NOT NULL,
+    age TINYINT UNSIGNED NULL
+);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;插入记录：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;INSERT tb3(username) VALUES(&#39;Ross&#39;);
+INSERT tb3(username) VALUES(&#39;Richard&#39;);
+INSERT tb3(username) VALUES(&#39;Monica&#39;);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;5-唯一约束-unique-key&#34;&gt;5.唯一约束：UNIQUE KEY&lt;/h3&gt;
+
+&lt;p&gt;1）UNIQUE KEY可以保证记录的唯一性；&lt;/p&gt;
+
+&lt;p&gt;2）UNIQUE KEY可以为空值；&lt;/p&gt;
+
+&lt;p&gt;3）每张表里可以存在多个唯一约束。&lt;/p&gt;
+
+&lt;p&gt;创建数据表tb5:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;CREATE TABLE tb5(
+    id SMALLINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(20) NOT NULL UNIQUE KEY,
+    age TINYINT UNSIGNED NULL
+);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;查看刚刚创建的数据表tb5数据结构：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;SHOW COLUMNS FROM tb5;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;插入一条记录：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;INSERT tb5(username, age) VALUES(&#39;Ross&#39;, 30);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;插入成功，现在已经有一条记录的&lt;code&gt;username&lt;/code&gt;为&amp;rsquo;Ross&amp;rsquo;了。再插入一条记录：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;INSERT tb5(username, age) VALUES(&#39;Ross&#39;, 28);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;报错：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;ERROR 1062 (23000): Duplicate entry &#39;Ross&#39; for key &#39;username&#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;6-默认值-default&#34;&gt;6.默认值： DEFAULT&lt;/h3&gt;
+
+&lt;p&gt;当插入记录时，如果没有明确为字段赋值，则自动赋予默认值。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;CREATE TABLE tb6(
+    id SMALLINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(20) NOT NULL UNIQUE KEY,
+    sex ENUM(&#39;1&#39;, &#39;2&#39;, &#39;3&#39;) DEFAULT &#39;3&#39;
+);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;查看刚刚创建的数据表tb6数据结构：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;SHOW COLUMNS FROM tb6;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;插入一条记录：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;INSERT tb6(username) VALUES(&#39;Frank&#39;);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;查看记录：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;SELECT * FROM tb6;
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>MySQL入门：语句规范及常用命令</title>
+      <link>http://www.wangxingfeng.com/mysql-basic.html</link>
+      <pubDate>Sat, 03 Jun 2017 22:38:52 +0800</pubDate>
+      
+      <guid>http://www.wangxingfeng.com/mysql-basic.html</guid>
+      <description>
+
+&lt;h2 id=&#34;一-mysql语句规范&#34;&gt;一、MySQL语句规范：&lt;/h2&gt;
+
+&lt;p&gt;1.关键字、函数名全部大写；&lt;/p&gt;
+
+&lt;p&gt;2.数据库名、表名、字段名一律小写；&lt;/p&gt;
+
+&lt;p&gt;3.SQL语句必须以分号结尾。&lt;/p&gt;
+
+&lt;h2 id=&#34;二-mysql常用命令&#34;&gt;二、MySQL常用命令：&lt;/h2&gt;
+
+&lt;p&gt;1.显示当前数据库版本&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;SELECT VERSION();
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;2.显示当前时间:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;SELECT NOW();
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;3.显示当前用户：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;SELECT USER();
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;4.创建数据库：&lt;/p&gt;
+
+&lt;p&gt;语法为：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;CREATE {DATABASE | SCHEMA} [IF NOT EXISTS] db_name [DEFAULT] CHARACTER SET [=] charset_name;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;输入如下语句，将会创建数据库test2:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;CREATE DATABASE test2;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果数据库test2已经存在，将会报错：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;ERROR 1007 (HY000): Can&#39;t create database &#39;test2&#39;; database exists
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果创建数据库的时候加了 &lt;code&gt;IF NOT EXISTS&lt;/code&gt;, 遇到已经存在的数据库，将不会报错，但会有一条&lt;code&gt;WARNING&lt;/code&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;CREATE DATABASE IF NOT EXISTS test2;
+Query OK, 1 row affected, 1 warning (0.00 sec)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果想要查看WARNING信息，只需输入&lt;code&gt;SHOW WARNING;&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;4.查看数据库：&lt;/p&gt;
+
+&lt;p&gt;语法为：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;SHOW {DATABASES | SCHEMAS} [LIKE &#39;pattern&#39; | WHERE expr];
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;输入如下语句，可以查看&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;SHOW DATABASES;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;5.删除数据库：&lt;/p&gt;
+
+&lt;p&gt;语法：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;DROP {DATABASE | SCHEMA} [IF EXISTS] db_name
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果数据库test2, 输入以下语句，可以删除该数据库：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;DROP DATABASE test2;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果需要删除的数据库test2不存在，则会报错。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;ERROR 1008 (HY000): Can&#39;t drop database &#39;test2&#39;; database doesn&#39;t exist
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果删除时添加了 &lt;code&gt;IF EXISTS&lt;/code&gt;，则不会报错，而是会有一条WARNING:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;DROP DATABASE IF EXISTS test2;
+Query OK, 1 row affected, 1 warning (0.00 sec)
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Win7系统MySQL报错ERROR1045及其处理方法</title>
+      <link>http://www.wangxingfeng.com/mysql-error-1045.html</link>
+      <pubDate>Sat, 03 Jun 2017 21:52:09 +0800</pubDate>
+      
+      <guid>http://www.wangxingfeng.com/mysql-error-1045.html</guid>
+      <description>&lt;p&gt;最近自学数据库，在&lt;code&gt;Win7&lt;/code&gt;系统下使用&lt;code&gt;MySQL&lt;/code&gt;遇到了一些报错，做个记录，方便以后查阅。&lt;/p&gt;
+
+&lt;p&gt;MySQL官网下载的&lt;code&gt;MySQL 5.5.56&lt;/code&gt;的社区版，安装正常。当我在命令行输入&lt;code&gt;mysql -u root -p&lt;/code&gt; 出现了报错信息，无法连接数据库。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;C:\Windows\system32&amp;gt; mysql -u root -p
+Enter password: 
+ERROR 1045 (28000): Access denied for user &#39;root&#39;@&#39;localhost&#39; (using password: YES)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;网上找到的解决方法如下：&lt;/p&gt;
+
+&lt;p&gt;1.编辑mysql配置文件&lt;code&gt;my.ini&lt;/code&gt;，在&lt;code&gt;[mysqld]&lt;/code&gt;这个条目下加入&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;skip-grant-tables
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;2.保存&lt;code&gt;my.ini&lt;/code&gt;退出后重启mysql。&lt;/p&gt;
+
+&lt;p&gt;命令行输入 &lt;code&gt;net stop mysql&lt;/code&gt; 停止MySQL服务；&lt;/p&gt;
+
+&lt;p&gt;命令行输入 &lt;code&gt;net start mysql&lt;/code&gt; 重启MySQL服务；&lt;/p&gt;
+
+&lt;p&gt;3.重置密码：
+现在在命令行输入&lt;code&gt;mysql -u root -p&lt;/code&gt;就可以不用密码登录了，出现&lt;code&gt;password：&lt;/code&gt;的时候直接回车可以进入，不会出现&lt;code&gt;ERROR 1045 (28000)&lt;/code&gt;。&lt;/p&gt;
+
+&lt;p&gt;1）进入mysql数据库：输入&lt;code&gt;use mysql&lt;/code&gt;, 会出现&lt;code&gt;Database changed&lt;/code&gt;的提示信息。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;mysql&amp;gt; use mysql;
+
+Database changed
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;2）给root用户设置新密码：输入&lt;code&gt;update user set password=password(&amp;quot;新密码&amp;quot;) where user=&amp;quot;root&amp;quot;;&lt;/code&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;mysql&amp;gt; update user set password=password(&amp;quot;新密码&amp;quot;) where user=&amp;quot;root&amp;quot;;
+Query OK, 1 rows affected (0.01 sec)
+Rows matched: 1 Changed: 1 Warnings: 0
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;3)刷新数据库: 输入&lt;code&gt;flush privileges;&lt;/code&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;mysql&amp;gt; flush privileges;
+Query OK, 0 rows affected (0.00 sec)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;4)退出mysql：输入&lt;code&gt;quit&lt;/code&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;mysql&amp;gt; quit
+Bye
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;4.重新修改配置文件&lt;code&gt;my.ini&lt;/code&gt;，把刚才加入的&lt;code&gt;skip-grant-tables&lt;/code&gt;这行代码删除，保存退出再重启mysql服务就可以了。&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Css3 on Frank Wang&#39;s Coding World</title>
+    <link>http://www.wangxingfeng.com/tags/css3/index.xml</link>
+    <description>Recent content in Css3 on Frank Wang&#39;s Coding World</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <atom:link href="http://www.wangxingfeng.com/tags/css3/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title> CSS3 动画效果</title>
+      <link>http://www.wangxingfeng.com/css3_transition.html</link>
+      <pubDate>Mon, 11 Jul 2016 21:03:27 +0800</pubDate>
+      
+      <guid>http://www.wangxingfeng.com/css3_transition.html</guid>
+      <description>
+
+&lt;h2 id=&#34;作用&#34;&gt;作用&lt;/h2&gt;
+
+&lt;p&gt;用来定义样式变化的过渡效果, 在某些情况下（移动端），可以代替JavaScript代码来实现动画效果。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;transition&lt;/code&gt;属性是一个简写属性，用于设置四个过渡属性：&lt;/p&gt;
+
+&lt;h3 id=&#34;1-transition-property&#34;&gt;1. transition-property&lt;/h3&gt;
+
+&lt;p&gt;规定设置过渡效果的 CSS 属性的名称, 默认值为&lt;code&gt;all&lt;/code&gt;, 表示所有属性，也可以单独设置某个css属性。&lt;/p&gt;
+
+&lt;h3 id=&#34;2-transition-duration&#34;&gt;2. transition-duration&lt;/h3&gt;
+
+&lt;p&gt;过渡时间，值以秒或毫秒计。&lt;/p&gt;
+
+&lt;h3 id=&#34;3-transition-timing-function&#34;&gt;3. transition-timing-function&lt;/h3&gt;
+
+&lt;p&gt;过渡效果的速度曲线。该属性允许过渡效果随着时间来改变其速度。&lt;/p&gt;
+
+&lt;p&gt;默认值为&lt;code&gt;linear&lt;/code&gt;。常见的有以下值：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;linear  匀速
+ease    慢速开始，然后变快，然后慢速结束。
+ease-in 以慢速开始
+ease-out    以慢速结束
+ease-in-out 以慢速开始和结束的过渡效果
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;4-transition-delay&#34;&gt;4. transition-delay&lt;/h3&gt;
+
+&lt;p&gt;过渡效果的延迟，值以秒或毫秒计。默认为0。如果为正值，则表示延迟执行过渡效果；如果为负值（如-0.1s)，则会从过渡效果的执行0.1s的状态为初始状态开始执行过渡效果。&lt;/p&gt;
+
+&lt;h2 id=&#34;兼容性&#34;&gt;兼容性&lt;/h2&gt;
+
+&lt;p&gt;Internet Explorer 10、Firefox、Opera 和 Chrome等现代浏览器 支持 transition 属性。
+Safari 支持替代的 -webkit-transition 属性。&lt;/p&gt;
+
+&lt;h2 id=&#34;示例&#34;&gt;示例&lt;/h2&gt;
+
+&lt;style&gt;
+ .trans {
+    display:block;
+    width:100px;
+    height:30px;
+    background:#0ff;
+    transition:width 2s ease;
+ }
+ .trans:hover{
+    width:500px;
+ }
+&lt;/style&gt;
+
+&lt;p&gt;&lt;a class=&#34;trans&#34;&gt;过渡效果&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

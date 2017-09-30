@@ -1,0 +1,2629 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Frontend on Frank Wang&#39;s Coding World</title>
+    <link>http://www.wangxingfeng.com/categories/frontend/index.xml</link>
+    <description>Recent content in Frontend on Frank Wang&#39;s Coding World</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <atom:link href="http://www.wangxingfeng.com/categories/frontend/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>TypeScript 入门</title>
+      <link>http://www.wangxingfeng.com/typescript_basic.html</link>
+      <pubDate>Sun, 16 Jul 2017 21:43:35 +0800</pubDate>
+      
+      <guid>http://www.wangxingfeng.com/typescript_basic.html</guid>
+      <description>
+
+&lt;h2 id=&#34;1-简介&#34;&gt;1.简介：&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.typescriptlang.org/&#34;&gt;TypeScript&lt;/a&gt; 是微软2012年推出的一种编程语言，属于 JavaScript 的&lt;code&gt;超集&lt;/code&gt;，可以编译为 JavaScript 执行。它拓展了 JavaScript 的语法，给 JavaScript 添加可选的&lt;code&gt;静态类型&lt;/code&gt;和&lt;code&gt;基于类&lt;/code&gt;的面向对象编程。&lt;/p&gt;
+
+&lt;p&gt;TypeScript文件拓展名为 &lt;code&gt;.ts&lt;/code&gt;。&lt;/p&gt;
+
+&lt;p&gt;TypeScript 不能直接运行在浏览器环境中，运行前需要编译成 JavaScript 才能在浏览器运行。&lt;/p&gt;
+
+&lt;p&gt;TypeScript 是&lt;code&gt;Angular2&lt;/code&gt;官方推荐的开发语言，同时也可以作为使用 React、Vue、ReactNative 等框架或者类库的项目的开发语言。&lt;/p&gt;
+
+&lt;p&gt;一个简单的 TypeScript 文件 demo.ts, 如下代码所示：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-typescript&#34;&gt;var book: string = &amp;quot;Angular 2&amp;quot;;  // 定义了一个 string 类型的变量 book
+
+var num: number = 123;  // 定义了一个 number 类型的变量 num
+
+function log(msg: string): void {  // 定义了一个 函数 log, 它的参数 msg 是 string 类型的， `：void`表示这个函数没有返回值 
+    console.log(msg);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;2-安装-typescript&#34;&gt;2.安装 TypeScript:&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;npm install -g typescript
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;3-编译&#34;&gt;3.编译:&lt;/h2&gt;
+
+&lt;p&gt;3.1 本地编译：命令行输入&lt;code&gt;tsc 文件名.ts&lt;/code&gt; 既可编译成&lt;code&gt;同名&lt;/code&gt;的 JavaScript 文件。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;tsc demo.ts
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;demo.ts 编译后得到 demo.js 文件，如下代码所示：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-typescript&#34;&gt;var book = &amp;quot;Angular 2&amp;quot;;
+var num = 123;
+function log(msg) {
+    console.log(msg);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;3.2 在线编译：TypeScript 官方提供&lt;a href=&#34;http://www.typescriptlang.org/play/index.html&#34;&gt;在线的实时编译&lt;/a&gt;。&lt;/p&gt;
+
+&lt;h2 id=&#34;4-编辑器-visual-studio-code&#34;&gt;4.编辑器: Visual Studio Code&lt;/h2&gt;
+
+&lt;p&gt;微软官方为 TypeScript 提供了一款轻量级但功能强大的编辑器 —— &lt;a href=&#34;https://code.visualstudio.com/&#34;&gt;VS Code&lt;/a&gt;。Visual Studio Code本身就是一个&lt;code&gt;文本编辑器&lt;/code&gt;，非常轻量级，搭配各种插件的话，就可以重现 Visual Studio的强大功能。&lt;/p&gt;
+
+&lt;h2 id=&#34;5-语法特性之一-类型注解&#34;&gt;5.语法特性之一：类型注解&lt;/h2&gt;
+
+&lt;p&gt;TypeScript里的&lt;code&gt;类型注解&lt;/code&gt;是一种轻量级的为函数或变量添加约束的方式。&lt;/p&gt;
+
+&lt;p&gt;在示例代码中里，我们希望 log 函数接收一个字符串参数。 然后尝试把 log 的调用改成传入一个数组：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-typescript&#34;&gt;function log(msg: string) {
+    return &amp;quot;Hello, &amp;quot; + msg;
+}
+
+var msg = [0, 1, 2];
+
+log(msg);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;TypeScript提供了静态的代码分析，它可以分析代码结构和提供的类型注解。所以上述代码在 VS Code 中会出现提示错误：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Argument of type &#39;number[]&#39; is not assignable to parameter of type string
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;6-语法特性之二-接口-interface&#34;&gt;6.语法特性之二：接口 Interface:&lt;/h2&gt;
+
+&lt;p&gt;TypeScript的核心原则之一是对值所具有的结构进行类型检查。 它有时被称做“鸭式辨型法”或“结构性子类型化”。&lt;/p&gt;
+
+&lt;p&gt;在TypeScript里，接口的作用就是为这些类型命名和为你的代码或第三方代码定义契约。&lt;/p&gt;
+
+&lt;p&gt;简单示例来观察接口是如何工作的：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-typescript&#34;&gt;function print(obj: { a: string }) {
+    console.log(obj.a);
+}
+
+let myObj = { 
+    size: 10, 
+    a: &amp;quot;Size 10 Object&amp;quot; 
+};
+
+print(myObj);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;类型检查器会查看函数 print()的调用。 它有一个对象参数，并且这个对象参数有一个名为a, 类型为 string 的属性。 需要注意的是，我们传入的对象参数实际上会包含很多属性，但是编译器只会检查那些必需的属性是否存在，并且其类型是否匹配。&lt;/p&gt;
+
+&lt;p&gt;关键字&lt;code&gt;interface&lt;/code&gt;用来定义&lt;code&gt;接口&lt;/code&gt;, 接口名&lt;code&gt;首字母大写&lt;/code&gt;。&lt;/p&gt;
+
+&lt;p&gt;下面我们重写上面的例子，这次使用&lt;code&gt;接口&lt;/code&gt;来描述：必须包含一个类型为 string 的属性 a。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-typescript&#34;&gt;interface MyValue {
+    a: string;
+}
+
+function print(obj: MyValue) {
+    console.log(obj.a);
+}
+
+let myObj = {
+    size: 10, 
+    a: &amp;quot;Size 10 Object&amp;quot;
+};
+print(myObj);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;7-语法特性之三-类-class&#34;&gt;7.语法特性之三：类 Class&lt;/h2&gt;
+
+&lt;h3 id=&#34;7-1-类的定义-关键字-class-用来定义一个类-类名-首字母大写&#34;&gt;7.1 类的定义：关键字&lt;code&gt;class&lt;/code&gt;用来定义一个类，类名&lt;code&gt;首字母大写&lt;/code&gt;。&lt;/h3&gt;
+
+&lt;p&gt;传统的 JavaScript 程序没有&lt;code&gt;类(Class)&lt;/code&gt;的概念, 通过基于&lt;code&gt;原型链&lt;/code&gt;的继承来实现面向对象的编程。从ECMAScript 2015(ES6) 开始，JavaScript 引入了类的概念，而 TypeScript 早就实现了类的继承。&lt;/p&gt;
+
+&lt;p&gt;示例代码：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-typescript&#34;&gt;class Greeter {
+    
+    // 定义了 string 类型的属性, 
+    greeting: string;
+
+    // 定义了类的构造函数，它参数为 string 类型
+    constructor(message: string) {
+
+        this.greeting = message;
+    }
+
+    // 定义了一个类的方法 
+    greet() {
+        return &amp;quot;Hello, &amp;quot; + this.greeting;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;上述代码声明了一个 Greeter类。这个类有3个成员：一个叫做 greeting 的属性，一个构造函数和一个 greet 方法。&lt;/p&gt;
+
+&lt;p&gt;我们在引用任何一个类成员的时候都用了&lt;code&gt;this&lt;/code&gt;, 它表示我们访问的是类的成员。&lt;/p&gt;
+
+&lt;h3 id=&#34;7-2-实例化-关键字-new-用来创建类的一个实例对象&#34;&gt;7.2 实例化：关键字&lt;code&gt;new&lt;/code&gt;用来创建类的一个实例对象。&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-typescript&#34;&gt;let greeter = new Greeter(&amp;quot;world&amp;quot;);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;使用&lt;code&gt;new&lt;/code&gt; 创建了Greeter类的一个实例。 它会调用之前定义的构造函数，创建一个 Greeter类型的新对象，并执行构造函数初始化它。&lt;/p&gt;
+
+&lt;h3 id=&#34;7-3-类的继承-关键字-extends-表示类的继承关系&#34;&gt;7.3 类的继承： 关键字&lt;code&gt;extends&lt;/code&gt;表示类的继承关系&lt;/h3&gt;
+
+&lt;p&gt;示例代码：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-typescript&#34;&gt;class Animal {
+    name:string;
+    constructor(theName: string) { 
+        this.name = theName; 
+    }
+    move(distanceInMeters: number = 0) {
+        console.log(`${this.name} moved ${distanceInMeters}m.`);
+    }
+}
+
+class Snake extends Animal {
+    constructor(name: string) {
+        super(name); //必须调用super()方法来执行父类的构造方法
+    }
+    move(distanceInMeters = 5) {
+        console.log(&amp;quot;Slithering...&amp;quot;);
+        super.move(distanceInMeters); 
+    }
+}
+
+class Horse extends Animal {
+    constructor(name: string) { 
+        super(name); 
+    }
+    move(distanceInMeters = 45) {
+        console.log(&amp;quot;Galloping...&amp;quot;);
+        super.move(distanceInMeters);
+    }
+}
+
+let sam = new Snake(&amp;quot;Sammy the Python&amp;quot;);
+let tom: Animal = new Horse(&amp;quot;Tommy the Palomino&amp;quot;);
+
+sam.move();
+tom.move(34);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;与其它语言类似，TypeScript 使用 关键字&lt;code&gt;extends&lt;/code&gt;来创建子类。你可以看到 Horse 和 Snake 都是 Animal 的子类，并且可以访问其属性和方法。&lt;/p&gt;
+
+&lt;p&gt;包含构造函数的派生类必须调用&lt;code&gt;super()&lt;/code&gt;，它会执行父类的构造方法。&lt;/p&gt;
+
+&lt;p&gt;在子类里可以重写父类的方法。上述代码中，Snake 类 和 Horse 类都创建了 move 方法，它们重写了从 Animal 继承来的 move 方法，使得 move 方法根据不同的类而具有不同的功能。&lt;/p&gt;
+
+&lt;h3 id=&#34;7-4-类的修饰符&#34;&gt;7.4 类的修饰符：&lt;/h3&gt;
+
+&lt;p&gt;7.4.1  public：默认修饰符&lt;/p&gt;
+
+&lt;p&gt;如果没有使用&lt;code&gt;修饰符&lt;/code&gt;来修饰类的成员（属性、方法），则默认为&lt;code&gt;public&lt;/code&gt;，表示我们可以自由地访问到类的这个成员。&lt;/p&gt;
+
+&lt;p&gt;7.4.2 private：修饰私有成员用&lt;/p&gt;
+
+&lt;p&gt;当成员被标记成&lt;code&gt;private&lt;/code&gt;时，它就不能在声明它的类的&lt;code&gt;外部&lt;/code&gt;访问。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-typescript&#34;&gt;class Animal {
+    private name: string;
+    constructor(theName: string) { 
+        this.name = theName; 
+    }
+}
+
+new Animal(&amp;quot;Cat&amp;quot;).name; // Error: &#39;name&#39; is private;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;7.4.3 protected：&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;protected&lt;/code&gt;修饰符与&lt;code&gt;private&lt;/code&gt;修饰符的行为很相似，但有一点不同，&lt;code&gt;protected&lt;/code&gt;成员在&lt;code&gt;派生类&lt;/code&gt;中仍然可以访问。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-typescript&#34;&gt;class Person {
+    protected name: string;
+    constructor(name: string) { 
+        this.name = name; 
+    }
+}
+
+class Employee extends Person {
+    private department: string;
+
+    constructor(name: string, department: string) {
+        super(name)
+        this.department = department;
+    }
+
+    public getElevatorPitch() {
+        return `Hello, my name is ${this.name} and I work in ${this.department}.`;
+    }
+}
+
+let howard = new Employee(&amp;quot;Howard&amp;quot;, &amp;quot;Sales&amp;quot;);
+console.log(howard.getElevatorPitch());
+console.log(howard.name); // error
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;我们不能在 Person 类外使用 name ，但是我们仍然可以通过 Employee 类的实例方法访问，因为 Employee 是由 Person 派生而来的。&lt;/p&gt;
+
+&lt;p&gt;7.4.4 readonly：只读修饰符&lt;/p&gt;
+
+&lt;p&gt;你可以使用&lt;code&gt;readonly&lt;/code&gt;关键字将属性设置为&lt;code&gt;只读&lt;/code&gt;的。 只读属性必须在&lt;code&gt;声明&lt;/code&gt;时或&lt;code&gt;构造函数&lt;/code&gt;里被初始化。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-typescript&#34;&gt;class Octopus {
+    readonly name: string;
+    readonly numberOfLegs: number = 8;
+    constructor (theName: string) {
+        this.name = theName;
+    }
+}
+
+let dad = new Octopus(&amp;quot;Man with the 8 strong legs&amp;quot;);
+
+dad.name = &amp;quot;Man with the 3-piece suit&amp;quot;; // error! name is readonly.
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>快速入门 Angular2 核心概念</title>
+      <link>http://www.wangxingfeng.com/angular2_basic.html</link>
+      <pubDate>Sat, 15 Jul 2017 17:13:18 +0800</pubDate>
+      
+      <guid>http://www.wangxingfeng.com/angular2_basic.html</guid>
+      <description>
+
+&lt;p&gt;&lt;img src=&#34;http://www.wangxingfeng.com/images/2017071501.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;1-components-组件&#34;&gt;1.Components 组件&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.wangxingfeng.com/images/2017071502.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;1-1-组件及示例代码&#34;&gt;1.1 组件及示例代码&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-typescript&#34;&gt;//装饰器
+@Component({
+    //元数据
+
+    selector: &#39;hello&#39;,
+
+    //定义组件的模板
+    template: &#39;&amp;lt;p&amp;gt;{{greeting}}&amp;lt;/p&amp;gt;
+})
+
+//组件类
+export class HelloComponent {
+    private greeting: string;
+    constructor() {
+        this.greeting = &#39;Hello, Welcome to Angular 2!&#39;;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.wangxingfeng.com/images/2017071505.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;装饰器：@Component&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;赋予一个类更丰富的信息,即将&lt;code&gt;元数据&lt;/code&gt; 注入到组件类中。&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;元数据：装饰器重定义的数据&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;模板：&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;可以在元数据内自定义模板template; 也可以通过templateUrl:&amp;ldquo;path/xx.html&amp;rdquo; 来引用外部模板xx.html&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;数据绑定：&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;1)插值：{{变量名}}。可以直接使用&lt;code&gt;组件类&lt;/code&gt;里的变量。&lt;/p&gt;
+
+&lt;p&gt;2)属性绑定：[]=&amp;ldquo;mydata&amp;rdquo;。把&lt;code&gt;组件类&lt;/code&gt;的数据传递&lt;code&gt;mydata&lt;/code&gt;到&lt;code&gt;模板&lt;/code&gt;中的，可以从&lt;code&gt;父组件&lt;/code&gt;向&lt;code&gt;子组件&lt;/code&gt;传递数据。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-typescript&#34;&gt;     &amp;lt;input [message]=&amp;quot;myData&amp;quot; /&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;3)事件绑定：(事件名)。把&lt;code&gt;模板&lt;/code&gt;产生的数据通过&lt;code&gt;函数调用&lt;/code&gt;的方式传递到&lt;code&gt;组件类&lt;/code&gt;中，可以从&lt;code&gt;子组件&lt;/code&gt;从&lt;code&gt;父组件&lt;/code&gt;传递数据。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-typescript&#34;&gt;    &amp;lt;input (keyup)=&amp;quot;handle($event)&amp;quot; /&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;4)双向绑定：[(ngModel)] 。实现模板和组件类的数据的双向流动，实时更新。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-typescript&#34;&gt;    &amp;lt;input [(ngModel)]=&amp;quot;myData&amp;quot; /&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;1-2-组件树&#34;&gt;1.2 组件树&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.wangxingfeng.com/images/2017071506.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;1-3-组件间的通讯机制及数据流向&#34;&gt;1.3 组件间的通讯机制及数据流向&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.wangxingfeng.com/images/2017071503.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.wangxingfeng.com/images/2017071507.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;1-4-组件的生命周期及其钩子&#34;&gt;1.4 组件的生命周期及其钩子&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.wangxingfeng.com/images/2017071504.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;1.Constructor 构造器初始化：变量的初始赋值&lt;/p&gt;
+
+&lt;p&gt;2.OnChanges 接收父组件传递的数据，第一次触发数据变化OnChanges钩子&lt;/p&gt;
+
+&lt;p&gt;3.OnInit 组件初始化：此时处理业务逻辑&lt;/p&gt;
+
+&lt;p&gt;4.OnChange 运行期间只要数据发生了变化，就会触发数据变化OnChange钩子&lt;/p&gt;
+
+&lt;p&gt;5.OnDestroy 组件销毁前会触发 OnDestroy 钩子：数据解绑、取消数据订阅等&lt;/p&gt;
+
+&lt;h2 id=&#34;2-directives-指令&#34;&gt;2. Directives 指令&lt;/h2&gt;
+
+&lt;p&gt;组件继承于指令，组件是自身带有模板的指令。&lt;/p&gt;
+
+&lt;h3 id=&#34;2-1-属性指令&#34;&gt;2.1 属性指令：&lt;/h3&gt;
+
+&lt;p&gt;改变组件模板的外观或行为的，如样式等。&lt;/p&gt;
+
+&lt;h3 id=&#34;2-2-结构指令&#34;&gt;2.2 结构指令：&lt;/h3&gt;
+
+&lt;p&gt;改变组件模板的DOM结构，如ngIf用来插入或者移除DOM节点。&lt;/p&gt;
+
+&lt;h3 id=&#34;2-3-自定义指令&#34;&gt;2.3 自定义指令：&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-typescript&#34;&gt;// 自定义指令highlight
+// 指令需要导入Directive, ElementRef, Renderer 来 辅助元素的渲染
+import { Directive, ElementRef, Renderer } from &#39;@angular/core&#39;;
+
+@Directive({
+    selector: &amp;quot;[highlight]&amp;quot; // 中括号表示指令使用在元素属性上
+})
+
+export class HighlightDirective {
+    constructor(private el: ElementRef, private renderer:Renderer) { 
+        renderer.setElementStyle(el.nativeElement, &#39;backgroundColor&#39;, &#39;pink&#39;);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;3-services-服务&#34;&gt;3. Services 服务&lt;/h2&gt;
+
+&lt;p&gt;服务是实现专一目的的逻辑单元（类），如日志服务。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-typescript&#34;&gt;export class LoggerService {
+    constructor() {}
+
+    debug(msg: string) {
+        console.log(msg);
+    }
+
+    error(msg: string) {
+        console.error(msg);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;4-dependency-injection-依赖注入&#34;&gt;4. Dependency Injection 依赖注入&lt;/h2&gt;
+
+&lt;h3 id=&#34;4-1-依赖注入&#34;&gt;4.1 依赖注入:&lt;/h3&gt;
+
+&lt;p&gt;&lt;code&gt;依赖注入&lt;/code&gt;是&lt;code&gt;组件&lt;/code&gt;引入&lt;code&gt;外部构建&lt;/code&gt;（如服务）的一种机制。最常见的是组件引入服务。引用服务其实引用的是&lt;code&gt;服务类的实例&lt;/code&gt;，所以服务在引入之前有一个&lt;code&gt;实例化&lt;/code&gt;的过程，并且&lt;code&gt;这个实例&lt;/code&gt;通常要被缓存起来&lt;code&gt;注入器对象&lt;/code&gt;中，以供其他组件使用。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.wangxingfeng.com/images/2017071508.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;示例：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-typescript&#34;&gt;@Component({
+    selector: &#39;hello&#39;,
+    template: &#39;&amp;lt;p&amp;gt;{{greeting}}&amp;lt;/p&amp;gt;
+    
+    //依赖注入的配置
+    providers:[LoggerService]
+})
+
+export class HelloComponent {
+    private greeting: string;
+
+    //组件构造函数 定义服务类LoggerService类型的参数
+    依赖注入机制会根据这个参数在注入器对象中尝试查找LoggerService的实例，找到之后，自动传入到这个构造函数中，组件内部获得了LoggerService实例的引用。
+    constructor(logger: LoggerService){
+        this.greeting = &#39;Hello, Angular2&#39;;
+        logger.debug(&#39;构造函数执行完毕&#39;);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;4-2-分层依赖注入-hierarchical-dependency-injection&#34;&gt;4.2 分层依赖注入 hierarchical dependency injection&lt;/h3&gt;
+
+&lt;p&gt;在父组件中依赖注入的服务，在&lt;code&gt;组件本身及其子组件&lt;/code&gt;都能使用。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.wangxingfeng.com/images/2017071509.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;5-modules-模块&#34;&gt;5. Modules 模块&lt;/h2&gt;
+
+&lt;h3 id=&#34;5-1-文件模块-框架代码以模块的形式组织&#34;&gt;5.1 文件模块：框架代码以模块的形式组织&lt;/h3&gt;
+
+&lt;p&gt;1.文件模块分类：&lt;/p&gt;
+
+&lt;p&gt;1)核心模块：@angular/core&lt;/p&gt;
+
+&lt;p&gt;2)通用模块：@angular/common&lt;/p&gt;
+
+&lt;p&gt;3)表单模块：@angular/forms&lt;/p&gt;
+
+&lt;p&gt;4)网络模块：@angular/http&lt;/p&gt;
+
+&lt;p&gt;5)其他模块&lt;/p&gt;
+
+&lt;p&gt;2.模块的使用：&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;文件模块&lt;/code&gt;在使用前，需要通过&lt;code&gt;import&lt;/code&gt;导入&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-typescript&#34;&gt;import { Http } from &amp;quot;@angular/http&amp;quot;;
+
+import { Component } from &amp;quot;@angular/core&amp;quot;;
+
+import { Directive } from &amp;quot;@angular/core&amp;quot;;
+
+import { ElementRef, Renderer } from &amp;quot;@angular/core&amp;quot;;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;5-2-应用模块-功能单元以模块的形式组织&#34;&gt;5.2 应用模块：功能单元以模块的形式组织&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.wangxingfeng.com/images/2017071510.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;1.应用模块：把有关联的组件、服务、指令等按功能进行归类包装成模块。&lt;/p&gt;
+
+&lt;p&gt;2.模块间的调用：&lt;/p&gt;
+
+&lt;p&gt;默认情况下，一个组件不能直接引用其他组件或指令的，要想使用就必须先导入。一个模块内的组件可以使用同模块的任意组件和指令。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-typescript&#34;&gt;// @NgModule 声明模块
+@NgModule({
+
+    // 包装组件或指令
+    declarations: [
+        AppComponent,
+        HelloComponent,
+        SomeDirective
+    ],
+
+    // 依赖注入服务
+    providers: [ LoggerService ],
+
+    // 导入其他模块
+    imports: [OtherModule ],
+
+    // 设置根组件
+    bootstrap: [ AppComponent],
+
+    // 导出该模块暴露的指令或模块以供其他组件调用
+    exports:[ SomeDirective ]
+})
+
+export class AppModule {}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;一个模块导入了另一个模块后，可以调用模块&lt;code&gt;exports出来的组件或指令&lt;/code&gt;，
+以及模块内依赖注入的服务（一个模块依赖注入了服务，那么整个应用内的所有组件里）。&lt;/p&gt;
+
+&lt;p&gt;3.根模块、特性模块、共享模块、核心模块&lt;/p&gt;
+
+&lt;p&gt;应用根据&lt;code&gt;功能&lt;/code&gt;可以切分为大大小小的各种模块。其中，&lt;code&gt;根模块&lt;/code&gt;作为应用启动的入口。各种&lt;code&gt;功能&lt;/code&gt;可以封装成一个个&lt;code&gt;特性模块&lt;/code&gt;。随着&lt;code&gt;特性模块&lt;/code&gt;越来越多，如果它们之间可以抽象出来一些相似的&lt;code&gt;功能组件&lt;/code&gt;，我们把这些&lt;code&gt;功能组件&lt;/code&gt;再封装成为独立的&lt;code&gt;共享模块&lt;/code&gt;。
+我们可以把一些全局的组件或者服务（如维护登录信息的服务、公共的头部、底部组件等）放在&lt;code&gt;根模块&lt;/code&gt;里，也可以抽离出来封装成独立的&lt;code&gt;核心模块&lt;/code&gt;，只在&lt;code&gt;根模块&lt;/code&gt;中导入。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.wangxingfeng.com/images/20170715011.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>JavaScript 的 Number 需要注意的一些特性</title>
+      <link>http://www.wangxingfeng.com/js-number.html</link>
+      <pubDate>Sun, 09 Jul 2017 21:45:51 +0800</pubDate>
+      
+      <guid>http://www.wangxingfeng.com/js-number.html</guid>
+      <description>
+
+&lt;h2 id=&#34;一-nan&#34;&gt;一、NaN：&lt;/h2&gt;
+
+&lt;p&gt;1.定义：&lt;code&gt;NaN&lt;/code&gt; 是 JavaScript 的一个特殊值，表示“非数字”（Not a Number），主要出现在将字符串解析成数字出错的场合。&lt;/p&gt;
+
+&lt;p&gt;2.&lt;code&gt;NaN&lt;/code&gt; 不是一种独立的数据类型，而是一种特殊数值，它的数据类型依然属于 &lt;code&gt;number&lt;/code&gt; ，使用 &lt;code&gt;typeof&lt;/code&gt; 运算符可以看得很清楚。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;typeof NaN // &#39;number&#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;3.NaN不等于任何值，包括它本身。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;NaN === NaN // false
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;4.isNaN()：可以用来判断一个值是否为 NaN 。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;注意:&lt;/code&gt; 如果传入的非数值(如字符串），会先进行类型转换, 转成 NaN, 所以这个方法并不可靠！用 isNaN() 之前需要判断一下数据类型是否为 number 。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;function isRealNaN(x){
+    return typeof x === &amp;quot;number&amp;quot; &amp;amp;&amp;amp; isNaN(x);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;或者利用 只有 NaN 是JavaScript之中唯一不等于自身的值这个特点，进行判断。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;function isTrueNaN(x){
+    return x !== x;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;二-infinity-与-isfinite&#34;&gt;二、Infinity 与 isFinite()&lt;/h2&gt;
+
+&lt;p&gt;1.&lt;code&gt;Infinity&lt;/code&gt;：表示“无穷”，是一个特殊的数值，用来表示两种场景。一种是一个正的数值太大，或一个负的数值太小，无法表示；另一种是非0数值除以0，得到 &lt;code&gt;Infinity&lt;/code&gt;。&lt;/p&gt;
+
+&lt;p&gt;2.&lt;code&gt;isFinite()&lt;/code&gt;：返回一个&lt;code&gt;布尔值&lt;/code&gt;，检查某个值是不是&lt;code&gt;正常数值&lt;/code&gt;。&lt;/p&gt;
+
+&lt;p&gt;如果对 &lt;code&gt;NaN&lt;/code&gt; 使用 &lt;code&gt;isFinite&lt;/code&gt; 函数，也返回 &lt;code&gt;false&lt;/code&gt;，表示 &lt;code&gt;NaN&lt;/code&gt; 不是一个正常值。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;isFinite(Infinity) // false
+isFinite(NaN) // false
+isFinite(&amp;quot;abc&amp;quot;) // false
+isFinite(undefined) //false
+isFinite({}) //false
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;注意参数为 &lt;code&gt;true&lt;/code&gt;, &lt;code&gt;false&lt;/code&gt;, &lt;code&gt;null&lt;/code&gt;, &lt;code&gt;[]&lt;/code&gt;, &lt;code&gt;&amp;quot;&amp;quot;&lt;/code&gt; 时返回 &lt;code&gt;true&lt;/code&gt;。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;isFinite(true) // true
+isFinite(false)// true
+isFinite(null) //true
+isFinite([]) //true
+isFinite(&amp;quot;&amp;quot;) //true
+isFinite(-1) // true
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;三-parseint-和parsefloat&#34;&gt;三、 parseInt() 和parseFloat()&lt;/h2&gt;
+
+&lt;p&gt;1.&lt;code&gt;parseInt()&lt;/code&gt; 用于将&lt;code&gt;字符串&lt;/code&gt;转为&lt;code&gt;整数&lt;/code&gt;; &lt;code&gt;parseFloat()&lt;/code&gt;用于将&lt;code&gt;字符串&lt;/code&gt;转为&lt;code&gt;浮点数&lt;/code&gt;。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;parseInt(&#39;123&#39;) // 123
+parseFloat(&#39;3.14&#39;) // 3.14
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;2.字符串转为整数或浮点数的时候，是&lt;code&gt;一个个字符依次转换&lt;/code&gt;，如果遇到不能转为数字的字符，就不再进行下去，返回已经转好的部分。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;parseInt(&#39;15px&#39;) // 15
+parseFloat(&#39;3.14abcd &#39;) // 3.14
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;3.如果字符串前后有&lt;code&gt;空格&lt;/code&gt;，空格会被自动去除。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;parseInt(&#39;   81&#39;) // 81
+parseFloat(&#39;\t\v\r12.34\n &#39;) // 12.34
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;4.如果字符串的第一个字符不能转化为数字（后面跟着数字的正负号除外），返回&lt;code&gt;NaN&lt;/code&gt;。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;parseInt(&#39;abc&#39;) // NaN
+parseInt(&#39;.3&#39;) // NaN
+parseInt(&#39;&#39;) // NaN
+parseInt(&#39;+&#39;) // NaN
+parseInt(&#39;+1&#39;) // 1
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;5.对于那些会自动转为&lt;code&gt;科学计数法&lt;/code&gt;的数字，parseInt()会将科学计数法的表示方法视为字符串，因此导致一些奇怪的结果。如果字符串符合科学计数法，parseFloat())则会进行相应的转换。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;parseInt(1000000000000000000000.5) // 1
+// 等同于
+parseInt(&#39;1e+21&#39;) // 1
+
+parseFloat(&#39;314e-2&#39;) // 3.14
+parseFloat(&#39;0.0314E+2&#39;) // 3.14
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;6.&lt;code&gt;parseInt()&lt;/code&gt;还可以接受第二个参数（2到36之间），表示被解析的值的进制，返回该值对应的十进制数。默认情况下，&lt;code&gt;parseInt&lt;/code&gt;的第二个参数为10，即默认是十进制转十进制。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;parseInt(&#39;1000&#39;) // 1000
+// 等同于
+parseInt(&#39;1000&#39;, 10) // 1000
+parseInt(&#39;1000&#39;, 2) // 8
+parseInt(&#39;1000&#39;, 6) // 216
+parseInt(&#39;1000&#39;, 8) // 512
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;7.如果字符串包含对于指定进制无意义的字符，则从最高位开始，只返回可以转换的数值。如果最高位无法转换，则直接返回&lt;code&gt;NaN&lt;/code&gt;。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;parseInt(&#39;1546&#39;, 2) // 1
+parseInt(&#39;546&#39;, 2) // NaN
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;8.如果&lt;code&gt;parseInt()&lt;/code&gt;的第一个参数不是字符串，会被先转为字符串。这会导致一些令人意外的结果。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;parseInt(0x11, 36) // 43
+// 等同于
+parseInt(&#39;17&#39;, 36)
+parseInt(String(0x11), 36)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;9.如果参数不是字符串，或者字符串的第一个字符不能转化为浮点数，则&lt;code&gt;parseFloat()&lt;/code&gt;返回&lt;code&gt;NaN&lt;/code&gt;。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;parseFloat([]) // NaN
+parseFloat(&#39;FF2&#39;) // NaN
+parseFloat(&#39;&#39;) // NaN
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;四-强制类型转换的函数-number&#34;&gt;四、强制类型转换的函数：Number()&lt;/h2&gt;
+
+&lt;p&gt;1.Number(): 可以将任意类型的值转化成数值。&lt;/p&gt;
+
+&lt;p&gt;2.&lt;code&gt;Number()&lt;/code&gt;将字符串转为数值，要比&lt;code&gt;parseInt()&lt;/code&gt;严格很多。基本上，只要有一个字符无法转成数值，整个&lt;code&gt;字符串&lt;/code&gt;就会被转为&lt;code&gt;NaN&lt;/code&gt;。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;parseFloat(&#39;123.45#&#39;) // 123.45
+Number(&#39;123.45#&#39;) // NaN
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;2.如果&lt;code&gt;Number()&lt;/code&gt;的参数是&lt;code&gt;null&lt;/code&gt;, &lt;code&gt;false&lt;/code&gt;, &lt;code&gt;&#39;&#39;&lt;/code&gt;, &lt;code&gt;[]&lt;/code&gt; 则结果为&lt;code&gt;0&lt;/code&gt;；如果为 &lt;code&gt;true&lt;/code&gt;，则结果为 &lt;code&gt;1&lt;/code&gt;。&lt;code&gt;parseInt()&lt;/code&gt;/&lt;code&gt;parseFloat()&lt;/code&gt;的参数如果是这些特殊值时，一律为 &lt;code&gt;NaN&lt;/code&gt;。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Number(null)  //0
+Number(&amp;quot;&amp;quot;)   //0
+Number(false)   //0
+Number([])   //0
+Number(true) // 1
+
+parseInt(null) // NaN
+parseFloat(null) // NaN
+parseInt(&amp;quot;&amp;quot;) // NaN
+parseFloat(&amp;quot;&amp;quot;) // NaN
+parseInt(false) // NaN
+parseFloat(false) // NaN
+parseInt([]) // NaN
+parseFloat([]) // NaN
+parseInt(true)  // NaN
+parseFloat(true)  // NaN
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;3.&lt;code&gt;Number()&lt;/code&gt;跟&lt;code&gt;parseInt()&lt;/code&gt;、&lt;code&gt;parseFloat()&lt;/code&gt;一样，会自动过滤字符串前后的&lt;code&gt;空格&lt;/code&gt;。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Number(&#39;\t\v\r12.34\n&#39;) // 12.34
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;4.如果参数是&lt;code&gt;对象&lt;/code&gt;时，将返回&lt;code&gt;NaN&lt;/code&gt;，除非是包含&lt;code&gt;单个数值的数组&lt;/code&gt;。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Number({a: 1}) // NaN
+Number([1, 2, 3]) // NaN
+Number([5]) // 5
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>两个Safari浏览器不兼容的坑</title>
+      <link>http://www.wangxingfeng.com/safari-not-support.html</link>
+      <pubDate>Thu, 01 Jun 2017 07:35:15 +0800</pubDate>
+      
+      <guid>http://www.wangxingfeng.com/safari-not-support.html</guid>
+      <description>
+
+&lt;h2 id=&#34;一-苹果手机的safari浏览器不兼容-new-date-日期转换格式的坑&#34;&gt;一、 苹果手机的Safari浏览器不兼容  new Date()日期转换格式的坑&lt;/h2&gt;
+
+&lt;p&gt;做Web项目的开发，&lt;code&gt;倒计时&lt;/code&gt;是个很常见的需求。我的需求是做一个演唱会门票开售时间的倒计时。&lt;/p&gt;
+
+&lt;h3 id=&#34;思路如下&#34;&gt;思路如下：&lt;/h3&gt;
+
+&lt;p&gt;取到 &lt;code&gt;开售时间&lt;/code&gt;和&lt;code&gt;服务器上现在的时间&lt;/code&gt;，用&lt;code&gt;开售时间&lt;/code&gt;减去&lt;code&gt;现在的时间&lt;/code&gt;，得出一个时间毫秒数，然后再转换成xx天xx小时xx分xx秒。&lt;/p&gt;
+
+&lt;p&gt;跟后台技术小哥简单沟通了一下，后台会将&lt;code&gt;开售时间&lt;/code&gt;和&lt;code&gt;现在的时间&lt;/code&gt;传到页面上，放在&lt;code&gt;隐藏域&lt;/code&gt;里，这样我用JavaScript就能取到时间了。so easy! 然后我就开始写代码了。&lt;/p&gt;
+
+&lt;p&gt;一开始我是这样写的：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;function preSellCount(){
+    // 如果没有设置开售时间，则取演出时间，取到的时间格式为2017-06-01 10:00
+    var preSt = $(&#39;#preSellTime&#39;).val() || $(&#39;#showTime&#39;).val();  
+
+    var nowTime = $(&#39;#nowTime&#39;).val();
+
+    // 如果没有设置开售时间，也没有设置演出的时间，则倒计时处显示“开售时间待定”
+    if (!preSt) {
+        $(&#39;#preSellCount&#39;).text(&amp;quot;开售时间待定&amp;quot;);
+    }else{
+
+        //取到的开售时间是一个字符串，先转换成毫秒数，
+        var sellTime = new Date(preSt).getTime();
+
+        //现在的毫秒数
+        var now = new Date(nowTime).getTime();
+
+        var count, d, h, min, sec, timeStr, timer;
+
+        count = now &amp;gt; sellTime ? 0 : Math.floor((sellTime-now)/1000);
+
+        //进来页面的时间不为零，才执行定时器
+        if(count!==0){
+            // 定时器
+            timer = setInterval(function() {
+                if (count === 0) {
+                    clearInterval(timer);
+
+                    // 倒计时为零时，自动刷新页面
+                    window.location.reload();
+                }else{
+                    
+                    // 天数
+                    d = Math.floor(count/86400); 
+
+                    // 小时数
+                    h = Math.floor(count%86400/3600); 
+
+                    // 分钟数
+                    min = Math.floor(count%86400%3600/60); 
+
+                    // 秒钟数
+                    sec = Math.floor(count%86400%3600%60);
+
+                    // 小于10的时候，前面补一个‘0’。
+                    if (min &amp;lt; 10) {
+                        min = &#39;0&#39; + min;
+                    }
+                    if (sec &amp;lt; 10 ) {
+                        sec = &#39;0&#39; + sec;
+                    }
+
+                    if (d == 0) {
+                        timeStr =  h + &amp;quot;小时&amp;quot; + min + &amp;quot;分&amp;quot; + s + &amp;quot;秒&amp;quot;;
+                    }else{
+                        timeStr = d + &amp;quot;天&amp;quot; + h + &amp;quot;小时&amp;quot; + min + &amp;quot;分&amp;quot; + s + &amp;quot;秒&amp;quot;;
+                    }
+                    // 得到倒计时的时间字符串
+                    timeStr = d + &amp;quot;天&amp;quot; + h + &amp;quot;小时&amp;quot; + min + &amp;quot;分&amp;quot; + sec + &amp;quot;秒&amp;quot;;
+
+                    // 将字倒计时显示到页面上
+                    $(&#39;#preSellCount&#39;).text(timeStr);
+
+                    count -= 1;
+                }
+            }, 1000);
+        }
+    }
+}
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;用 Chrome 模拟各种手机调试都是一切正常。发布到本地测试环境，然后用自己的安卓手机访问，也一切正常。再用同事的苹果手机测试，倒计时不显示。WTF?&lt;/p&gt;
+
+&lt;p&gt;想想哪里可能会有兼容性问题呢？&lt;/p&gt;
+
+&lt;p&gt;从头检查一遍代码。获取开售时间没有问题。取到的开售时间是一个字符串的日期，用&lt;code&gt;new Date(preSt).getTime()&lt;/code&gt;转换成毫秒数，有没有问题呢？Google一下&lt;code&gt;new Date() iOS&lt;/code&gt;。
+果然发现有不少相关文章提到iOS下日期转换问题。由于Safari在iOS5及以下对&lt;code&gt;YYYY-MM-DD&lt;/code&gt;格式的日期不支持，所以需要转换格式。&lt;/p&gt;
+
+&lt;p&gt;最简单的是用&lt;code&gt;正则表达式&lt;/code&gt;把日期转换成 &lt;code&gt;YYYY/MM/DD&lt;/code&gt;格式。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;
+    preSt.replace(/-/g, &amp;quot;/&amp;quot;)
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;最终的代码是这样的：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;
+function preSellCount(){
+    // 如果没有设置开售时间，则取演出时间，取到的时间格式为2017-06-01 10:00
+    var preSt = $(&#39;#preSellTime&#39;).val() || $(&#39;#showTime&#39;).val();  
+    var nowTime = $(&#39;#nowTime&#39;).val();
+    // 如果没有设置开售时间，也没有设置演出的时间，则倒计时处显示“开售时间待定”
+    if (!preSt) {
+        $(&#39;#preSellCount&#39;).text(&amp;quot;开售时间待定&amp;quot;);
+    }else{
+
+        //取到的开售时间是一个字符串，先转换成毫秒数，
+        var sellTime = new Date(preSt.replace(/-/g, &amp;quot;/&amp;quot;)).getTime();
+
+        //现在的毫秒数
+        var now = new Date(nowTime.replace(/-/g, &amp;quot;/&amp;quot;)).getTime();
+
+        var count, d, h, min, sec, timeStr, timer;
+
+        count = now &amp;gt; sellTime ? 0 : Math.floor((sellTime-now)/1000);
+
+        //进来页面的时间不为零，才执行定时器
+        if(count!==0){
+            // 定时器
+            timer = setInterval(function() {
+                if (count === 0) {
+                    clearInterval(timer);
+
+                    // 倒计时为零时，自动刷新页面
+                    window.location.reload();
+                }else{
+                    
+                    // 天数
+                    d = Math.floor(count/86400); 
+
+                    // 小时数
+                    h = Math.floor(count%86400/3600); 
+
+                    // 分钟数
+                    min = Math.floor(count%86400%3600/60); 
+
+                    // 秒钟数
+                    sec = Math.floor(count%86400%3600%60);
+
+                    // 小于10的时候，前面补一个‘0’。
+                    if (min &amp;lt; 10) {
+                        min = &#39;0&#39; + min;
+                    }
+                    if (sec &amp;lt; 10 ) {
+                        sec = &#39;0&#39; + sec;
+                    }
+
+                    if (d == 0) {
+                        timeStr =  h + &amp;quot;小时&amp;quot; + min + &amp;quot;分&amp;quot; + s + &amp;quot;秒&amp;quot;;
+                    }else{
+                        timeStr = d + &amp;quot;天&amp;quot; + h + &amp;quot;小时&amp;quot; + min + &amp;quot;分&amp;quot; + s + &amp;quot;秒&amp;quot;;
+                    }
+                    // 得到倒计时的时间字符串
+                    timeStr = d + &amp;quot;天&amp;quot; + h + &amp;quot;小时&amp;quot; + min + &amp;quot;分&amp;quot; + sec + &amp;quot;秒&amp;quot;;
+
+                    // 将字倒计时显示到页面上
+                    $(&#39;#preSellCount&#39;).text(timeStr);
+
+                    count -= 1;
+                }
+            }, 1000);
+        }
+    }
+}
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;二-苹果手机的safari浏览器不支持-keydown-keypress-keyup-change等事件的坑&#34;&gt;二、苹果手机的Safari浏览器不支持  keydown, keypress, keyup, change等事件的坑。&lt;/h2&gt;
+
+&lt;p&gt;需求:在输入框中输入内容时，输入框后边显示清除按钮，点击可以清除输入框中的所有内容&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;var keyword = $(&amp;quot;#search-keyword&amp;quot;);
+var clear = $(&#39;.clear&#39;);
+
+keyword.on(&#39;keyup&#39;, function(event) {
+    if($(this).val().length&amp;gt;0){
+
+        //显示清空输入框的小图标
+        clear.show();
+
+    }else{
+
+        // 隐藏清空输入框的小图标
+        clear.hide();
+    }
+});
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;但是在 iOS 的 Safari 中, keydown、keypress、 keyup、change等事件都无效，考虑监听 input 和 propertychange 事件作为代替。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;var keyword = $(&amp;quot;#search-keyword&amp;quot;);
+var clear = $(&#39;.clear&#39;);
+
+keyword.on(&#39;input propertychange&#39;, function(event) {
+    if($(this).val().length&amp;gt;0){
+        //显示清空输入框的小图标
+        clear.show();
+    }else{
+        // 隐藏清空输入框的小图标
+        clear.hide();
+    }
+});
+
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>用border-image&#43;SVG实现切角效果</title>
+      <link>http://www.wangxingfeng.com/bevel-corners-svg.html</link>
+      <pubDate>Sat, 06 May 2017 16:19:48 +0800</pubDate>
+      
+      <guid>http://www.wangxingfeng.com/bevel-corners-svg.html</guid>
+      <description>
+
+&lt;p&gt;之前写了一篇文章，介绍了&lt;a href=&#34;http://www.wangxingfeng.com/bevel-corners.html&#34;&gt;基于CSS渐变来实现切角效果&lt;/a&gt;的方法。今天再来介绍另一种方法，即使用&lt;code&gt;border-image&lt;/code&gt;+&lt;code&gt;SVG&lt;/code&gt;的方式来实现&lt;code&gt;切角效果&lt;/code&gt;。&lt;/p&gt;
+
+&lt;h2 id=&#34;border-image的工作原理&#34;&gt;border-image的工作原理&lt;/h2&gt;
+
+&lt;p&gt;给一个元素设置边框，我们会使用&lt;code&gt;border&lt;/code&gt;这个属性。&lt;code&gt;border&lt;/code&gt;是&lt;code&gt;border-width&lt;/code&gt;、&lt;code&gt;border-style&lt;/code&gt;、&lt;code&gt;border-color&lt;/code&gt;等3个属性的简写形式。&lt;/p&gt;
+
+&lt;p&gt;我们给div设置一个宽20px、实线、颜色为&lt;code&gt;#58a&lt;/code&gt;的边框。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-css&#34;&gt;    div{
+        width:200px;
+        height:150px; 
+        margin:20px auto;
+        border:40px solid #58a;
+    }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;div style=&#34;width:200px; height:150px; margin:20px auto; border:40px solid #58a;&#34;&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;code&gt;border-image&lt;/code&gt;是CSS3的新属性，用于指定元素边框的背景图片。使用 border-image 时，border-style属性所设置的边框样式solid、dashed或dotted将不起作用。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;border-image&lt;/code&gt;属性也是一个简写：包含&lt;code&gt;border-image-source&lt;/code&gt;、&lt;code&gt;border-image-slice&lt;/code&gt;、&lt;code&gt;border-image-width&lt;/code&gt;、&lt;code&gt;border-image-outset&lt;/code&gt;、&lt;code&gt;border-image-repeat&lt;/code&gt;等5个属性。&lt;/p&gt;
+
+&lt;h3 id=&#34;1-border-image-source&#34;&gt;1. &lt;code&gt;border-image-source&lt;/code&gt;:&lt;/h3&gt;
+
+&lt;p&gt;从这个属性的英文命名，我们就可以知道它表示的是边框背景图片资源的路径，默认值是&lt;code&gt;none&lt;/code&gt;。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-css&#34;&gt;    div{
+        width:200px;
+        height:150px;
+        margin:20px auto;
+        border:40px solid #58a;
+        border-image-source:url(/images/adamcatlace.jpg);
+    }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;div style=&#34;width:200px; height:150px; margin:20px auto; border:40px solid #58a; border-image-source:url(/images/adamcatlace.jpg)&#34;&gt;&lt;/div&gt;
+
+&lt;h3 id=&#34;2-border-image-slice&#34;&gt;2. &lt;code&gt;border-image-slice&lt;/code&gt;:&lt;/h3&gt;
+
+&lt;p&gt;&lt;code&gt;border-image-slice&lt;/code&gt;属性指定图像的边界向内偏移。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-css&#34;&gt;    div{
+        width:200px;
+        height:150px;
+        margin:20px auto;
+        border:40px solid #58a;
+        border-image-source:url(/images/adamcatlace.jpg);
+        border-image-slice:10% 20% 30% 40%; 
+        border-image-repeat: none;
+    }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;div style=&#34;width:200px; height:150px; margin:20px auto; border:40px solid #58a; border-image:url(/images/adamcatlace.jpg);border-image-slice:10% 20% 30% 40%; border-image-repeat: round stretch;&#34;&gt;&lt;/div&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-css&#34;&gt;    div{
+        width:200px;
+        height:150px;
+        margin:20px auto;
+        border:40px solid #58a;
+        border-image-source:url(/images/adamcatlace.jpg);
+        border-image-slice: 10% 30%;
+    }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;div style=&#34;width:200px; height:150px; margin:20px auto; border:40px solid #58a; border-image:url(/images/adamcatlace.jpg); border-image-slice: 10% 30%;&#34;&gt;&lt;/div&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-css&#34;&gt;    div{
+        width:200px;
+        height:150px;
+        margin:20px auto;
+        border:40px solid #58a;
+        border-image-source:url(/images/adamcatlace.jpg);
+        border-image-slice: 30 30% 45;
+    }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;div style=&#34;width:200px; height:150px; margin:20px auto; border:40px solid #58a; border-image:url(/images/adamcatlace.jpg); border-image-slice: 30 30% 45;&#34;&gt;&lt;/div&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-css&#34;&gt;    div{
+        width:200px;
+        height:150px;
+        margin:20px auto;
+        border:40px solid #58a;
+        border-image-source:url(/images/adamcatlace.jpg);
+        border-image-slice: 7 12 14 5; 
+    }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;div style=&#34;width:200px; height:150px; margin:20px auto; border:40px solid #58a; border-image:url(/images/adamcatlace.jpg); border-image-slice: 7 12 14 5; &#34;&gt;&lt;/div&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-css&#34;&gt;    div{
+        width:200px;
+        height:150px;
+        margin:20px auto;
+        border:40px solid #58a;
+        border-image-source:url(/images/adamcatlace.jpg);
+        border-image-slice: 10% fill 7 12; 
+    }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;div style=&#34;width:200px; height:150px; margin:20px auto; border:40px solid #58a; border-image:url(/images/adamcatlace.jpg); border-image-slice: border-image-slice: 10% fill 7 12; &#34;&gt;&lt;/div&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-css&#34;&gt;    .demo{
+        border:30px solid transparent;
+        border-image:1 url(&#39;data:image/svg+xml,\
+            &amp;lt;svg xmlns=&amp;quot;http://www.w3.org/2000/svg&amp;quot; width=&amp;quot;3&amp;quot; height=&amp;quot;3&amp;quot; fill=&amp;quot;red&amp;quot;&amp;gt;\
+              &amp;lt;polygon points=&amp;quot;0,1 1,0 2, 0 3, 1 3, 2 2, 3 1, 3 0, 2&amp;quot;/&amp;gt;\
+            &amp;lt;/svg&amp;gt;&#39;);
+    }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;svg xmlns=&#34;http://www.w3.org/2000/svg&#34; width=&#34;300&#34; height=&#34;300&#34; fill=&#34;purple&#34;&gt;
+    &lt;polygon points=&#34;0, 100 100, 0 200, 0 300, 100 300, 200 200, 300 100, 300 0, 200&#34;/&gt;
+&lt;/svg&gt;
+&lt;div class=&#34;demo bevel-corners-8&#34;&gt;
+&lt;/div&gt;&lt;/p&gt;
+
+&lt;div&gt;
+    
+&lt;/div&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>CSS实现切角效果</title>
+      <link>http://www.wangxingfeng.com/bevel-corners.html</link>
+      <pubDate>Tue, 02 May 2017 22:52:17 +0800</pubDate>
+      
+      <guid>http://www.wangxingfeng.com/bevel-corners.html</guid>
+      <description>
+
+&lt;p&gt;扁平化设计风格中，很流行斜面切角，即把元素的一个或多个角切成45度的缺口。大多数网页开发者倾向于使用背景图片来实现切角效果。但使用背景图片会增加额外的HTTP请求，增加网页加载的时间，难以修改和维护。实际上，CSS已经足够强大，可以提供纯CSS的解决方案，我们仅用CSS代码就能实现切角效果。&lt;/p&gt;
+
+&lt;h2 id=&#34;基于-css渐变-的切角效果&#34;&gt;基于&lt;code&gt;CSS渐变&lt;/code&gt;的切角效果&lt;/h2&gt;
+
+&lt;p&gt;如果你对CSS渐变不陌生的话，应该知道CSS渐变可以接受&lt;code&gt;一个角度&lt;/code&gt;作为方向，还可以设置百分比的色标的位置。当然，色标的位置也可以设置为绝对的长度值。
+&lt;style&gt;
+    .demo{
+        width:300px;
+        height: 200px;
+        margin:10px auto;
+    }
+    .demo1{
+        background: linear-gradient(-45deg, red, green);
+    }
+    .demo2{
+        background: linear-gradient(-45deg, red 20%, green 70%);
+    }
+    .demo3{
+        background: linear-gradient(-45deg, red 20%, green 0);
+    }
+    .demo4{
+        background: linear-gradient(-45deg, transparent 20%, green 0);
+    }
+    .demo5{
+        background: linear-gradient(-45deg, transparent 30px, green 0),
+                    linear-gradient(45deg, transparent 30px, red 0);
+    }
+    .demo6{
+        background: linear-gradient(-45deg, transparent 30px, green 0) right,
+                    linear-gradient(45deg, transparent 30px, red 0) left;
+        background-size:50% 100%;
+        background-repeat:no-repeat;
+    }
+    .demo7{
+        background: linear-gradient(135deg, transparent 30px, green 0) top left,
+            linear-gradient(-135deg, transparent 30px, red 0) top right,
+            linear-gradient(-45deg, transparent 30px, pink 0) bottom right,
+            linear-gradient(45deg, transparent 30px, blue 0) bottom left;
+        background-size: 50% 50%;
+        background-repeat: no-repeat;
+    }
+&lt;/style&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;1-普通的线性渐变&#34;&gt;1.普通的线性渐变&lt;/h3&gt;
+
+&lt;p&gt;我们设置-45度为渐变方向，即从右下角到左上角渐变的方向。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-css&#34;&gt;.demo{
+    background: linear-gradient(-45deg, red, green);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;渲染的效果是这样的：&lt;/p&gt;
+
+&lt;div class=&#34;demo demo1&#34;&gt;&lt;/div&gt;
+
+&lt;h3 id=&#34;2-设置色标值的线性渐变&#34;&gt;2.设置色标值的线性渐变&lt;/h3&gt;
+
+&lt;p&gt;我们给这两个色标设置一个百分比，看看会是什么效果。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-css&#34;&gt;.demo{
+    background: linear-gradient(-45deg, red 20%, green 70%);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;上述代码的意思从右下角到左上角渐变的方向上，0~20%的区域是纯红色的，20%-70%的区域是渐变，70%-100%的区域是纯绿色的。
+&lt;div class=&#34;demo demo2&#34;&gt;&lt;/div&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;3-色标值为0的线性渐变&#34;&gt;3.色标值为0的线性渐变&lt;/h3&gt;
+
+&lt;p&gt;如果我们再稍微做些修改，把第二个色标值改为0，会是什么效果呢？&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-css&#34;&gt;.demo{
+    background: linear-gradient(-45deg, red 20%, green 0);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;div class=&#34;demo demo3&#34;&gt;&lt;/div&gt;
+
+&lt;p&gt;是不是有点惊讶？！&lt;/p&gt;
+
+&lt;p&gt;我们得到的图形是没有渐变的。从右下角到左上角渐变的方向上，0-20%的区域是纯红色，20%-100%的区域就是纯绿色。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;注意：只要第二个色标值小于前一个色标值，那么浏览器就会默认解析为前一个色标值的。
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;上面的CSS代码等价于：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-css&#34;&gt;.demo{
+    background: linear-gradient(-45deg, red 20%, green 20%);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;4-切角效果&#34;&gt;4.切角效果&lt;/h3&gt;
+
+&lt;p&gt;将上面的代码再稍作改动，把右下角的&lt;code&gt;红色&lt;/code&gt;改成&lt;code&gt;透明色&lt;/code&gt;, 就能得到一个右下角的&lt;code&gt;切角效果&lt;/code&gt;。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-css&#34;&gt;.demo{
+    background: linear-gradient(-45deg, transparent 20%, green 0);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;div class=&#34;demo demo4&#34;&gt;&lt;/div&gt;
+
+&lt;p&gt;其实，实际的网页开发中，我们更倾向于一个固定大小的切角。那么，我们可以把百分比改为绝对的长度值，比如把20%改为30px.&lt;/p&gt;
+
+&lt;h3 id=&#34;5-两个切角效果&#34;&gt;5.两个切角效果&lt;/h3&gt;
+
+&lt;p&gt;如果我们需要的切角不止一个，怎么实现呢？&lt;/p&gt;
+
+&lt;p&gt;是不是可以声明两条渐变规则呢？我们来试一下效果。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-css&#34;&gt;.demo{
+    background: linear-gradient(-45deg, transparent 30px, green 0),
+                linear-gradient(45deg, transparent 30px, red 0);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;div class=&#34;demo demo5&#34;&gt;&lt;/div&gt;
+
+&lt;p&gt;尝试失败。因为默认情况下，两层渐变都会填满整个元素，导致相互重叠。这个时候，我们就需要用到&lt;code&gt;background-size&lt;/code&gt;和&lt;code&gt;background-repeat&lt;/code&gt;,让每层渐变分别占据整个元素的一半。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-css&#34;&gt;.demo{
+    background: linear-gradient(-45deg, transparent 30px, green 0) right,
+                linear-gradient(45deg, transparent 30px, red 0) left;
+    background-size:50% 100%;
+    background-repeat:no-repeat;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;div class=&#34;demo demo6&#34;&gt;&lt;/div&gt;
+
+&lt;h3 id=&#34;6-四个切角效果&#34;&gt;6.四个切角效果&lt;/h3&gt;
+
+&lt;p&gt;看了两个切角的实现方式，想必你也能推断出实现&lt;code&gt;四个切角效果&lt;/code&gt;的思路了。我们需要&lt;code&gt;4层渐变&lt;/code&gt;，每层只占整个元素的&lt;code&gt;4分之一&lt;/code&gt;。下面的例子，我用了4种不同的颜色表示，这样可以更加直观的看出来每层渐变的大小和位置。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-css&#34;&gt;.demo{
+    background: linear-gradient(135deg, transparent 30px, green 0) top left,
+        linear-gradient(-135deg, transparent 30px, red 0) top right,
+        linear-gradient(-45deg, transparent 30px, pink 0) bottom right,
+        linear-gradient(45deg, transparent 30px, blue 0) bottom left;
+    background-size: 50% 50%;
+    background-repeat: no-repeat;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;div class=&#34;demo demo7&#34;&gt;&lt;/div&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>如何用CSS代码实现网页设计中的菱形图片</title>
+      <link>http://www.wangxingfeng.com/diamond-picture.html</link>
+      <pubDate>Mon, 01 May 2017 22:00:03 +0800</pubDate>
+      
+      <guid>http://www.wangxingfeng.com/diamond-picture.html</guid>
+      <description>
+
+&lt;style&gt;
+div.diamond-pic{width:200px;transform: rotate(45deg);overflow: hidden;margin:60px auto;}
+img.diamond-img{max-width:100%;transform: rotate(-45deg);}
+img.diamon-pic-clip-path{clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);}
+img.diamon-pic-clip-path-2{clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);transition: 1s clip-path;}
+img.diamon-pic-clip-path-2:hover{clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);}
+&lt;/style&gt;
+
+&lt;p&gt;在网页设计中，我们常常能够看到被裁切成菱形的图片。&lt;/p&gt;
+
+&lt;p&gt;传统的实现方式是预先在图像处理软件中把图片裁切好，当然这种方式的可维护性差。&lt;/p&gt;
+
+&lt;p&gt;而现在，随着CSS的新特性的支持度越来越好了，CSS也越来越强大，我们已经可以用CSS代码来实现菱形图片了。&lt;/p&gt;
+
+&lt;h2 id=&#34;1-基于tranform的实现方法&#34;&gt;1. 基于tranform的实现方法&lt;/h2&gt;
+
+&lt;p&gt;原图
+&lt;img src=&#34;http://www.wangxingfeng.com/images/adamcatlace.jpg&#34; style=&#34;display:block; max-width: 200px; margin:30px auto&#34;&gt;
+用一个&lt;code&gt;&amp;lt;div&amp;gt;&lt;/code&gt; 把图片包裹起来，对这个容器&lt;code&gt;&amp;lt;div&amp;gt;&lt;/code&gt;应用&lt;code&gt;transform:rotate(45deg)&lt;/code&gt;, 进行旋转45度，我们得到如下的效果：图片应该也会跟着旋转了&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-css&#34;&gt;div{
+    width:200px;
+    transform: rotate(45deg);
+    overflow: hidden;
+};
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;div class=&#34;diamond-pic&#34;&gt;
+    &lt;img src=&#34;http://www.wangxingfeng.com/images/adamcatlace.jpg&#34; &gt;
+&lt;/div&gt;
+
+&lt;p&gt;如果我们对里面的图片进行反向旋转45度，那么图片的旋转就会抵消掉。看看效果。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-css&#34;&gt;    div&amp;gt;img{
+        max-width:100%;
+        transform: rotate(-45deg);
+    };
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;div class=&#34;diamond-pic&#34; &gt;
+    &lt;img src=&#34;http://www.wangxingfeng.com/images/adamcatlace.jpg&#34; class=&#34;diamond-img&#34; &gt;
+&lt;/div&gt;
+
+&lt;p&gt;我们得到了一个裁成&lt;code&gt;八边形&lt;/code&gt;的图片。&lt;/p&gt;
+
+&lt;p&gt;问题出在哪里呢？我给外面的&lt;code&gt;div&lt;/code&gt;加一个边框，这样就容易看出来了。&lt;/p&gt;
+
+&lt;div class=&#34;diamond-pic&#34; style=&#34;border:1px solid red;&#34;&gt;
+    &lt;img src=&#34;http://www.wangxingfeng.com/images/adamcatlace.jpg&#34; class=&#34;diamond-img&#34;&gt;
+&lt;/div&gt;
+
+&lt;p&gt;问题出在了这里图片的宽度是与容器&lt;code&gt;div&lt;/code&gt;的&lt;code&gt;边长&lt;/code&gt;相等，其实我们应该让图片的宽度与&lt;code&gt;对角线&lt;/code&gt;相等。&lt;/p&gt;
+
+&lt;p&gt;运用勾股定理，可以计算出图片的宽度应该是√2倍，我们取1.42倍。&lt;/p&gt;
+
+&lt;p&gt;如果通过&lt;code&gt;width属性&lt;/code&gt;设置来放大图片,会得到如下的效果。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-css&#34;&gt;    div&amp;gt;img{
+        width:142%;
+        max-width:142%;
+        transform: rotate(-45deg);
+    };
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;div class=&#34;diamond-pic&#34;&gt;
+    &lt;img src=&#34;http://www.wangxingfeng.com/images/adamcatlace.jpg&#34; class=&#34;diamond-img&#34; style=&#34;width:142%;max-width:142%;&#34;&gt;
+&lt;/div&gt;
+
+&lt;p&gt;因为是以图片的&lt;code&gt;左上角&lt;/code&gt;为原点进行放大的。我们还需要在通过设置&lt;code&gt;margin:-45px;&lt;/code&gt;才能得到菱形图片。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-css&#34;&gt;    div&amp;gt;img{
+        max-width:142%;
+        transform: rotate(-45deg);
+        margin:-45px;
+    };
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;div class=&#34;diamond-pic&#34;&gt;
+    &lt;img src=&#34;http://www.wangxingfeng.com/images/adamcatlace.jpg&#34; class=&#34;diamond-img&#34; style=&#34;width:142%;max-width:142%;margin:-45px&#34;&gt;
+&lt;/div&gt;
+
+&lt;p&gt;当然，我们可以通过&lt;code&gt;transform:scale(1.42)&lt;/code&gt;来放大图片1.42倍。&lt;code&gt;scale()&lt;/code&gt;是以图片的&lt;code&gt;中心点&lt;/code&gt;进行缩放的，这样我们就不用额外地设置&lt;code&gt;margin&lt;/code&gt;值了。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;div&amp;gt;img{
+    max-width:100%;
+    transform: scale(1.42) rotate(-45deg);
+};
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;div class=&#34;diamond-pic&#34;&gt;
+    &lt;img src=&#34;http://www.wangxingfeng.com/images/adamcatlace.jpg&#34; class=&#34;diamond-img&#34; style=&#34;transform: rotate(-45deg) scale(1.42);&#34;&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&#34;2-基于裁切路径-clip-path-方法&#34;&gt;2. 基于裁切路径 clip-path 方法&lt;/h2&gt;
+
+&lt;p&gt;第一种方法虽然可以奏效，但存在一些缺点：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;1.需要一层额外的HTML标签；&lt;/li&gt;
+&lt;li&gt;2.代码不够直观；&lt;/li&gt;
+&lt;li&gt;3.如果处理的图片不是正方形，将无法得到一个菱形图片，如下图所示：&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&#34;diamond-pic&#34;&gt;
+    &lt;img src=&#34;http://www.wangxingfeng.com/images/adam-sleeping.jpg&#34; class=&#34;diamond-img&#34; style=&#34;transform: rotate(-45deg) scale(1.42);&#34;&gt;
+&lt;/div&gt;
+
+&lt;p&gt;&lt;code&gt;SVG&lt;/code&gt;中，有个名叫&lt;code&gt;&amp;lt;clipPath&amp;gt;&lt;/code&gt;的元素，专门用来定义剪裁路径。其实CSS中也有一个类似的属性，即&lt;code&gt;clip-path属性&lt;/code&gt;。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;clip-path&lt;/code&gt;可以把元素裁切成我们想要的任何形状。我们通过&lt;code&gt;polygon()函数&lt;/code&gt;来指定一个菱形，参数是一系列用&lt;code&gt;逗号&lt;/code&gt;分隔的&lt;code&gt;坐标点&lt;/code&gt;。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-css&#34;&gt;img{
+    clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.wangxingfeng.com/images/adam-sleeping.jpg&#34; class=&#34;diamon-pic-clip-path&#34; &gt;&lt;/p&gt;
+
+&lt;p&gt;如上图所示，这个方法可以很好的适应非正方形的图片。&lt;/p&gt;
+
+&lt;p&gt;另外，因为&lt;code&gt;clip-path&lt;/code&gt;属性可以参与动画，我们还可以给这个图片动画过渡效果。比如，当我们的鼠标悬停到图片上时，菱形图片平滑地扩展为完整的原图。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-css&#34;&gt;img{
+    clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+    transition: 1s clip-path;
+}
+img:hover{
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.wangxingfeng.com/images/adam-sleeping.jpg&#34; class=&#34;diamon-pic-clip-path-2&#34; &gt;&lt;/p&gt;
+
+&lt;p&gt;注意，除了谷歌浏览器，其他浏览器对这个clip-path属性的支持度都还不是很好。&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>用CSS创建内容不倾斜的平行四边形</title>
+      <link>http://www.wangxingfeng.com/parallelograms.html</link>
+      <pubDate>Sun, 30 Apr 2017 16:44:06 +0800</pubDate>
+      
+      <guid>http://www.wangxingfeng.com/parallelograms.html</guid>
+      <description>
+
+&lt;h2 id=&#34;1-平行四边形&#34;&gt;1.平行四边形&lt;/h2&gt;
+
+&lt;p&gt;普通的网页元素是矩形的。但有时候，我们需要创建可以传达出一种动感的形状，比如平行四边形。&lt;/p&gt;
+
+&lt;p&gt;说到&lt;code&gt;倾斜&lt;/code&gt;，我们会想到使用&lt;code&gt;transform&lt;/code&gt;属性的&lt;code&gt;skew()&lt;/code&gt;方法来对普通的矩形元素进行&lt;code&gt;斜向拉伸&lt;/code&gt;。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;width:100px;
+height:60px;
+transform: skew(-30deg);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;div style=&#34;width:100px;height:60px;margin:10px auto;color:#fff;background: #673ab7;font-size: 16px;line-height: 60px;text-align: center;transform: skew(-30deg);&#34;&gt;平行四边形&lt;/div&gt;
+
+&lt;p&gt;如上所示，我们得到了一个平行四边形，但是内容也跟着斜向变形了。我们希望只是容器倾斜，而内容是不倾斜的。怎么办？&lt;/p&gt;
+
+&lt;h2 id=&#34;2-嵌套元素方案&#34;&gt;2.嵌套元素方案&lt;/h2&gt;
+
+&lt;p&gt;首先，我们可以先在容器内部新增一个元素，包裹里面的内容，对这个元素再次进行斜向变形，值为负的外面容器的斜向变形值，这样刚好可以抵消掉斜向变形。&lt;/p&gt;
+
+&lt;p&gt;HTML代码&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;div class=&amp;quot;parallelograms-container&amp;quot;&amp;gt;
+    &amp;lt;div class=&amp;quot;parallelograms-inner&amp;quot;&amp;gt;
+        平行四边形
+    &amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;CSS代码&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;.parallelograms-container{
+    width:100px;
+    height:60px;
+    transform: skew(-30deg);
+}
+
+.parallelograms-inner{
+    transform:skew(30deg);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;div class=&#34;parallelograms-container&#34;&gt;
+    &lt;div class=&#34;parallelograms-inner&#34;&gt;
+        平行四边形
+    &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&#34;3-伪元素方案&#34;&gt;3.伪元素方案&lt;/h2&gt;
+
+&lt;p&gt;如果我们不想添加额外的HTML结构，能否用纯CSS来实现呢？&lt;/p&gt;
+
+&lt;p&gt;答案是肯定的。&lt;/p&gt;
+
+&lt;p&gt;我们可以考虑用CSS生成&lt;code&gt;伪元素&lt;/code&gt;，然后把所有样式（背景、边框等）应用到伪元素上，用&lt;code&gt;绝对定位&lt;/code&gt;将伪元素重叠在内容之下，然后再对伪元素进行&lt;code&gt;斜向拉伸&lt;/code&gt;变形。这样内容就可以保持不倾斜。&lt;/p&gt;
+
+&lt;p&gt;HTML 代码&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;div class=&amp;quot;pseudo-container&amp;quot;&amp;gt;
+    平行四边形
+&amp;lt;/div&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;CSS 代码&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;.pseudo-container{
+    position:relative;
+    /* 内容的文字大小、颜色、内边距等样式在这里*/
+    width:100px;
+    height:60px;
+    margin:0 auto;
+    color:#fff;
+    font-size: 16px;
+    line-height: 60px;
+    text-align: center;
+    background:transparent;
+}
+
+.pseudo-container::before{
+    content:&amp;quot;&amp;quot;;
+    position:absolute;
+    top:0;right:0;bottom:0;left:0;
+    z-index:-1;
+    background: #673ab7;
+    transform: skew(-30deg);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;效果如下：
+&lt;div class=&#34;pseudo-container&#34;&gt;
+    平行四边形
+&lt;/div&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;注意：&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;注意这里有个小坑。由于我们对这个伪元素设置了&lt;code&gt;z-index:-1&lt;/code&gt;, 所以，必须确保这个伪元素的容器、以及容器的&lt;code&gt;祖先元素&lt;/code&gt;(一直追溯到&lt;code&gt;&amp;lt;body&amp;gt;&lt;/code&gt;的&lt;code&gt;直接子元素&lt;/code&gt;)的背景都必须是透明的，否则将会遮盖住这个&lt;code&gt;伪元素&lt;/code&gt;。&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>用CSS绘制椭圆、半椭圆、四分之一椭圆</title>
+      <link>http://www.wangxingfeng.com/ellipse-border-radius.html</link>
+      <pubDate>Sun, 30 Apr 2017 11:25:58 +0800</pubDate>
+      
+      <guid>http://www.wangxingfeng.com/ellipse-border-radius.html</guid>
+      <description>
+
+&lt;h2 id=&#34;1-border-radius&#34;&gt;1. border-radius&lt;/h2&gt;
+
+&lt;p&gt;&lt;code&gt;border-radius&lt;/code&gt; 可以为元素添加圆角边框，比如 按钮。&lt;/p&gt;
+
+&lt;p&gt;&lt;button style=&#34;display:block; width:160px; height:60px; margin:10px auto;color:#fff;background: #ff5722; border-radius:8px; border:none;outline:none; &#34;&gt;
+    示例按钮
+&lt;/button&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;2-兼容性-ie9-以上都很好地能够兼容-border-radius&#34;&gt;2. 兼容性： IE9+以上都很好地能够兼容  border-radius&lt;/h2&gt;
+
+&lt;h2 id=&#34;3-border-radius-绘制圆形&#34;&gt;3. border-radius 绘制圆形&lt;/h2&gt;
+
+&lt;p&gt;如果我们给一个正方形的元素设置一个足够大的border-radius值（只要大于等于正方形边长的一半）的话，就可以被这个元素变成圆形。
+但考虑到元素的高宽可能不是固定的，那么，我们可以设置百分比，这个百分比是基于元素的尺寸大小来解析的。当我们给一个正方形的元素设置border-radius：50%时，我们会得到一个自适应的圆形。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-css&#34;&gt;    width:200px;
+    height:200px;
+    border-radius:50%; /*在这里等价于border-radius:100px; 建议写成百分比*/
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如下所示：&lt;/p&gt;
+
+&lt;div style=&#34;width:200px; height:200px; border-radius: 50%; background: #03a9f4; margin: 10px auto&#34;&gt;&lt;/div&gt;
+
+&lt;h2 id=&#34;4-border-radius-绘制自适应椭圆&#34;&gt;4. border-radius 绘制自适应椭圆&lt;/h2&gt;
+
+&lt;p&gt;当元素的高宽不相等时，我们来看下会变成什么样子。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-css&#34;&gt;    width:300px; /*宽度变长了*/
+    height:200px;
+    border-radius:50%; 
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如下所示：&lt;/p&gt;
+
+&lt;div style=&#34;width:300px; height:200px; border-radius: 50%; background: #cddc39; margin: 10px auto&#34;&gt;&lt;/div&gt;
+
+&lt;p&gt;如上图所示，当元素的高宽不相等，&lt;code&gt;border-radius&lt;/code&gt; 设置为 50%，我们将会得到一个自适应的椭圆。&lt;/p&gt;
+
+&lt;h2 id=&#34;5-border-radius-绘制半个椭圆&#34;&gt;5. border-radius 绘制半个椭圆&lt;/h2&gt;
+
+&lt;p&gt;如果想要得到半个椭圆，怎么办呢？&lt;/p&gt;
+
+&lt;div style=&#34;width:300px; height:100px; border-radius: 50% / 100% 100% 0 0; background: #795548; margin: 10px auto&#34;&gt;&lt;/div&gt;
+
+&lt;p&gt;我们需要补充以下两个知识点：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;1.&lt;code&gt;border-radius&lt;/code&gt;的值是可以单独指定水平方向上的半径和垂直方向上的半径的，中间需要用一个斜杠(/)分隔开两个值。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;2.&lt;code&gt;border-radius&lt;/code&gt;是一个简写属性，我们可以单独为元素的每个角指定不同的值。&lt;code&gt;border-radius&lt;/code&gt; 展开的话是以下4个属性：&lt;/p&gt;
+
+&lt;p&gt;border-top-left-radius
+border-top-right-radius
+border-bottom-right-radius
+border-bottom-left-radius&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;我们不必分开写，可以给&lt;code&gt;border-radius&lt;/code&gt;指定4个值，用空格分开。浏览器解析的时候，是按顺时针顺序应用到元素的四个角的（和&lt;code&gt;margin&lt;/code&gt;、&lt;code&gt;padding&lt;/code&gt;等其他的常见属性的简写类似）。&lt;/p&gt;
+
+&lt;p&gt;我们来分析一下这个半椭圆形。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;1.它是垂直对称的，说明左上角和右上角的半径值是相同的；左下角和右下角的半径值也应该是相同的。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;2.它的顶部边缘是曲线的，说明左上角和右上角的半径值之和应该是等于这个元素的宽的。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;3.由前面两点可以推出，左上角和右上角的半径在水平方向上是50%。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;4.再看垂直方向上，顶部的两个圆角占据了整个元素的高度，而底部完全没有任何圆角。因此，可以推断左上角和右上角的半径在垂直方向上是100%，左下角和右下角在垂直方向上是0。&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;综上所述，&lt;code&gt;border-radius&lt;/code&gt;的值应该是&lt;code&gt;50% / 100% 100% 0 0&lt;/code&gt;;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-css&#34;&gt;    width:300px;
+    height:100px;
+    border-radius: 50% / 100% 100% 0 0;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;div style=&#34;width:300px; height:100px; border-radius: 50% / 100% 100% 0 0; background: #795548; margin: 10px auto&#34;&gt;&lt;/div&gt;
+
+&lt;p&gt;如果我们把垂直方向上的值改为&lt;code&gt;0 0 100% 100%&lt;/code&gt;，则可以得到另一个半椭圆。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-css&#34;&gt;    width:300px;
+    height:100px;
+    border-radius: 50% /0 0 100% 100% ;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;div style=&#34;width:300px; height:100px; border-radius: 50% / 0 0 100% 100%; background: #4caf50; margin: 10px auto&#34;&gt;&lt;/div&gt;
+
+&lt;p&gt;如果把&lt;code&gt;水平方向&lt;/code&gt;&lt;code&gt;border-raduis&lt;/code&gt;设置为&lt;code&gt;50%&lt;/code&gt;; &lt;code&gt;垂直方向&lt;/code&gt;上，左上角和左下角设置为&lt;code&gt;100%&lt;/code&gt;； 右上角和右下角设为&lt;code&gt;0&lt;/code&gt;，则可以得到一个&lt;code&gt;沿Y轴劈开的半椭圆形&lt;/code&gt;。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-css&#34;&gt;    width:150px;
+    height:200px;
+    border-radius: 100% 0 0 100% / 50%;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;div style=&#34;width:150px; height:200px; border-radius: 100% 0 0 100% / 50% ; background: #9c27b0; margin: 10px auto&#34;&gt;&lt;/div&gt;
+
+&lt;h2 id=&#34;6-border-radius-绘制椭圆的四分之一&#34;&gt;6.border-radius 绘制椭圆的四分之一&lt;/h2&gt;
+
+&lt;p&gt;如果想要得到四分之一个椭圆呢？顺着之前的思路，我们可以设置其中一个角的&lt;code&gt;border-radius&lt;/code&gt;值为&lt;code&gt;100%&lt;/code&gt;，其他三个角为&lt;code&gt;0&lt;/code&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-css&#34;&gt;    width:150px;
+    height:100px;
+    border-radius: 100% 0 0 0;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;div style=&#34;width:150px; height:100px; border-radius: 100% 0 0 0 ; background: #9e9e9e; margin: 10px auto&#34;&gt;&lt;/div&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>用CSS实现图片翻转的动画效果</title>
+      <link>http://www.wangxingfeng.com/css-flip.html</link>
+      <pubDate>Sat, 29 Apr 2017 21:24:00 +0800</pubDate>
+      
+      <guid>http://www.wangxingfeng.com/css-flip.html</guid>
+      <description>
+
+&lt;style&gt;
+
+.back, .front, .rotate-container{
+    width: 320px;
+    height: 380px;
+    margin: 0 auto;
+    text-align: center;
+    color: #00f;
+}
+.flipper {
+    transition-duration: 1s;
+    transform-style: preserve-3d;
+    position: relative;
+}
+.rotate-container.hover .flipper,.rotate-container:hover .flipper {
+    transform: rotateY(180deg)
+}
+.back, .front {
+    backface-visibility: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+.front {
+    z-index: 2;
+}
+.back {
+    transform: rotateY(180deg);
+}
+.rotateY{
+    transition-duration:1.5s;
+}
+.rotateY45:hover{
+    transform: rotateY(45deg);
+}
+.rotateY90:hover{
+    transform: rotateY(90deg);
+}
+.rotateY180:hover{
+    transform: rotateY(180deg);
+    
+}
+.bf-hidden{
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
+}
+&lt;/style&gt;
+
+&lt;h2 id=&#34;用css实现页面或图片翻转的动画效果&#34;&gt;用CSS实现页面或图片翻转的动画效果&lt;/h2&gt;
+
+&lt;p&gt;Web开发中常常会有动画的交互效果，以前我们只能用JavaScript来实现，随着浏览器对CSS3新特性的支持度越来越好，很多的特效都可以通过CSS代码来实现。&lt;/p&gt;
+
+&lt;p&gt;我们在浏览网站的时候，经常能够看到图片会翻转的动画效果，比如&lt;code&gt;Demo 1&lt;/code&gt;所示。&lt;/p&gt;
+
+&lt;div class=&#34;rotate-container&#34; style=&#34;border:2px solid #000;&#34;&gt;
+    &lt;div class=&#34;flipper&#34;&gt;
+        &lt;div class=&#34;front&#34;&gt;
+            &lt;!-- 前面内容 --&gt;
+            &lt;p &gt;正面内容&lt;/p&gt;
+            &lt;img src=&#34;https://images-cn.ssl-images-amazon.com/images/I/51fD0ZgQoXL._SL400_.jpg&#34; alt=&#34;&#34;&gt;
+        &lt;/div&gt;
+        &lt;div class=&#34;back&#34;&gt;
+            &lt;p&gt;反面内容&lt;/p&gt;
+            &lt;img src=&#34;https://images-cn.ssl-images-amazon.com/images/G/28/kindle/merch/2014/campaign/Gen7-Launch/Associate/Associate_AssociateCenrter_300_250_Family._V325383366_.jpg&#34; alt=&#34;&#34;&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p&gt;能否用纯CSS来实现这种翻转动画效果呢？答案是肯定的。&lt;/p&gt;
+
+&lt;p&gt;我们知道CSS3的&lt;code&gt;transform&lt;/code&gt;属性非常强大，可以实现2D或者3D的旋转、缩放、移动或倾斜。&lt;/p&gt;
+
+&lt;p&gt;上述Demo1是沿着Y轴3D翻转的，我们可以想到用&lt;code&gt;transform&lt;/code&gt;属性的&lt;code&gt;rotateY()&lt;/code&gt;方法来实现。&lt;/p&gt;
+
+&lt;h2 id=&#34;示例代码&#34;&gt;示例代码&lt;/h2&gt;
+
+&lt;p&gt;HTML代码&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-html&#34;&gt;&amp;lt;div class=&amp;quot;rotate-container&amp;quot;&amp;gt;
+    &amp;lt;div class=&amp;quot;flipper&amp;quot;&amp;gt;
+        &amp;lt;div class=&amp;quot;front&amp;quot;&amp;gt;
+            &amp;lt;!-- 前面内容 --&amp;gt;
+        &amp;lt;/div&amp;gt;
+        &amp;lt;div class=&amp;quot;back&amp;quot;&amp;gt;
+            &amp;lt;!-- 背面内容 --&amp;gt;
+        &amp;lt;/div&amp;gt;
+    &amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;CSS代码&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-css&#34;&gt;.rotate-container:hover .flipper{
+    transform: rotateY(180deg);
+}
+
+.rotate-container, .front, .back {
+    width: 320px;
+    height: 480px;
+}
+
+.flipper {
+    transition-duration: 1s;  
+    transform-style: preserve-3d;
+    position: relative;
+}
+
+.front, .back {
+    backface-visibility: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.front {
+    z-index: 2;
+}
+
+.back {
+    transform: rotateY(180deg);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;关键的技术点解释&#34;&gt;关键的技术点解释：&lt;/h2&gt;
+
+&lt;h3 id=&#34;1-transform-变形&#34;&gt;1.transform：变形&lt;/h3&gt;
+
+&lt;p&gt;&lt;code&gt;transform: rotateY(180deg)&lt;/code&gt; 表示沿着Y轴旋转180度。&lt;/p&gt;
+
+&lt;p&gt;&lt;p&gt;Demo2：沿着Y轴旋转180度(旋转到背面可见)&lt;/p&gt;
+&lt;div class=&#34;rotateY rotateY180&#34;&gt;
+    &lt;img src=&#34;https://images-cn.ssl-images-amazon.com/images/I/51fD0ZgQoXL._SL400_.jpg&#34; alt=&#34;&#34;&gt;
+&lt;/div&gt;
+&lt;p&gt;Demo3：沿着Y轴旋转90度&lt;/p&gt;
+&lt;div class=&#34;rotateY rotateY90&#34;&gt;
+    &lt;img src=&#34;https://images-cn.ssl-images-amazon.com/images/I/51fD0ZgQoXL._SL400_.jpg&#34; alt=&#34;&#34;&gt;
+&lt;/div&gt;
+&lt;p&gt;Demo4：沿着Y轴旋转45度&lt;/p&gt;
+&lt;div class=&#34;rotateY rotateY45&#34;&gt;
+    &lt;img src=&#34;https://images-cn.ssl-images-amazon.com/images/I/51fD0ZgQoXL._SL400_.jpg&#34; alt=&#34;&#34;&gt;
+&lt;/div&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;2-transform-style-指定该元素的子元素所在空间&#34;&gt;2.transform-style：指定该元素的子元素所在空间。&lt;/h3&gt;
+
+&lt;p&gt;指定该元素的子元素是（看起来）位于三维空间内，还是在该元素所在的平面内被扁平化。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;transform-style&lt;/code&gt;属性有两个参数，&lt;code&gt;flat&lt;/code&gt;和&lt;code&gt;preserve-3d&lt;/code&gt;。&lt;code&gt;flat&lt;/code&gt;为默认值，指定子元素位于此元素所在平面内; &lt;code&gt;preserve-3d&lt;/code&gt;指定子元素定位在三维空间内。&lt;/p&gt;
+
+&lt;h3 id=&#34;3-backface-visibility-指定元素旋转到背面时是否可见&#34;&gt;3.backface-visibility 指定元素旋转到背面时是否可见。&lt;/h3&gt;
+
+&lt;p&gt;默认为visible，即背面是可见的, 如&lt;code&gt;Demo2&lt;/code&gt;所示。&lt;/p&gt;
+
+&lt;p&gt;在Demo1中，由于翻转过来的是另外一张图片，所以设置为backface-visibility:hidden背面是不可见的。&lt;/p&gt;
+
+&lt;p&gt;&lt;p&gt;Demo5: 沿着Y轴旋转180度(旋转到背面不可见)&lt;/p&gt;
+&lt;div class=&#34;rotate-container&#34;&gt;
+    &lt;div class=&#34;flipper&#34; &gt;
+        &lt;div class=&#34;front&#34;&gt;
+            &lt;img src=&#34;https://images-cn.ssl-images-amazon.com/images/I/51fD0ZgQoXL._SL400_.jpg&#34; alt=&#34;&#34;&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;4-transition-duration-表示完成过渡效果需要花费的时间&#34;&gt;4.transition-duration：表示完成过渡效果需要花费的时间。&lt;/h3&gt;
+
+&lt;p&gt;&lt;code&gt;transition-duration：1s&lt;/code&gt;可以用简写的形式&lt;code&gt;transition:1s&lt;/code&gt;。&lt;/p&gt;
+
+&lt;h3 id=&#34;5-position-absolute-绝对定位&#34;&gt;5.position:absolute：绝对定位。&lt;/h3&gt;
+
+&lt;p&gt;使用绝对定位&lt;code&gt;position:absolute&lt;/code&gt;把翻转前后的两个元素摆放到同一个位置。&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>CSS预处理器之Less</title>
+      <link>http://www.wangxingfeng.com/less.html</link>
+      <pubDate>Sun, 23 Apr 2017 16:28:38 +0800</pubDate>
+      
+      <guid>http://www.wangxingfeng.com/less.html</guid>
+      <description>
+
+&lt;h2 id=&#34;1-css&#34;&gt;1.CSS&lt;/h2&gt;
+
+&lt;p&gt;&lt;code&gt;CSS&lt;/code&gt;层叠样式表(Cascading Style Sheets)是一种用来表现HTML（标准通用标记语言的一个应用）或XML（标准通用标记语言的一个子集）等文件样式的计算机语言。&lt;/p&gt;
+
+&lt;p&gt;由于&lt;code&gt;CSS&lt;/code&gt;不想普通的编程语言有自己的变量、常量、条件语句、函数等编程语法，而只是一行行单纯的属性描述，所以写起来相当的费事，代码难以组织和维护。&lt;/p&gt;
+
+&lt;h2 id=&#34;2-dry&#34;&gt;2.DRY&lt;/h2&gt;
+
+&lt;p&gt;&lt;code&gt;DRY&lt;/code&gt;, 即 Don&amp;rsquo;t Repeat Yourself， 是一种为程序员所熟悉的编程理念，优秀的程序员通常遵循这种规范编写代码。
+&lt;code&gt;DRY&lt;/code&gt;可以显著地提升代码的可维护性，比如在需要改变某个参数的时候，只需要改动一处或者少数几处地方。&lt;/p&gt;
+
+&lt;h2 id=&#34;3-css预处理器&#34;&gt;3.CSS预处理器&lt;/h2&gt;
+
+&lt;p&gt;纯粹的&lt;code&gt;CSS&lt;/code&gt;代码并没有变量、嵌套、条件等概念，难以做到DRY, 这令程序员们头痛不已。因此，有程序员尝试为 &lt;code&gt;CSS&lt;/code&gt; 增加一些编程的的特性，使得在 &lt;code&gt;CSS&lt;/code&gt; 中使用变量、简单的程序逻辑、函数成为可能。&lt;/p&gt;
+
+&lt;p&gt;目前，最常用的CSS预处理器，主要有3个：&lt;code&gt;Less&lt;/code&gt;、&lt;code&gt;SASS&lt;/code&gt;、&lt;code&gt;Stylus&lt;/code&gt;。
+从&lt;a href=&#34;https://github.com/showcases/css-preprocessors&#34;&gt;GitHub&lt;/a&gt;上可以看出&lt;code&gt;Less&lt;/code&gt;是最受欢迎的&lt;code&gt;CSS&lt;/code&gt;预处理器。
+&lt;img src=&#34;http://www.wangxingfeng.com/images/2017042301.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;3-less&#34;&gt;3.Less&lt;/h2&gt;
+
+&lt;h3 id=&#34;3-1-安装&#34;&gt;3.1 安装&lt;/h3&gt;
+
+&lt;p&gt;因为&lt;code&gt;Less&lt;/code&gt;是使用&lt;code&gt;JavaScript&lt;/code&gt;语言写的，它可以运行在服务端的&lt;code&gt;NodeJS&lt;/code&gt;环境中，因此，最简单的安装方式是用 &lt;code&gt;npm install&lt;/code&gt;。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;npm install -g less # -g表示全局安装
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;3-2-编译&#34;&gt;3.2 编译&lt;/h3&gt;
+
+&lt;p&gt;&lt;code&gt;Less&lt;/code&gt;文件的后缀名为&lt;code&gt;.less&lt;/code&gt;. 浏览器并不能直接识别&lt;code&gt;.less&lt;/code&gt;的文件，需要编译成&lt;code&gt;.css&lt;/code&gt;结尾的&lt;code&gt;CSS&lt;/code&gt;样式文件。
+假设你已经有一个&lt;code&gt;less&lt;/code&gt;文件&lt;code&gt;demo.less&lt;/code&gt;，在命令行执行以下命令，即可编译生成&lt;code&gt;demo.css&lt;/code&gt;。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;lessc demo.less demo.css  
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;lessc&lt;/code&gt;是Less的命令，第一个参数demo.less为指定需要编译的源文件名， 第二个参数demo.css为编译后的CSS文件名。&lt;/p&gt;
+
+&lt;p&gt;如果需要编译成压缩的CSS文件，可以全局安装下载一个Less官方提供的插件 &lt;a href=&#34;https://github.com/less/less-plugin-clean-css&#34;&gt;clean-css plugin&lt;/a&gt;。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;npm install -g less-plugin-clean-css
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;然后，在命令行输入如下命令：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;lessc --clean-css demo.less demo.min.css #多了一个参数 --clean-css
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;3-3-基本语法&#34;&gt;3.3 基本语法&lt;/h3&gt;
+
+&lt;h4 id=&#34;3-3-1-变量&#34;&gt;3.3.1 变量&lt;/h4&gt;
+
+&lt;p&gt;Less 的变量名使用&lt;code&gt;@&lt;/code&gt;符号开始, 比如：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;@nice-blue: #5B83AD;
+@light-blue: @nice-blue + #111;
+
+#header {
+  color: @light-blue;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;编译之后，得到如下代码：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;#header {
+  color: #6c94be;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;注意：Less的变量本质上是常量，只能定义 一次。&lt;/p&gt;
+
+&lt;h4 id=&#34;3-3-2-mixins&#34;&gt;3.3.2 Mixins&lt;/h4&gt;
+
+&lt;p&gt;将一系列属性从一个规则集引入(“混合”)到另一个规则集的方式。&lt;/p&gt;
+
+&lt;p&gt;比如，先定义了一个规则&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;.bordered {
+  border-top: dotted 1px black;
+  border-bottom: solid 2px black;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;想要在其他的地方使用到这个规则，可以这样：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;#menu a {
+  color: #111;
+  .bordered;
+}
+
+.post a {
+  color: red;
+  .bordered;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;编译结果如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;.bordered {
+  border-top: dotted 1px black;
+  border-bottom: solid 2px black;
+}
+#menu a {
+  color: #111;
+  border-top: dotted 1px black;
+  border-bottom: solid 2px black;
+}
+.post a {
+  color: red;
+  border-top: dotted 1px black;
+  border-bottom: solid 2px black;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;3-3-3-嵌套&#34;&gt;3.3.3 嵌套&lt;/h4&gt;
+
+&lt;p&gt;根据HTML结构来嵌套样式规则。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;#header {
+  color: black;
+  .navigation {
+    font-size: 12px;
+  }
+  .logo {
+    width: 300px;
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;编译之后的CSS样式文件：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;#header {
+  color: black;
+}
+#header .navigation {
+  font-size: 12px;
+}
+#header .logo {
+  width: 300px;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;还可以结合伪类来嵌套，比如“清除浮动”的样式可以这样写：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;.clearfix {
+  display: block;
+  zoom: 1;
+
+  &amp;amp;:after {
+    content: &amp;quot; &amp;quot;;
+    display: block;
+    font-size: 0;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;上述代码里的符号&lt;code&gt;&amp;amp;&lt;/code&gt;表示当前选择器的父选择器。&lt;/p&gt;
+
+&lt;p&gt;编译之后的结果如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;.clearfix {
+  display: block;
+  zoom: 1;
+}
+.clearfix:after {
+  content: &amp;quot; &amp;quot;;
+  display: block;
+  font-size: 0;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;3-3-4-媒体查询及嵌套&#34;&gt;3.3.4 媒体查询及嵌套&lt;/h4&gt;
+
+&lt;p&gt;媒体查询（Media query ）可以嵌套在选择器中，编译时，会自动把选择器复制到媒体查询体内。媒体查询规则里还可以嵌套媒体查询。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;.screen-color {
+  @media screen {
+    color: green;
+    @media (min-width: 768px) {
+      color: red;
+    }
+  }
+  @media tv {
+    color: black;
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;编译结果：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;@media screen {
+  .screen-color {
+    color: green;
+  }
+}
+@media screen and (min-width: 768px) {
+  .screen-color {
+    color: red;
+  }
+}
+@media tv {
+  .screen-color {
+    color: black;
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;3-3-5-运算&#34;&gt;3.3.5 运算&lt;/h4&gt;
+
+&lt;p&gt;在Less中，数值、颜色、变量可以进行加、减、乘、除的运算。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;@color: #224488 / 2; //results in #112244
+background-color: #112244 + #111; // result is #223355
+
+@base: 5%;
+@filler: @base * 2; // result is 10%
+@other: @base + @filler; // result is 15%
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;3-3-6-函数&#34;&gt;3.3.6 函数&lt;/h4&gt;
+
+&lt;p&gt;&lt;code&gt;Less&lt;/code&gt;提供了许多用于转换颜色、处理字符串 以及进行算术运算的函数。具体可以参考&lt;a href=&#34;http://lesscss.org/functions/&#34;&gt;Less Function Reference&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;这些函数使用起来非常简单。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;@base: #f04615;
+@width: 0.5;
+
+.class {
+  width: percentage(@width); 
+  color: saturate(@base, 5%);
+  background-color: spin(lighten(@base, 25%), 8);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;在上述代码中我们使用 函数&lt;code&gt;percentage()&lt;/code&gt; 将 0.5 转换为 50%，然后用 函数&lt;code&gt;saturate()&lt;/code&gt;将基础颜色值的饱和度增加了 5%，再使用 函数lighten() 将背景颜色的亮度增加了 25%，最后通过函数spin()又将色相值增加 8。编译之后：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;.class {
+  width: 50%;
+  color: #f6430f;
+  background-color: #f8b38d;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;3-5-官网&#34;&gt;3.5 官网&lt;/h3&gt;
+
+&lt;p&gt;更多内容，可以访问&lt;a href=&#34;http://lesscss.org/&#34;&gt;http://lesscss.org/&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>ES6的块级作用域以及let、const命令</title>
+      <link>http://www.wangxingfeng.com/es6-let-const.html</link>
+      <pubDate>Fri, 07 Apr 2017 20:18:56 +0800</pubDate>
+      
+      <guid>http://www.wangxingfeng.com/es6-let-const.html</guid>
+      <description>
+
+&lt;h2 id=&#34;1-块级作用域&#34;&gt;1. 块级作用域&lt;/h2&gt;
+
+&lt;p&gt;&lt;code&gt;ES5&lt;/code&gt; 只有&lt;code&gt;全局作用域&lt;/code&gt;和&lt;code&gt;函数作用域&lt;/code&gt;，没有&lt;code&gt;块级作用域&lt;/code&gt;。&lt;/p&gt;
+
+&lt;p&gt;在函数外部声明的变量，都是全局变量，容易导致变量冲突。因此，我们不得不使用&lt;code&gt;立即执行函数&lt;/code&gt;来避免全局变量的冲突。另外，在循环内用来计数的变量也会泄露成全局变量。&lt;/p&gt;
+
+&lt;p&gt;为此，&lt;code&gt;ES6&lt;/code&gt; 引入了&lt;code&gt;块级作用域&lt;/code&gt;的概念。&lt;/p&gt;
+
+&lt;h2 id=&#34;2-let-声明变量&#34;&gt;2. let 声明变量&lt;/h2&gt;
+
+&lt;p&gt;2.1 &lt;code&gt;let&lt;/code&gt;声明的变量，只在它所在的代码块（块级作用域）内有效。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;    {
+        var a = 1;
+        let b = 2;
+    }
+    a //1 
+    b // Uncaught ReferenceError: b is not defined
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;2.2 &lt;code&gt;for循环&lt;/code&gt;的计数器使用&lt;code&gt;let&lt;/code&gt;命令来声明。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;    for (let i = 0; i &amp;lt; 10; i++) {
+        //
+    }
+    console.log(i);  //ReferenceError: i is not defined
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;2.3 不存在&lt;code&gt;变量提升&lt;/code&gt;。变量应该遵循&lt;code&gt;先声明后使用&lt;/code&gt;的原则。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;var&lt;/code&gt;声明的变量会提升到作用域的顶部,在变量可以在声明之前可以使用，值为&lt;code&gt;undefined&lt;/code&gt;。&lt;code&gt;let&lt;/code&gt;声明的变量不存在&lt;code&gt;变量提升&lt;/code&gt;, 声明之前使用，会报错。&lt;/p&gt;
+
+&lt;p&gt;2.4 暂时性死区(temporal dead zone，简称 TDZ):&lt;/p&gt;
+
+&lt;p&gt;只要&lt;code&gt;块级作用域&lt;/code&gt;内存在&lt;code&gt;let命令&lt;/code&gt;，它所声明的变量就“绑定”（binding）这个区域，不再受外部的影响。在let命令声明该变量之前的区域内，该变量不能使用，即使外部声明了该变量。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;    let a = 1;
+    if (true) {
+        // TDZ开始
+        console.log(a); //Uncaught ReferenceError: a is not defined
+
+        let a;  //TDZ结束
+    }
+
+    let b = 1;
+    if (true) {
+        let b = 100; 
+        console.log(b);  //100
+    } 
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;可以这么理解&lt;code&gt;暂时性死区&lt;/code&gt;：只要一进入当前的块级作用域，所有将要使用的变量就已经存在了，但是还暂时无法获取，只有等到声明变量之后，才可以获取和使用该变量。&lt;/p&gt;
+
+&lt;p&gt;2.5 不能重复声明变量&lt;/p&gt;
+
+&lt;p&gt;在同一个作用域内，&lt;code&gt;let&lt;/code&gt;命令不能重复声明同一个变量。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;    function () {
+        let x = 10;
+        var x = 20;
+    }
+    // Uncaught SyntaxError: Identifier &#39;x&#39; has already been declared
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;3-const-声明常量&#34;&gt;3. const 声明常量&lt;/h2&gt;
+
+&lt;p&gt;3.1 &lt;code&gt;ES6&lt;/code&gt; 引入了&lt;code&gt;常量&lt;/code&gt;的概念。&lt;code&gt;const 命令&lt;/code&gt;是用来声明&lt;code&gt;常量&lt;/code&gt;的, 通常用&lt;code&gt;大写字母&lt;/code&gt;表示常量。一旦声明，常量的值就不能改变。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;    const PI = 3.1415;
+    PI = 3; //Uncaught TypeError: Assignment to constant variable.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;3.2 声明变量时，必须立即赋值。否则会报错。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;    const SIN //Uncaught SyntaxError: Missing initializer in const declaration
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;3.3 &lt;code&gt;const&lt;/code&gt;的作用域与&lt;code&gt;let&lt;/code&gt;命令相同：常量只在它声明时所在的&lt;code&gt;块级作用域&lt;/code&gt;内有效。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;    if (true) {
+      const A = 5;
+    }
+    A // Uncaught ReferenceError: A is not defined
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;3.4 &lt;code&gt;const&lt;/code&gt;命令声明的常量也是不提升，同样存在&lt;code&gt;暂时性死区&lt;/code&gt;，只能在声明的位置后面使用。同时，也不能重复声明。&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>JavaScript数组的常用方法总结</title>
+      <link>http://www.wangxingfeng.com/js-array.html</link>
+      <pubDate>Thu, 06 Apr 2017 22:31:32 +0800</pubDate>
+      
+      <guid>http://www.wangxingfeng.com/js-array.html</guid>
+      <description>
+
+&lt;h2 id=&#34;不改变原数组的方法&#34;&gt;不改变原数组的方法：&lt;/h2&gt;
+
+&lt;p&gt;1.&lt;code&gt;indexOf()&lt;/code&gt; 和&lt;code&gt;lastIndexOf()&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;1.1 &lt;code&gt;indexOf()&lt;/code&gt; : 返回元素在数组的索引，从&lt;code&gt;0&lt;/code&gt;开始。若数组不存在该元素，则返回&lt;code&gt;-1&lt;/code&gt;。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;    var arr = [1, 2];
+    arr.indexOf(1); //0
+    arr.indexOf(10); //-1
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;1.2 &lt;code&gt;lastIndexOf()&lt;/code&gt;:
+返回元素在数组中最后一次出现的索引，如果没有出现则返回-1.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;    var arr = [1, 2, 3, 4, 2];
+    arr.lastIndexOf(2); // 4
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;2.&lt;code&gt;slice()&lt;/code&gt;: 与&lt;code&gt;字符串&lt;/code&gt;的&lt;code&gt;substring()&lt;/code&gt;方法一样，截取数组的一部分，返回一个新的数组。&lt;/p&gt;
+
+&lt;p&gt;2.1 通常，接受2个参数作为一个左闭右开区间，即包括开始索引位置的元素，但不包括结束索引位置的元素。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;    var arr = [1, 2, 3,4,5,6];
+    arr.slice(0,2)    //[1, 2] 只返回索引0,1位置的元素
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;2.2 可以省略第二个参数，即截取到原数组的最后一个元素。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;    arr.slice(2,);    //[3, 4, 5, 6] 
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;2.3 如果没有传参数，则返回一个从头到尾截取所有元素的新数组。可以用来复制一个数组。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;    var copyArr = arr.slice();
+    copyArr;   //[1, 2, 3, 4, 5, 6]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;3.&lt;code&gt;concat()&lt;/code&gt;: 合并数组。把当前的数组和另一个数组连接起来，并返回一个新的数组。&lt;/p&gt;
+
+&lt;p&gt;3.1 &lt;code&gt;concat()&lt;/code&gt;方法的参数可以有多个，也可以任意任意类型，&lt;code&gt;数值&lt;/code&gt;、&lt;code&gt;字符串&lt;/code&gt;、&lt;code&gt;布尔值&lt;/code&gt;、&lt;code&gt;数组&lt;/code&gt;、&lt;code&gt;对象&lt;/code&gt; 都可以，参数会被被添加到新的数组中。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;    var arr1 =  [1, 2, 3,4,5,6];
+    var arr2 = [&#39;a&#39;,&#39;b&#39;,&#39;c&#39;];
+    var arr3 = arr1.concat(arr2);
+    arr3;   //[1, 2, 3, 4, 5, 6, &amp;quot;a&amp;quot;, &amp;quot;b&amp;quot;, &amp;quot;c&amp;quot;]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;3.2 注意，如果参数是&lt;code&gt;数组&lt;/code&gt;, 会被拉平一次，即数组会被拆开来，加入到新的数组中。具体看示例：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;    var arr1 = [1, 2, 3];
+    var arr2 = arr1.concat(66,&#39;abc&#39;,true,[10,20],[30,[31,32]],{x:100});
+    arr2;  //[1, 2, 3, 66, &amp;quot;abc&amp;quot;, true, 10, 20, 30, [31,32], {x:100}]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;4.&lt;code&gt;join()&lt;/code&gt;: 转成字符串。它会把当前Array的每个元素都用指定的字符串连接起来，然后返回连接后的字符串。&lt;/p&gt;
+
+&lt;p&gt;4.1 参数是用来指定连接的字符串。见示例代码：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;    var arr = [1, 2, 3];
+    arr.join(&#39;*&#39;)   //&amp;quot;1*2*3&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;4.2 如果没有指定参数，默认是用&lt;code&gt;,&lt;/code&gt;连接。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;    var arr = [1, 2, 3];
+    arr.join()   //&amp;quot;1,2,3&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;5.&lt;code&gt;toString()&lt;/code&gt;: 返回数组的字符串形式&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;    var arr = [1, 2, 3];
+    arr.toString() // &amp;quot;1,2,3&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;6.&lt;code&gt;valueOf()&lt;/code&gt;:返回数组本身&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;    var arr = [1, 2, 3];
+    arr.valueOf() // [1, 2, 3]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;7.&lt;code&gt;map()&lt;/code&gt;:&lt;/p&gt;
+
+&lt;p&gt;7.1 对数组的所有成员&lt;code&gt;依次调用一个函数&lt;/code&gt;，返回值是一个新数组。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;    var arr = [1, 2, 3];
+    arr.map(function(elem){
+        return elem*2;
+    });
+    //[2, 4, 6, 8]
+    arr; //[1, 2, 3]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;7.2 &lt;code&gt;map&lt;/code&gt;方法接受一个函数作为参数,该函数调用时，map方法会将其传入3个参数，分别是当前成员、当前位置和数组本身(后2个参数可选)。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;    arr.map(function(elem, index, arr) {
+        return elem * index;
+    }); 
+    //[0, 2, 6]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;7.3 &lt;code&gt;map&lt;/code&gt;方法还可以接受第2个参数，表示回调函数执行时&lt;code&gt;this&lt;/code&gt;所指向的对象。&lt;/p&gt;
+
+&lt;p&gt;8.&lt;code&gt;forEach()&lt;/code&gt;: 与map方法很相似，也是遍历数组的所有成员，执行某种操作。&lt;strong&gt;注意&lt;/strong&gt;：&lt;code&gt;forEach&lt;/code&gt;方法一般没有返回值&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;    var arr = [1, 2, 3];
+    function log(element, index, array) {
+        console.log(&#39;[&#39; + index + &#39;] = &#39; + element);
+    }
+    arr.forEach(log);
+    // [0] = 1
+    // [1] = 2
+    // [2] = 3
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;注意&lt;/strong&gt;: &lt;code&gt;forEach&lt;/code&gt;方法无法中断执行，总是会将所有成员遍历完。如果希望符合某种条件时，就中断遍历，要使用&lt;code&gt;for循环&lt;/code&gt;。&lt;/p&gt;
+
+&lt;p&gt;9.&lt;code&gt;filter()&lt;/code&gt;:&lt;/p&gt;
+
+&lt;p&gt;9.1 筛选数组的元素，返回值是符合筛选条件元素组成的一个新数组。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;    var arr = [1, 2, 3, 4, 5];
+    arr.filter(function (elem) {
+      return (elem &amp;gt; 3);
+    });
+    //[4, 5]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;9.2 &lt;code&gt;filter&lt;/code&gt;方法接受一个函数作为参数,该函数调用时，&lt;code&gt;fitler&lt;/code&gt;方法会将其传入3个参数，分别是当前成员、当前位置和数组本身(后2个参数可选)。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;    var arr = [1, 2, 3, 4, 5];
+    arr.filter(function (elem, index, arr) {
+      return index % 2 === 1;
+    });
+    //[2, 4]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;9.3 &lt;code&gt;filter&lt;/code&gt;方法还可以接受第2个参数，指定测试函数所在的&lt;code&gt;上下文对象&lt;/code&gt;（即&lt;code&gt;this对象&lt;/code&gt;）。&lt;/p&gt;
+
+&lt;p&gt;10.&lt;code&gt;some()&lt;/code&gt;和&lt;code&gt;every()&lt;/code&gt;: 类似“断言”（assert），用来判断数组成员是否符合某种条件。&lt;/p&gt;
+
+&lt;p&gt;10.1 接受一个函数作为参数，所有数组成员依次执行该函数，返回一个&lt;code&gt;布尔值&lt;/code&gt;。该函数接受三个参数，依次是当前位置的成员、当前位置的序号和整个数组。&lt;/p&gt;
+
+&lt;p&gt;10.2 &lt;code&gt;some&lt;/code&gt;方法是只要有一个数组成员的返回值是true，则整个some方法的返回值就是true，否则false。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;    var arr = [1, 2, 3, 4];
+    arr.some(function (elem, index, arr) {
+      return elem &amp;gt;= 3;
+    });
+    // true
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;10.3 &lt;code&gt;every&lt;/code&gt;方法则是所有数组成员的返回值都是true，才返回true，否则false。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;    var arr = [1, 2, 3, 4];
+    arr.every(function (elem, index, arr) {
+      return elem &amp;gt;= 3;
+    });
+    // false
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;10.4 注意，对于&lt;code&gt;空数组&lt;/code&gt;，&lt;code&gt;some&lt;/code&gt;方法返回false，&lt;code&gt;every&lt;/code&gt;方法返回true&lt;/p&gt;
+
+&lt;p&gt;10.5 &lt;code&gt;some&lt;/code&gt;和&lt;code&gt;every&lt;/code&gt;方法还可以接受第2个参数，用来绑定函数中的&lt;code&gt;this关键字&lt;/code&gt;。&lt;/p&gt;
+
+&lt;p&gt;11.&lt;code&gt;reduce()&lt;/code&gt;和&lt;code&gt;reduceRight()&lt;/code&gt;: 依次处理数组的每个成员，最终累计为一个值。&lt;/p&gt;
+
+&lt;p&gt;11.1&lt;code&gt;reduce&lt;/code&gt;是&lt;code&gt;从左到右&lt;/code&gt;处理（从第一个成员到最后一个成员）&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;    arr.reduce(function(x, y){
+      console.log(x, y)
+      return x + y;
+    });
+    // 1 2
+    // 3 3
+    // 6
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;11.2&lt;code&gt;reduceRight&lt;/code&gt;则是&lt;code&gt;从右到左&lt;/code&gt;处理（从最后一个成员到第一个成员）&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;    arr.reduceRight(function(x, y){
+      console.log(x, y)
+      return x + y;
+    });
+    // 3 2
+    // 5 1
+    // 6
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;改变原数组的方法&#34;&gt;改变原数组的方法：&lt;/h2&gt;
+
+&lt;p&gt;1.&lt;code&gt;push()&lt;/code&gt;: 向数组的末尾添加若干元素。返回值是改变后的数组长度。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;    var arr = [1, 2];
+    arr.push(3) ;// 3
+    arr; //  [1, 2, 3]
+    arr.push(&#39;b&#39;,&#39;c&#39;); //5
+    arr; //[1, 2, 3, &amp;quot;b&amp;quot;, &amp;quot;c&amp;quot;]
+    arr.push([10,20]); //6
+    arr; //[1, 2, 3, &amp;quot;b&amp;quot;, &amp;quot;c&amp;quot;, [10,20]]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;2.&lt;code&gt;pop()&lt;/code&gt;: 删除数组最后一个元素。返回值是删除的元素。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;    var arr =[1, 2, 3, &amp;quot;b&amp;quot;, &amp;quot;c&amp;quot;, [10,20]];
+    arr.pop(); //[10, 20]
+    arr;  // [1, 2, 3, &amp;quot;b&amp;quot;, &amp;quot;c&amp;quot;]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;3.&lt;code&gt;unshift()&lt;/code&gt;: 向数组头部添加若干元素。返回值是改变后的数组长度。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;    var arr = [1, 2];
+    arr.unshift(3,4 );  //4
+    arr;  // [3, 4, 1, 2]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;4.&lt;code&gt;shift()&lt;/code&gt;: 删除数组最后一个元素。返回值是删除的元素。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;    var arr = [&#39;a&#39;, &#39;b&#39;, 1, 2];
+    arr.shift(); //&#39;a&#39;
+    arr;  //[&#39;b&#39;, 1, 2]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;5.&lt;code&gt;sort()&lt;/code&gt;: 数组排序。&lt;/p&gt;
+
+&lt;p&gt;5.1 &lt;strong&gt;注意&lt;/strong&gt;：默认是将所有元素转换成&lt;code&gt;字符串&lt;/code&gt;，再按&lt;code&gt;字符串Unicode码点&lt;/code&gt;排序。返回值是新的数组。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;    var arr = [1, 2, 12, &#39;a&#39;, &#39;b&#39;, &#39;ab&#39;, &#39;A&#39;, &#39;B&#39;]
+    arr.sort();  //[1, 12, 2, &amp;quot;A&amp;quot;, &amp;quot;B&amp;quot;, &amp;quot;a&amp;quot;, &amp;quot;ab&amp;quot;, &amp;quot;b&amp;quot;] 注意：12排在了2的前面
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;5.2 如果元素都是&lt;code&gt;数字&lt;/code&gt;，要按&lt;code&gt;从小到大&lt;/code&gt;排序，可以传入一个回调函数作为参数。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;    var arr = [1, 2, 12, 100]
+
+    arr.sort(function(a,b){
+        return a-b;
+    });
+    // [1, 2, 12, 100]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;5.3 如果想要&lt;code&gt;从大到小&lt;/code&gt;排序：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;    arr.sort(function(a,b){
+        return b-a;
+    });
+    //[100, 12, 2, 1]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;6.&lt;code&gt;reverse()&lt;/code&gt;: 颠倒数组中元素的位置&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;    var arr = [1, 2, 12, &#39;a&#39;, &#39;b&#39;, &#39;ab&#39;, &#39;A&#39;, &#39;B&#39;];
+    arr.reverse();
+    //[&amp;quot;B&amp;quot;, &amp;quot;A&amp;quot;, &amp;quot;ab&amp;quot;, &amp;quot;b&amp;quot;, &amp;quot;a&amp;quot;, 12, 2, 1]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;7.&lt;code&gt;splice()&lt;/code&gt;: 修改数组元素（新增、删减、替换）。从&lt;code&gt;指定的索引&lt;/code&gt;开始删除&lt;code&gt;若干个&lt;/code&gt;元素，然后再从该位置添加&lt;code&gt;若干个元素&lt;/code&gt;。返回值是删除的元素组成的数组。参数1是删除元素的起始索引，参数2是删除的元素个数，之后的参数为待添加的元素。&lt;/p&gt;
+
+&lt;p&gt;7.1 只删除,不添加。可以传入2个参数：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;    var arr = [&#39;Alibaba&#39;, &#39;Tencent&#39;, &#39;Baidu&#39;, &#39;XiaoMi&#39;, &#39;360&#39;];
+
+    // 从索引2开始删除3个元素
+    arr.splice(2, 3); // 返回删除的元素 [&#39;Baidu&#39;, &#39;XiaoMi&#39;, &#39;360&#39;]
+    arr; // [&#39;Alibaba&#39;, &#39;Tencent&#39;]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;7.2 只添加,不删除。第2个参数设为&lt;code&gt;0&lt;/code&gt;，即不删除元素。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;    arr.splice(2, 0, &#39;Toutiao&#39;, &#39;Meituan&#39;, &#39;Didi&#39;); // 返回[],因为没有删除任何元素
+    arr; //[&amp;quot;Alibaba&amp;quot;, &amp;quot;Tencent&amp;quot;, &amp;quot;Toutiao&amp;quot;, &amp;quot;Meituan&amp;quot;, &amp;quot;Didi&amp;quot;]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;7.3 先删除若干元素，然后在删除的位置上在添加若干个元素。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;    var  arr =[&amp;quot;Alibaba&amp;quot;, &amp;quot;Tencent&amp;quot;, &amp;quot;Toutiao&amp;quot;, &amp;quot;Meituan&amp;quot;, &amp;quot;Didi&amp;quot;]
+    arr.splice(2,2,&#39;Apple&#39;,&#39;Google&#39;);  //[&amp;quot;Toutiao&amp;quot;, &amp;quot;Meituan&amp;quot;]
+    arr; //[&amp;quot;Alibaba&amp;quot;, &amp;quot;Tencent&amp;quot;, &amp;quot;Apple&amp;quot;, &amp;quot;Google&amp;quot;, &amp;quot;Didi&amp;quot;]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;array-isarray&#34;&gt;Array.isArray()&lt;/h2&gt;
+
+&lt;p&gt;用来判断一个值是否为数组, 如果参数为数组，返回true，否则，返回false.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;    var arr = [1,2]
+    Array.isArray(arr);  //true;
+
+    Array.isArray(&#39;a&#39;); //false
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>JavaScript实现复制内容到剪贴板的功能</title>
+      <link>http://www.wangxingfeng.com/copy2clipboard.html</link>
+      <pubDate>Wed, 05 Apr 2017 20:29:51 +0800</pubDate>
+      
+      <guid>http://www.wangxingfeng.com/copy2clipboard.html</guid>
+      <description>
+
+&lt;h2 id=&#34;1-zeroclipboard-js&#34;&gt;1.ZeroClipboard.js&lt;/h2&gt;
+
+&lt;p&gt;点击按钮实现复制链接或者一段文本到剪贴板，这个小功能想必不少人都见过。GitHub上就有这么一个点击按钮复制仓库地址的功能。如下图所示：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.wangxingfeng.com/images/2017040501.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;Github&lt;/code&gt;用的是&lt;a href=&#34;http://zeroclipboard.org/&#34;&gt;ZeroClipboard&lt;/a&gt;来实现这一功能。这个库是用一个不可见的Flash来完成剪贴操作的。即将 Flash 做成透明的，以便于我们放在诸如链接、按钮等需要放置的任何地方。这样，用户界面看起来没有变化，当点击链接或按钮时，实际上点击是却是 Flash，从而实现复制操作。具体实现方法，可以参考官方文档&lt;a href=&#34;http://zeroclipboard.org。&#34;&gt;http://zeroclipboard.org。&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;我们知道&lt;code&gt;Flash&lt;/code&gt;正走向没落，不少功能被越来越强大的&lt;code&gt;HTML5&lt;/code&gt;所替代。而且，出于安全方面的考虑，不少浏览器都默认禁用了Flash。那么有没有不是Flash的实现方式呢？&lt;/p&gt;
+
+&lt;h2 id=&#34;2-clipboard-js&#34;&gt;2.clipboard.js&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://clipboardjs.com/&#34;&gt;clipboard.js&lt;/a&gt;是个更加轻量的JavaScript库，没有使用Flash，而是依赖于&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/Selection&#34;&gt;Selection&lt;/a&gt;和&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/Document/execCommand&#34;&gt;execCommand&lt;/a&gt;这两个API，并且使用了HTML5的特性，比如自定义数据的&lt;code&gt;data-* 属性&lt;/code&gt;。因此，clipboard.js在兼容性方面比ZeroClipboard.js差，但现代浏览器(IE9+)基本能够兼容。&lt;/p&gt;
+
+&lt;p&gt;使用方法非常简单：&lt;/p&gt;
+
+&lt;p&gt;1)&lt;a href=&#34;https://github.com/zenorocha/clipboard.js/archive/master.zip&#34;&gt;下载代码&lt;/a&gt;，并引入到文件中。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;script src=&amp;quot;dist/clipboard.min.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;2)实例化一个Clipboard对象，参数可以是&lt;code&gt;CSS选择器&lt;/code&gt;、&lt;code&gt;HTML节点&lt;/code&gt;、NodeList对象&lt;/p&gt;
+
+&lt;p&gt;参数为&lt;code&gt;CSS选择器&lt;/code&gt;：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;new Clipboard(&#39;.btn&#39;); // btn为DOM元素的class名, 跟jQuery的用法一样。
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;参数为&lt;code&gt;HTML节点&lt;/code&gt;：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;var btn = document.getElementById(&#39;btn&#39;);
+var clipboard = new Clipboard(btn);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;参数为&lt;code&gt;NodeList对象&lt;/code&gt;：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;var btns = document.querySelectorAll(&#39;button&#39;);
+var clipboard = new Clipboard(btns);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;3)实例化对象的时候，可以同时设置复制的内容：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;var clipboard = new Clipboard(&#39;.btn&#39;, {
+    text: function() {
+        return &#39;to be or not to be&#39;; //剪贴板上的文本
+    }
+});
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;4)也可以通过data-*属性来设置要复制的内容&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;!-- Target --&amp;gt;
+&amp;lt;input id=&amp;quot;foo&amp;quot; value=&amp;quot;https://github.com/zenorocha/clipboard.js.git&amp;quot;&amp;gt;
+
+&amp;lt;!-- Trigger --&amp;gt;
+&amp;lt;button class=&amp;quot;btn&amp;quot; data-clipboard-target=&amp;quot;#foo&amp;quot;&amp;gt;点击复制&amp;lt;/button&amp;gt;
+
+&amp;lt;script&amp;gt;
+    var clipboard = new Clipboard(&#39;.btn&#39;);
+&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;点击一下，看看是否成功复制到剪贴板：&lt;/p&gt;
+
+&lt;p&gt;&lt;input id=&#34;foo&#34; value=&#34;https://github.com/zenorocha/clipboard.js.git&#34; style=&#34;width:300px;&#34;&gt;
+&lt;button class=&#34;btn&#34; data-clipboard-target=&#34;#foo&#34;&gt;点击复制&lt;/button&gt;
+&lt;script src=&#34;https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.6.0/clipboard.min.js&#34;&gt;&lt;/script&gt;&lt;/p&gt;
+
+&lt;script type=&#34;text/javascript&#34; &gt;
+    var clipboard = new Clipboard(&#39;.btn&#39;);
+&lt;/script&gt;
+
+&lt;p&gt;&lt;code&gt;data-clipboard-target&lt;/code&gt;属性的值&lt;code&gt;#foo&lt;/code&gt;对应的是目标节点的CSS选择器。&lt;/p&gt;
+
+&lt;p&gt;5）更多的配置信息和使用方法，请查阅&lt;a href=&#34;https://clipboardjs.com/&#34;&gt;clipboard.js官网&lt;/a&gt;，有兴趣的朋友，应该看看它的源码。&lt;/p&gt;
+
+&lt;p&gt;注意我说的看源码，指的是&lt;code&gt;src目录&lt;/code&gt;的代码。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.wangxingfeng.com/images/2017040502.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.wangxingfeng.com/images/2017040505.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;代码是长这样的。没错，这是ES6的写法。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.wangxingfeng.com/images/2017040504.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;千万不要去看&lt;code&gt;dist&lt;/code&gt;下的&lt;code&gt;clipboard.js&lt;/code&gt; ，那个是编译之后的代码。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.wangxingfeng.com/images/2017040503.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>通过 userAgent 识别移动设备，自动跳转移动端站点</title>
+      <link>http://www.wangxingfeng.com/useragent.html</link>
+      <pubDate>Tue, 04 Apr 2017 21:02:50 +0800</pubDate>
+      
+      <guid>http://www.wangxingfeng.com/useragent.html</guid>
+      <description>
+
+&lt;p&gt;不少互联网公司的网站都分为PC端和手机端。如果用户用手机访问PC站点，受限于手机网络，很可能会出现加载网页缓慢的情况。
+因此，如何识别用户访问网站的设备，并且自动跳转到对应的站点呢？&lt;/p&gt;
+
+&lt;h2 id=&#34;navigator-useragent&#34;&gt;navigator.userAgent&lt;/h2&gt;
+
+&lt;p&gt;navigator是JavaScript中的一个独立的对象，用于提供用户所使用的浏览器以及操作系统等信息，以navigator对象属性的形式来提供。所有浏览器都支持该对象。&lt;/p&gt;
+
+&lt;p&gt;navigator对象有一个userAgent属性，会返回用户的设备操作系统和浏览器的信息。&lt;/p&gt;
+
+&lt;p&gt;1.用&lt;code&gt;谷歌浏览器&lt;/code&gt;，随便打开一个网页，&lt;code&gt;F12&lt;/code&gt;打开Chrome调试工具，输入&lt;code&gt;navigator.userAgent&lt;/code&gt;, 会返回如下的字符串：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;quot;Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.98 Safari/537.36&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这个字符串可以分成四个主要的部分，我来解释一下各个部分的含义：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;1）Mozilla/5.0 ：表示兼容Mozilla, 几乎所有的浏览器都有这个字符;
+2) (Windows NT 6.1; Win64; x64): 表示设备的操作系统版本，以及CPU信息；
+3）AppleWebKit/537.36 (KHTML, like Gecko)：表示浏览器的内核；
+4) Chrome/57.0.2987.98 Safari/537.36: 表示浏览器的版本号。
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;2.用&lt;code&gt;火狐浏览器&lt;/code&gt;，随便打开一个网页，&lt;code&gt;F12&lt;/code&gt;打开调试工具，同样地在控制台输入&lt;code&gt;navigator.userAgent&lt;/code&gt;, 返回如下的字符串：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;quot;Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:52.0) Gecko/20100101 Firefox/52.0&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;与之前的结果区别：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;1)浏览器内核是Gecko内核，
+2)浏览器版本是火狐的Firefox/52.0。从这里我们可以看出火狐浏览器是基于Gecko内核。
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;3.用&lt;code&gt;谷歌浏览器&lt;/code&gt;模拟&lt;code&gt;手机&lt;/code&gt;访问，选择&lt;code&gt;iPhone6s&lt;/code&gt;，同样在调试工具控制台输入&lt;code&gt;navigator.userAgent&lt;/code&gt;, 会返回如下的字符串：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;quot;Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;注意看出现了&lt;code&gt;iPhone&lt;/code&gt;。&lt;/p&gt;
+
+&lt;p&gt;4.用&lt;code&gt;谷歌浏览器&lt;/code&gt;模拟&lt;code&gt;平板设备&lt;/code&gt;访问，选择&lt;code&gt;iPad&lt;/code&gt;，同样在调试工具控制台输入&lt;code&gt;navigator.userAgent&lt;/code&gt;, 会返回如下的字符串：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;quot;Mozilla/5.0 (iPad; CPU OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;注意看出现了&lt;code&gt;iPad&lt;/code&gt;。&lt;/p&gt;
+
+&lt;p&gt;5.用&lt;code&gt;谷歌浏览器&lt;/code&gt;模拟&lt;code&gt;安卓设备&lt;/code&gt;，比如选择&lt;code&gt;Galaxy S5&lt;/code&gt;，同样在调试工具控制台输入&lt;code&gt;navigator.userAgent&lt;/code&gt;, 会返回如下的字符串：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;quot;Mozilla/5.0 (Linux; Android 5.0; SM-G900P Build/LRX21T) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.98 Mobile Safari/537.36&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;注意看出现了&lt;code&gt;Android&lt;/code&gt;。&lt;/p&gt;
+
+&lt;p&gt;6.用&lt;code&gt;谷歌浏览器&lt;/code&gt;模拟&lt;code&gt;winPhone设备&lt;/code&gt;，比如选择&lt;code&gt;Microsoft Lumia 950&lt;/code&gt;，同样在调试工具控制台输入&lt;code&gt;navigator.userAgent&lt;/code&gt;, 会返回如下的字符串：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;quot;Mozilla/5.0 (Windows Phone 10.0; Android 4.2.1; Microsoft; Lumia 950) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2486.0 Mobile Safari/537.36 Edge/14.14263&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;注意看出现了&lt;code&gt;Windows Phone&lt;/code&gt;。&lt;/p&gt;
+
+&lt;p&gt;通过以上的小测试，我们还可以能够发现一个规律：手机和平板设备访问时，&lt;code&gt;navigator.userAgent&lt;/code&gt;返回的字符串都会包含&lt;code&gt;Mobile&lt;/code&gt;。&lt;/p&gt;
+
+&lt;h2 id=&#34;useragent的用途-识别手机-平板设备&#34;&gt;userAgent的用途：识别手机、平板设备&lt;/h2&gt;
+
+&lt;p&gt;刚才我们已经看到了手机和平板设备访问时，&lt;code&gt;navigator.userAgent&lt;/code&gt;返回的字符串都会包含&lt;code&gt;Mobile&lt;/code&gt;，可以利用这一点，来实现文章开头提出的需求，自动识别用户访问设备从而跳转对应的站点。&lt;/p&gt;
+
+&lt;p&gt;PC端站点可以加上如下代码，自动跳转到移动端站点&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;    var ua = navigator.userAgent.toLowerCase();
+    if (/mobile|android|iphone|ipad|phone/i.test(ua)) {
+       window.location.href = &amp;quot;http://m.example.com&amp;quot;;
+    }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果在&lt;code&gt;微信&lt;/code&gt;中打开和在&lt;code&gt;手机浏览器&lt;/code&gt;打开网页执行的是不同的脚本的话，还可以通过&lt;code&gt;userAgent&lt;/code&gt;来判断是否是在&lt;code&gt;微信&lt;/code&gt;中打开的。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;    var ua = navigator.userAgent.toLowerCase();
+    if(/micromessenger/i.test(ua){
+        //to do
+    }
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>
