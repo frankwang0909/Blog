@@ -1,0 +1,38 @@
+[articles]
+    read_more = "阅读全文"
+    words = "字"
+    readingtime = "分钟阅读"
+    share = "分享"
+    comments = "评论"
+
+[articles.linked_posts]
+    older = "上一篇"
+    newer = "下一篇"
+
+[search]
+    placeholder = "搜索"
+
+[pagination]
+    previous = "上一页"
+    next = "下一页"
+
+[profile]
+    follow_button = "关注"
+    tags = "标签"
+    posts = "文章"
+
+[page_not_found]
+    title = "404 - 页面未找到"
+    subtitle = "你访问的内容不存在或已被移除。"
+
+[widgets.categories]
+    title = "分类"
+
+[widgets.recent_articles]
+    title = "近期文章"
+
+[widgets.tag_cloud]
+    title = "标签云"
+
+[widgets.tags]
+    title = "标签"

@@ -122,7 +122,7 @@ url = "/build-blog-with-hugo.html"
 	cd themes
 ```
 
-由于需要使用到Git下载主题，以及版本管理和代码推送。需要事先下载安装好[Git](https://git-for-windows.github.io/)，关于如何安装和使用Git，可以参考我之前的一篇文章：[Git学习笔记](http://www.wangxingfeng.com/git-intro/)。
+由于需要使用到Git下载主题，以及版本管理和代码推送。需要事先下载安装好[Git](https://git-for-windows.github.io/)，关于如何安装和使用Git，可以参考我之前的一篇文章：[Git学习笔记](http://frankwang0909.github.io/git-intro/)。
 
 把选定的主题下载到`themes`目录下。
 ```shell
@@ -146,7 +146,7 @@ url = "/build-blog-with-hugo.html"
 ```markdown
 	languageCode = "zh-cn"
 	title = "Frank Wang's Coding World"
-	baseurl = "http://www.wangxingfeng.com/"  
+	baseurl = "http://frankwang0909.github.io/"  
 
 	[Params]
 		Author ="Frank Wang"

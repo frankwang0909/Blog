@@ -14,7 +14,7 @@ SEO 是“Search Engine Optimization”（搜索引擎优化）或“Search Engi
 
 新手入门可以阅读[Google 搜索引擎优化 (SEO) 单页指南.pdf](https://support.google.com/webmasters/answer/35291?hl=zh-Hans). 
 
-如果想要进一步学习，可以参考[Google搜索引擎优化入门指南](http://static.googleusercontent.com/media/www.google.com/en/us/intl/zh-cn/webmasters/docs/search-engine-optimization-starter-guide-zh-cn.pdf) （需翻墙），[如果翻不了，可以点击这里](http://www.wangxingfeng.com/posts/search-engine-optimization-starter-guide-zh-cn.pdf)。
+如果想要进一步学习，可以参考[Google搜索引擎优化入门指南](http://static.googleusercontent.com/media/www.google.com/en/us/intl/zh-cn/webmasters/docs/search-engine-optimization-starter-guide-zh-cn.pdf) （需翻墙），[如果翻不了，可以点击这里](http://frankwang0909.github.io/posts/search-engine-optimization-starter-guide-zh-cn.pdf)。
 
 ## 前端工程师应该掌握的SEO知识
 

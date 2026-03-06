@@ -1,6 +1,6 @@
-baseURL = "http://www.wangxingfeng.com/"
-languageCode = "zh-CN"
-defaultContentLanguage = "zh-CN"
+baseURL = "http://frankwang0909.github.io/"
+defaultContentLanguage = "zh-cn"
+defaultContentLanguageInSubdir = false
 title = "Frank Wang's Coding World"
 enableRobotsTXT = true
 enableEmoji = true
@@ -20,27 +20,80 @@ copyright = ""            # default: author.name ↓        # 默认为下面配
   priority = 0.5
   filename = "sitemap.xml"
 
-[[menu.main]]             # config your menu              # 配置目录
-  name = "Home"
-  weight = 10
-  identifier = "home"
-  url = "/"
-[[menu.main]]
-  name = "Archives"
-  weight = 20
-  identifier = "archives"
-  url = "/post/"
-[[menu.main]]
-  name = "Tags"
-  weight = 30
-  identifier = "tags"
-  url = "/tags/"
-[[menu.main]]
-  name = "Categories"
-  weight = 40
-  identifier = "categories"
-  url = "/categories/"
+[languages]
+  [languages.zh-cn]
+    languageCode = "zh-CN"
+    languageName = "中文"
+    title = "Frank Wang 的编程世界"
+    weight = 1
+    contentDir = "content"
+
+    [languages.zh-cn.params]
+      description = "Frank Wang’s Personal Blog, Web工程师的成长记录."
+
+    [[languages.zh-cn.menu.main]]
+      name = "首页"
+      weight = 10
+      identifier = "home"
+      url = "/"
+    [[languages.zh-cn.menu.main]]
+      name = "归档"
+      weight = 20
+      identifier = "archives"
+      url = "/post/"
+    [[languages.zh-cn.menu.main]]
+      name = "标签"
+      weight = 30
+      identifier = "tags"
+      url = "/tags/"
+    [[languages.zh-cn.menu.main]]
+      name = "分类"
+      weight = 40
+      identifier = "categories"
+      url = "/categories/"
+    [[languages.zh-cn.menu.main]]
+      name = "English"
+      weight = 50
+      identifier = "switch-en"
+      url = "/en/"
+
+  [languages.en]
+    languageCode = "en-US"
+    languageName = "English"
+    title = "Frank Wang's Coding World"
+    weight = 2
+    contentDir = "content"
+
+    [languages.en.params]
+      description = "Frank Wang's personal blog and engineering notes."
+
+    [[languages.en.menu.main]]
+      name = "Home"
+      weight = 10
+      identifier = "home"
+      url = "/en/"
+    [[languages.en.menu.main]]
+      name = "Archives"
+      weight = 20
+      identifier = "archives"
+      url = "/en/post/"
+    [[languages.en.menu.main]]
+      name = "Tags"
+      weight = 30
+      identifier = "tags"
+      url = "/en/tags/"
+    [[languages.en.menu.main]]
+      name = "Categories"
+      weight = 40
+      identifier = "categories"
+      url = "/en/categories/"
+    [[languages.en.menu.main]]
+      name = "中文"
+      weight = 50
+      identifier = "switch-zh"
+      url = "/"
 [params]
+  version = "4.x"
   since = "2016"            # Site creation time          # 站点建立时间
 
   # site info (option)                                    # 站点信息（可选）
@@ -49,7 +102,7 @@ copyright = ""            # default: author.name ↓        # 默认为下面配
   description = "Frank Wang’s Personal Blog, Web工程师的成长记录."
 
   # paginate of archives, tags and categories             # 归档、标签、分类每页显示的文章数目
-  archive-paginate = 20
+  archivePaginate = 20
 
   # The date format to use; for a list of valid formats, see https://gohugo.io/functions/format/
   dateFormatToUse = "2006-01-02"

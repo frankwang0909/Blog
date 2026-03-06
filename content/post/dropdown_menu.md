@@ -136,7 +136,7 @@ url = "/dropdown-menu.html"
 
 如何实现鼠标移动到主菜单相应的li元素位置时，显示二级菜单，而移开鼠标则隐藏二级菜单。基本的实现方法	`纯CSS样式`、`jQuery`、 `原生JavaScript`等三种实现方法。
 
-### 方法一、 纯CSS样式：[见demo1](http://www.wangxingfeng.com/posts/demo1.html)
+### 方法一、 纯CSS样式：[见demo1](http://frankwang0909.github.io/posts/demo1.html)
 
 最简单的方式是直接使用css的 `:hover` 来实现。
 
@@ -148,7 +148,7 @@ url = "/dropdown-menu.html"
 	/* hover 时显示二级菜单 */
 ```
 
-### 方法二、 jQuery：[见demo2](http://www.wangxingfeng.com/posts/demo2.html)
+### 方法二、 jQuery：[见demo2](http://frankwang0909.github.io/posts/demo2.html)
 
 使用 `jQuery` 获取 li 元素，绑定 `mouseover` 、`mouseout` 事件，调用 `jQuery` 的 `show()`、`hide()` 方法。参考代码如下：
 ```html
@@ -165,7 +165,7 @@ url = "/dropdown-menu.html"
 	</script>
 ````
 
-### 方法三、 原生 JavaScript：[见demo3](http://www.wangxingfeng.com/posts/demo3.html)
+### 方法三、 原生 JavaScript：[见demo3](http://frankwang0909.github.io/posts/demo3.html)
 
 先定义显示和隐藏元素的函数
 

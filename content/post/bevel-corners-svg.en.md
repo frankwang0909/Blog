@@ -1,20 +1,20 @@
 +++
 categories = ["frontend"]
 tags = ["CSS"]
-title = "用border-image+SVG实现切角效果"
-keywords = ["切角效果", "SVG", "border-image"]
-description = "切角效果在网页设计中非常流行，大多数网页开发者倾向于使用背景图片来实现，其实我们可以用border-image+SVG实现切角效果"
+title = "Bevel Corners Svg"
+keywords = ["Corner effect", "SVG", "border-image"]
+description = "The corner cutting effect is very popular in web design. Most web developers tend to use background images to achieve it. In fact, we can use border-image+SVG to achieve the corner cutting effect."
 url = "/bevel-corners-svg.html"
 date = "2017-05-06T16:19:48+08:00"
 
 +++
 
-之前写了一篇文章，介绍了[基于CSS渐变来实现切角效果](http://frankwang0909.github.io/bevel-corners.html)的方法。今天再来介绍另一种方法，即使用`border-image`+`SVG`的方式来实现`切角效果`。
+I wrote an article before, introducing the method of [achieving corner cutting effect based on CSS gradient](http://frankwang0909.github.io/bevel-corners.html). Today I will introduce another method, which is to use `border-image`+`SVG` to achieve the `corner cutting effect`.
 
-##  border-image的工作原理
-给一个元素设置边框，我们会使用`border`这个属性。`border`是`border-width`、`border-style`、`border-color`等3个属性的简写形式。
+## How border-image works
+To set a border for an element, we will use the `border` attribute. `border` is the abbreviation of `border-width`, `border-style` and `border-color`.
 
-我们给div设置一个宽20px、实线、颜色为`#58a`的边框。
+We set a border with a width of 20px, a solid line, and a color of `#58a` for the div.
 
 ```css
 	div{
@@ -27,13 +27,13 @@ date = "2017-05-06T16:19:48+08:00"
 <div style="width:200px; height:150px; margin:20px auto; border:40px solid #58a;"></div>
 
 
-`border-image`是CSS3的新属性，用于指定元素边框的背景图片。使用 border-image 时，border-style属性所设置的边框样式solid、dashed或dotted将不起作用。
+`border-image` is a new attribute of CSS3, used to specify the background image of the element border. When using border-image, the border style solid, dashed or dotted set by the border-style property will have no effect.
 
-`border-image`属性也是一个简写：包含`border-image-source`、`border-image-slice`、`border-image-width`、`border-image-outset`、`border-image-repeat`等5个属性。
+The `border-image` attribute is also an abbreviation: including `border-image-source`, `border-image-slice`, `border-image-width`, `border-image-outset`, `border-image-repeat` and other 5 attributes.
 
-### 1. `border-image-source`: 
+### 1. `border-image-source`:
 
-从这个属性的英文命名，我们就可以知道它表示的是边框背景图片资源的路径，默认值是`none`。
+From the English name of this attribute, we can know that it represents the path of the border background image resource, and the default value is `none`.
 
 ```css
 	div{
@@ -48,9 +48,9 @@ date = "2017-05-06T16:19:48+08:00"
 <div style="width:200px; height:150px; margin:20px auto; border:40px solid #58a; border-image-source:url(/images/adamcatlace.jpg)"></div>
 
 
-### 2. `border-image-slice`: 
+### 2. `border-image-slice`:
 
-`border-image-slice`属性指定图像的边界向内偏移。
+The `border-image-slice` attribute specifies that the border of the image is offset inwards.
 
 
 ```css
